@@ -25,7 +25,7 @@ After collection is approved, archive arrival and disruption streams during M1 s
 - [x] Identify primary sources and document preliminary evidence gaps.
 - [ ] Clarify the first research use case and pilot selection criteria.
 - [x] Verify API authentication and restricted static-catalogue access; full GTFS download and real-time endpoint checks remain pending.
-- [ ] Retrieve and inspect small representative source samples.
+- [x] Inspect a bounded convenience sample of GTFS, coverage, and live data; [31 structural assertions passed](audits/2026-11-05-smoke-audit.md). Representative pilot and longitudinal validation remain open.
 - [ ] Build a coverage/identifier/freshness assessment from evidence.
 - [ ] Establish which actual-event and cancellation fields are usable.
 - [ ] Investigate available histories and disruption time semantics.

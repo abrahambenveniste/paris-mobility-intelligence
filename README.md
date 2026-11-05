@@ -21,6 +21,7 @@ A planned research platform for understanding transport reliability, network con
 
 - [Project brief and shared-map concept](docs/project-brief.md)
 - [Data sources, access, and remaining gaps](docs/data-sources.md)
+- [First bounded data-quality audit and test results](docs/audits/2026-11-05-smoke-audit.md)
 - [Research standards](docs/research-standards.md)
 - [Roadmap and M0 completion criteria](docs/roadmap.md)
 - [Decisions and open questions](docs/decisions.md)

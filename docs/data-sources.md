@@ -2,7 +2,7 @@
 
 Reviewed: 2026-11-05. This is a documented-source inventory, not a completed empirical data audit.
 
-**Evidence labels:** documented = described by a primary publisher; account-reported = quota/account information supplied by the project owner; empirically checked = successfully retrieved and inspected by this project. Two minimal authenticated responses have now been checked; full datasets and real-time feeds remain unaudited.
+**Evidence labels:** documented = described by a primary publisher; account-reported = quota/account information supplied by the project owner; empirically checked = successfully retrieved and inspected by this project. Access checks and a [bounded GTFS/coverage/live audit](audits/2026-11-05-smoke-audit.md) are complete. Full-feed and longitudinal validation remain outstanding. The audit found unresolved trip matching, an unmatched stop, source-record age variation, and no actual/aimed times in its target live sample.
 
 ## Transport sources
 

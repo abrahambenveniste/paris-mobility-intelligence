@@ -45,3 +45,21 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limit:** catalogue metadata access does not validate the GTFS archive. Next-passage/disruption endpoints, pilot coverage, and field quality remain untested.
 
 **Next:** inspect the coverage reference, GTFS contents, and representative live responses during M0.
+
+## 2026-11-05 — Bounded quality audit and tests
+
+**Purpose and authorisation:** the owner requested data-quality checks and tests before development, while conserving usage.
+
+**Evidence:** ten data-service requests; four single-stop live responses; 119 candidate coverage pairs; an 80 MiB archive prefix; and 31 passing offline structural assertions. See the [dated report](audits/2026-11-05-smoke-audit.md) for counts, timestamps, selection bias, resource bounds, and reproduction details.
+
+**Findings:** no aimed/actual passage times in 12 target-line visits; no exact live-to-GTFS trip-ID matches; one unmatched stop; multiple lines in some responses; source-record ages up to about 14 minutes; projected-coordinate interpretation unresolved. A local encoding issue was corrected before final analysis. The archive remains incomplete and the stop-time sample contains no bus-38 rows.
+
+**Decision:** access and basic structure are usable. These results do not support operational punctuality scores or reliability rankings yet. No application or scheduled collector was built.
+
+**Next:** investigate stop/trip matching, targeted timetable semantics, and actual-event evidence within M0 before approving collection and analytical design.
+
+## 2026-11-05 — Simplicity and explainability
+
+**Decision:** the owner prioritised a simple, effective project they can explain to experts. Keep the four-module vision, but start with one metro line and one bus route and transparent measures.
+
+**Implication:** use the completed checks to distinguish usable schedules/predictions from unproven actual-performance measures. No further network calls or computation were needed for this clarification. Publish the bounded audit and its limits before expanding scope; implementation still awaits approval.

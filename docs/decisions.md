@@ -16,6 +16,8 @@ Updated: 2026-11-05. Status distinguishes user decisions from proposals.
 | D008 | Concise, detailed documentation at every step | Record purpose, evidence, decision, limitation, and next action |
 | D009 | Reliability balances passenger waiting experience and timetable punctuality | Publish both dimensions; exact measures and weights await the data audit. Balanced does not automatically mean a 50/50 score |
 | D010 | Conserve session usage | Keep replies brief, batch routine work, avoid repeated research and unnecessary tools, and document meaningful progress in compact commits |
+| D011 | Run a bounded M0 data-quality audit and tests, documenting results | Owner explicitly authorised checks; application/collector development remains gated. Use limited samples, no continuous polling, and explicit coverage limits |
+| D012 | Keep the project simple, useful, and explainable to experts | Start with understandable measures for one metro line and one bus route. Add complexity only to answer a defined question; the four-module vision remains the longer-term scope |
 
 ## Proposed
 
