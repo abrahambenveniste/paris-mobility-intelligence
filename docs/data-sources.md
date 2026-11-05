@@ -33,9 +33,9 @@ Residents in employment, establishments, and jobs located at workplaces are diff
 
 ## Account access and quotas
 
-The owner reports an active PRIM account and an API token. Successful authentication remains untested.
+The owner reports an active PRIM account and both API and static-data tokens. Successful authentication and downloads remain untested. Store credentials locally in the ignored `.env`; `.env.example` contains blank variable names only.
 
-PRIM's [authentication documentation](https://prim.iledefrance-mobilites.fr/content/files/2024/01/-FR--Documentation-fonctionnelle-PRIM---Syst-me-d-authentification-.pdf) describes a separate **Données statiques** token for automated downloads including GTFS and the coverage reference. Verify the current account/download flow; only the API token has been confirmed by the owner.
+PRIM's [authentication documentation](https://prim.iledefrance-mobilites.fr/content/files/2024/01/-FR--Documentation-fonctionnelle-PRIM---Syst-me-d-authentification-.pdf) describes a separate **Données statiques** token for automated downloads including GTFS and the coverage reference. Both tokens are now confirmed obtained by the owner; verify the current account/download flow with representative samples.
 
 Relevant limits copied from the owner's dashboard on 2026-11-05:
 

@@ -25,3 +25,11 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Evidence and limits:** the existing source inventory remains the baseline. Authentication, representative data downloads, actual-event evidence, cancellations, history, and fine job geography have not been empirically verified. No application or collector has been built.
 
 **Next:** confirm static-data credentials, then check API and static samples before choosing supported reliability measures. Implementation still requires the owner's explicit green light.
+
+## 2026-11-05 — Both credentials obtained
+
+**Evidence:** the owner confirmed possession of API and static-data tokens; no values are recorded here.
+
+**Change:** prepared an ignored local `.env` and published a blank `.env.example` for reproducible setup.
+
+**Next:** the owner fills the local credential file, then access and sample content can be checked. Token validity and dataset quality remain unverified; no application or collector is implemented.
