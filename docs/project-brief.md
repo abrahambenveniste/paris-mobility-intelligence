@@ -12,7 +12,7 @@ Create a tool researchers can use to inspect Paris transport, compare supported 
 - Research audience; local and hosted deployment are intended.
 - Initial sample: selected metro and bus lines in Paris. Select lines using coverage, operational diversity, and a documented sampling rationale.
 - Eventual expansion depends on data coverage, representativeness, operating cost, and validation.
-- Build projects 1, 2, 8, and 10 in that order after the shared foundation.
+- Start with project 2, explicitly approved by the owner. Projects 8, 10, and 1 remain subsequent modules; confirm their order as evidence develops.
 - Arrival prediction analysis is a supporting method, not a replacement for project 2.
 
 ## One website, one shared map
@@ -41,4 +41,4 @@ A research export should include the query settings, source versions, indicator 
 
 A new researcher can understand the methods, identify limitations, install the released tool, reproduce an example, and trace its output back to versioned inputs. No release should imply network-wide evidence from a small pilot.
 
-Application and collector development require the user's explicit green light. Repository creation and planning documentation are already authorised.
+The owner authorised project 2 for métro 4 and bus 38, locally first. The first increment is the [network explorer](network-explorer.md). Scheduled collection and hosted deployment remain undecided.

@@ -1,8 +1,21 @@
 # Paris Mobility Intelligence
 
-A planned research platform for understanding transport reliability, network connectivity, disruptions, and neighbourhood access in Paris.
+A research platform for understanding transport reliability, network connectivity, disruptions, and neighbourhood access in Paris.
 
-**Status: planning and M0 feasibility review. No application, collector, research results, or hosted service has been implemented.**
+**Status: first local network explorer implemented for métro 4 and bus 38.** Search 118 boarding points, inspect official route shapes, and request current departure estimates. One coverage point remains unmapped. Disruptions, closure simulation, historical analytics, and hosting are future work.
+
+## Run locally
+
+Requires Python 3.10+ and internet access; no Python packages or database needed. Copy `.env.example` to `.env` and enter your own PRIM credentials. Keep this file private.
+
+```powershell
+python prepare_data.py
+python app.py
+```
+
+Open http://127.0.0.1:8765. Preparation downloads only the two-line reference subset; rerun it when you want updated reference data, then restart the server. Stop the server with Ctrl+C. Predictions are requested only when selecting a point or refreshing, with a two-minute cache.
+
+[Setup, methodology, sources, and limits](docs/network-explorer.md). Run the lightweight offline tests with `python -m unittest discover -s tests -v`.
 
 ## Four projects, one map
 
@@ -13,7 +26,7 @@ A planned research platform for understanding transport reliability, network con
 | 8. Disruption Early-Warning System | Incident monitoring, recurrence analysis, and eventually validated warnings | Predictive claims require signals preceding events and chronological evaluation |
 | 10. Neighbourhood Mobility Score | Compare access to transport, services, and jobs where defensible | Match geographic vintages; disclose routing assumptions and job-location limits |
 
-**Pilot:** selected metro and bus lines in Paris, chosen after auditing coverage. Surrounding network data may be needed for journeys crossing the study boundary.
+**Pilot:** métro 4 and bus 38, selected by the owner after bounded sampling. Include their surrounding termini; this convenience pilot is not representative of the entire network.
 
 **Audience:** researchers and data scientists. **Delivery goal:** local installation and a hosted website. The four modules will be developed sequentially on shared data infrastructure.
 

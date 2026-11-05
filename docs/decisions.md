@@ -9,7 +9,7 @@ Updated: 2026-11-05. Status distinguishes user decisions from proposals.
 | D001 | Public repository; research audience; local and hosted delivery | Methods and installation must be inspectable and reproducible |
 | D002 | Original projects 1, 2, 8, and 10 | The digital twin remains in scope; arrival analysis supports reliability |
 | D003 | Data quality is the first priority | Restrict claims and coverage to what the evidence supports |
-| D004 | Repository and documentation now; implementation after explicit green light | Current work is planning and feasibility research |
+| D004 | Implementation requires explicit green light | Original planning restriction; project 2 authorised under D013 |
 | D005 | Develop the four modules one at a time | Reuse a common foundation and learn from each module |
 | D006 | Pilot selected metro and bus lines in Paris | Select actual lines after the coverage audit; allow surrounding data to avoid boundary bias |
 | D007 | Ask one unresolved question at a time | Explain choices and give the owner time to decide |
@@ -18,6 +18,8 @@ Updated: 2026-11-05. Status distinguishes user decisions from proposals.
 | D010 | Conserve session usage | Keep replies brief, batch routine work, avoid repeated research and unnecessary tools, and document meaningful progress in compact commits |
 | D011 | Run a bounded M0 data-quality audit and tests, documenting results | Owner explicitly authorised checks; application/collector development remains gated. Use limited samples, no continuous polling, and explicit coverage limits |
 | D012 | Keep the project simple, useful, and explainable to experts | Start with understandable measures for one metro line and one bus route. Add complexity only to answer a defined question; the four-module vision remains the longer-term scope |
+| D013 | Build project 2 first, using métro 4 and bus 38; local first | Explicit owner approval and two answered scope questions. First increment: reference network and on-demand predictions; no hosting or scheduled collection |
+| D014 | Initial implementation: Python standard library, plain browser JavaScript, Leaflet | Implementation choice to minimise setup and make transformations inspectable. No database or framework needed for this increment |
 
 ## Proposed
 
@@ -32,8 +34,8 @@ Updated: 2026-11-05. Status distinguishes user decisions from proposals.
 
 ## Next decisions, addressed individually
 
-1. First research use case and the comparison a researcher should be able to make.
-2. Pilot lines/stops, periods, and representativeness.
+1. Next project-2 increment: disruption overlay or a precisely defined closure scenario.
+2. Study periods and representativeness for subsequent research; pilot lines are selected.
 3. Always-on collection location, budget, time availability, and maintenance.
 4. Geographic unit and destination categories for accessibility.
 5. Reliability components, cancellation evidence, score weights, and ranking rules.

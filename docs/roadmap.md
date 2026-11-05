@@ -1,6 +1,8 @@
 # Roadmap
 
-Updated: 2026-11-05. Sequence agreed; dates and effort estimates remain open.
+Updated: 2026-11-05. Project 2 now comes first, explicitly authorised for local delivery. The original stage table below describes the broader backlog; its former reliability-first sequence is superseded by D013.
+
+**Delivered increment:** [local network explorer](network-explorer.md), métro 4 and bus 38, official geometries and on-demand estimates. Connected transfer topology, disruptions and closure scenarios remain future project-2 work. Full M0 readiness is module-specific: the map can proceed while reliability evidence remains incomplete.
 
 | Stage | Deliverable | Completion evidence |
 | --- | --- | --- |
@@ -32,11 +34,11 @@ After collection is approved, archive arrival and disruption streams during M1 s
 - [ ] Resolve dataset licences, retention, attribution, and redistribution.
 - [ ] Decide uptime, budget, collection cadence, storage, and operating responsibilities.
 - [ ] Define initial metrics, validation criteria, and architecture.
-- [ ] Obtain explicit approval to implement the proposed pilot.
+- [x] Obtain explicit approval to implement the proposed pilot: project 2, métro 4 and bus 38, local first.
 
 ## Documentation at each step
 
-Current readiness: proceed with access and representative-sample checks once credentials are configured. Full reliability calculations remain conditional on usable event evidence. Actual arrivals, cancellation completeness, historical availability, fine job locations, and accessibility coverage remain unresolved. Missing inputs may narrow a module rather than block the whole platform. Application and collector development remain awaiting explicit approval.
+Current readiness: the local project-2 explorer is implemented and tested. Full reliability calculations remain conditional on usable event evidence. Actual arrivals, cancellation completeness, historical availability, fine job locations, and accessibility coverage remain unresolved. Scheduled collection and hosting are not yet approved.
 
 Record purpose → evidence → decision → limitation → next action. Keep a short journal entry with links to the relevant change. Use commit history for exact edits and decision records for why choices were made.
 

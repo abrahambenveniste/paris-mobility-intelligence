@@ -63,3 +63,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Decision:** the owner prioritised a simple, effective project they can explain to experts. Keep the four-module vision, but start with one metro line and one bus route and transparent measures.
 
 **Implication:** use the completed checks to distinguish usable schedules/predictions from unproven actual-performance measures. No further network calls or computation were needed for this clarification. Publish the bounded audit and its limits before expanding scope; implementation still awaits approval.
+
+## 2026-11-05 — First local project-2 increment
+
+**Purpose:** turn the inspected pilot into a simple usable network explorer. The owner authorised building project 2, selected métro 4 and bus 38, and chose local-first delivery.
+
+**Evidence:** bounded official reference queries produced two route geometries and 118 boarding points; one of 119 coverage pairs remains unmapped. WGS84 stop coordinates avoid relying on the unresolved projected coverage coordinates. Eleven offline tests passed; JavaScript syntax passed. Browser checks confirmed search, live Cité estimates, and cached refresh without a second live request.
+
+**Decision:** use Python's standard library, plain JavaScript and Leaflet. Fetch estimates on demand with a two-minute cache and persistent rolling request budget. No scheduled collector or database. Keep credentials and generated data outside Git.
+
+**Limit:** boarding-point coverage is not station coverage; estimates are not actual passages. Transfer topology, disruptions, closure simulation and hosting remain unimplemented. Tests establish handling of defined cases, not network-wide source accuracy.
+
+**Next:** owner review of the local interface, then resolve the unmatched stop and specify the next network-analysis increment. See [setup and methods](network-explorer.md).
