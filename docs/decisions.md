@@ -21,6 +21,7 @@ Updated: 2026-11-05. Status distinguishes user decisions from proposals.
 | D013 | Build project 2 first, using métro 4 and bus 38; local first | Explicit owner approval and two answered scope questions. First increment: reference network and on-demand predictions; no hosting or scheduled collection |
 | D014 | Initial implementation: Python standard library, plain browser JavaScript, Leaflet | Implementation choice to minimise setup and make transformations inspectable. No database or framework needed for this increment |
 | D015 | Make learning and explainability visible throughout the project | Owner requested beginner explanations, code and data examples, basic design rationales, and useful prompts. Document assisted development honestly; demonstrate understanding through owner-completed exercises and explanations |
+| D016 | Next project-2 increment: on-demand directly linked traffic notices | Implementation choice under the owner's instruction to continue project 2. Use targeted line reports; exclude station-only associations from line status. No project-8 predictive model or background collection |
 
 ## Proposed
 
@@ -35,7 +36,7 @@ Updated: 2026-11-05. Status distinguishes user decisions from proposals.
 
 ## Next decisions, addressed individually
 
-1. Next project-2 increment: disruption overlay or a precisely defined closure scenario.
+1. Review the traffic-notice increment; define any closure scenario before implementing simulation.
 2. Study periods and representativeness for subsequent research; pilot lines are selected.
 3. Always-on collection location, budget, time availability, and maintenance.
 4. Geographic unit and destination categories for accessibility.

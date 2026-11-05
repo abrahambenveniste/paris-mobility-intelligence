@@ -6,6 +6,8 @@ Reviewed: 2026-11-05. This is a documented-source inventory, not a completed emp
 
 ## Transport sources
 
+**Current application inputs (6 November 2026):** `arrets-lignes` for stop/line associations; `traces-des-lignes-de-transport-en-commun-idfm` for GTFS-derived geometry; the coverage reference below; individual stop-monitoring predictions; and targeted [Messages Info Trafic v2 line reports](https://prim.iledefrance-mobilites.fr/fr/aide-et-contact/documentation/prise-en-main-des-api/api-information-trafic-travaux/api-calculateur-ile-de-france-mobilites-messages-info-trafic-v2). These were retrieved and inspected. Full GTFS and regional bulk disruptions remain broader research sources, not runtime inputs. See [traffic source selection and matching limits](traffic-notices.md).
+
 | Input | Primary source | Intended use | Remaining check |
 | --- | --- | --- | --- |
 | Planned service | [IDFM GTFS Datahub](https://prim.iledefrance-mobilites.fr/jeux-de-donnees/offre-horaires-tc-gtfs-idfm) | Routes, stops, trips, schedules, transfer inputs | Download; inspect calendars, shapes, frequencies, identifiers, completeness |

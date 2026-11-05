@@ -8,7 +8,9 @@ This is also a documented learning project: follow how public transport data bec
 
 Development is AI-assisted. The owner defines goals and approves scope; implementation and documentation have been produced with Codex assistance. The walkthrough includes exercises to establish personal understanding; these are not claimed as completed until the owner has done them.
 
-**Status: first local network explorer implemented for métro 4 and bus 38.** Search 118 boarding points, inspect official route shapes, and request current departure estimates. One coverage point remains unmapped. Disruptions, closure simulation, historical analytics, and hosting are future work.
+**Status: local network explorer for métro 4 and bus 38.** Search 118 boarding points, inspect official route shapes, request departure estimates, and check directly linked traffic notices. One coverage point remains unmapped. Closure simulation, historical analytics, and hosting are future work.
+
+Latest increment: [traffic notices—source choice, code, sample counts and limits](docs/traffic-notices.md). Click “Check métro 4” or “Check bus 38” below the map; reports are cached for five minutes. A dashed route indicates a linked active notice, not a full-line closure.
 
 ## Run locally
 

@@ -4,6 +4,8 @@
 
 Project 2 begins with an inspectable map of métro 4 and bus 38. Search or select a boarding point, inspect its identifier, and request provider estimates. This is the first network-view increment, not a validated simulation of transport operations.
 
+Update, 6 November 2026: [on-demand traffic notices](traffic-notices.md) now accompany the map. The initial eleven tests described below are supplemented by seven traffic tests, for eighteen total.
+
 ## Data and transformations
 
 | Input | Use | Validation |

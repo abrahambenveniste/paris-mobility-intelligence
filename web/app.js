@@ -55,10 +55,41 @@ async function loadDepartures() {
   } catch(error) { if(sequence===requestId) { $('live-status').textContent='ESTIMATES UNAVAILABLE'; $('departures').append(el('p',error.message,'notice')); } }
   finally { if(sequence===requestId)$('refresh').disabled=false; }
 }
+let trafficSequence = 0;
+function providerDate(value) { return value ? value.replace('T',' ') + ' (Paris)' : 'not supplied'; }
+async function loadTraffic(line) {
+  const sequence = ++trafficSequence, panel = $('traffic-result');
+  panel.replaceChildren(el('p', 'Checking published notices…'));
+  for(const layer of routeLayers) layer.setStyle({dashArray:null,weight:3});
+  try {
+    const response = await fetch('/api/traffic?' + new URLSearchParams({line}));
+    const data = await response.json();
+    if(sequence !== trafficSequence)return;
+    if(!response.ok)throw new Error(data.error || 'Traffic reports unavailable.');
+    panel.replaceChildren();
+    const r = route(line);
+    panel.append(el('h3', `${r.mode} ${r.name} · ${data.reports.length} explicitly linked report(s)`));
+    panel.append(el('p', `${data.cached?'Cached response':'New request'} · Fetched ${dateLabel.format(new Date(data.fetched_at))} Paris time · Cached up to 5 minutes.`, 'muted small'));
+    if(!data.reports.length)panel.append(el('p', 'No directly linked reports returned. This is not confirmation of normal service.', 'notice'));
+    for(const report of data.reports) {
+      const card = el('article', undefined, 'traffic-card');
+      card.append(el('p', `Provider status: ${report.status} · Effect: ${report.effect}`, 'eyebrow'));
+      card.append(el('p', report.text));
+      card.append(el('p', `Provider update: ${providerDate(report.updated_at_local)}`, 'muted small'));
+      for(const period of report.periods_local)card.append(el('p', `Reported application period: ${providerDate(period.begin)} → ${providerDate(period.end)}`, 'muted small'));
+      if(!report.periods_local.length)card.append(el('p','Application period not supplied.','muted small'));
+      card.append(el('small', 'Report ID: '+report.id));panel.append(card);
+    }
+    panel.append(el('p', `${data.excluded_unlinked} other returned records excluded because no direct line link was found. Station/accessibility notices can be omitted by this conservative filter. Report periods are not measured incident durations.`, 'muted small'));
+    if(data.reports.some(report=>report.status==='active'))for(const layer of routeLayers)if(layer.routeId===line)layer.setStyle({dashArray:'8 6',weight:5});
+  } catch(error) { if(sequence===trafficSequence)panel.replaceChildren(el('p',error.message,'notice error')); }
+}
 async function init() {
   try {
     const response=await fetch('/api/network'); if(!response.ok)throw new Error('Network data could not be loaded.'); network=await response.json();
     $('point-count').textContent=network.stops.length;
+    $('traffic-metro').addEventListener('click',()=>loadTraffic('STIF:Line::C01374:'));
+    $('traffic-bus').addEventListener('click',()=>loadTraffic('STIF:Line::C01083:'));
     for(const r of network.routes) { const button=el('button',undefined,'filter'); button.dataset.line=r.id;button.setAttribute('aria-pressed','false');button.append(el('span',r.mode),badge(r));$('line-filters').append(button); }
     $('line-filters').addEventListener('click',event=>{const button=event.target.closest('button');if(!button)return;activeLine=button.dataset.line;updateFilters();renderList();fit();});
     $('search').addEventListener('input',renderList);$('refresh').addEventListener('click',loadDepartures);$('fit-map').addEventListener('click',fit);

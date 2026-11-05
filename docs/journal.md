@@ -87,3 +87,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** assistant-generated code and successful assistant-run checks do not establish the owner's independent understanding. Exercises remain uncompleted until the owner attempts them; samples are labelled synthetic, observed or derived.
 
 **Next:** work through one small code example with the owner, ask one understanding question, and document their explanation or changes when completed. No application features were changed in this increment.
+
+## 2026-11-06 — On-demand traffic notices for project 2
+
+**Purpose:** extend the local network explorer with published conditions under the owner's instruction to continue project 2.
+
+**Evidence:** targeted PRIM requests for both lines returned 21 disruption records each. Inspection showed shared-station and other-service notices, so endpoint filtering alone was insufficient. Explicit line links retained zero métro reports and one bus-38 report in that sample. Seven new offline tests and eleven existing tests passed; JavaScript syntax passed.
+
+**Decision:** display only directly linked reports, source status, update time and application periods; show excluded counts and five-minute caching. An active report draws a dashed route with an explicit non-closure legend. Use a separate request budget and no automatic polling. See [method and teaching examples](traffic-notices.md).
+
+**Limitation:** conservative matching omits station-only notices. Reported effects and periods are not measured service loss or incident duration. Redistribution terms remain unresolved, including upstream feed metadata labels; raw samples remain untracked.
+
+**Next:** review the interface and explain the direct-link filter before choosing further network modelling. Implementation and validation were assistant-performed; no owner exercise completion is claimed.

@@ -8,6 +8,7 @@ import threading
 import time
 from urllib.parse import parse_qs, urlencode, urlsplit
 from urllib.request import Request, urlopen
+from traffic import PILOT, fetch_reports
 
 ROOT = Path(__file__).resolve().parent
 WEB = ROOT / 'web'
@@ -113,7 +114,7 @@ class RequestCache:
             return {**result, 'cached': False}
 
 
-def handler_class(network, key, cache):
+def handler_class(network, key, cache, traffic_cache=None):
     allowed = {(s['line_id'], s['monitoring_ref']) for s in network['stops'] if s['live_supported']}
 
     class Handler(BaseHTTPRequestHandler):
@@ -142,6 +143,19 @@ def handler_class(network, key, cache):
             url = urlsplit(self.path)
             if url.path == '/api/network':
                 return self.send(200, network)
+            if url.path == '/api/traffic':
+                line = parse_qs(url.query).get('line', [''])[0]
+                if line not in PILOT:
+                    return self.send(400, {'error': 'Select a supported pilot line.'})
+                if traffic_cache is None:
+                    return self.send(503, {'error': 'Traffic reports are not configured.'})
+                try:
+                    result = traffic_cache.get(line, lambda: fetch_reports(line, key))
+                    return self.send(200, result)
+                except RuntimeError as error:
+                    return self.send(503, {'error': str(error)})
+                except Exception:
+                    return self.send(502, {'error': 'Traffic reports unavailable or incomplete. No service conclusion can be drawn.'})
             if url.path == '/api/departures':
                 query = parse_qs(url.query)
                 line, stop = query.get('line', [''])[0], query.get('stop', [''])[0]
@@ -172,7 +186,8 @@ def main():
         raise SystemExit('Run python prepare_data.py first to download the small pilot network.')
     network = json.loads(NETWORK.read_text(encoding='utf-8'))
     cache = RequestCache(ROOT / 'artifacts' / 'app-request-budget.json')
-    server = ThreadingHTTPServer(('127.0.0.1', args.port), handler_class(network, read_keys().get('PRIM_API_KEY', ''), cache))
+    traffic_cache = RequestCache(ROOT / 'artifacts' / 'traffic-request-budget.json', ttl=300)
+    server = ThreadingHTTPServer(('127.0.0.1', args.port), handler_class(network, read_keys().get('PRIM_API_KEY', ''), cache, traffic_cache))
     print(f'Paris Mobility Intelligence: http://127.0.0.1:{args.port}', flush=True)
     try:
         server.serve_forever()
