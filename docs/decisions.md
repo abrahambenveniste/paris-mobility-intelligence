@@ -14,6 +14,8 @@ Updated: 2026-11-05. Status distinguishes user decisions from proposals.
 | D006 | Pilot selected metro and bus lines in Paris | Select actual lines after the coverage audit; allow surrounding data to avoid boundary bias |
 | D007 | Ask one unresolved question at a time | Explain choices and give the owner time to decide |
 | D008 | Concise, detailed documentation at every step | Record purpose, evidence, decision, limitation, and next action |
+| D009 | Reliability balances passenger waiting experience and timetable punctuality | Publish both dimensions; exact measures and weights await the data audit. Balanced does not automatically mean a 50/50 score |
+| D010 | Conserve session usage | Keep replies brief, batch routine work, avoid repeated research and unnecessary tools, and document meaningful progress in compact commits |
 
 ## Proposed
 

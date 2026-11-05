@@ -16,6 +16,7 @@ After collection is approved, archive arrival and disruption streams during M1 s
 
 ## M0 checklist
 
+- [x] Agree that reliability balances waiting experience and timetable punctuality; precise measures and weights remain open.
 - [x] Confirm the original four projects and research audience.
 - [x] Confirm public GitHub and local plus hosted delivery.
 - [x] Create the planning repository.
@@ -34,6 +35,8 @@ After collection is approved, archive arrival and disruption streams during M1 s
 - [ ] Obtain explicit approval to implement the proposed pilot.
 
 ## Documentation at each step
+
+Current readiness: proceed with access and representative-sample checks once credentials are configured. Full reliability calculations remain conditional on usable event evidence. Actual arrivals, cancellation completeness, historical availability, fine job locations, and accessibility coverage remain unresolved. Missing inputs may narrow a module rather than block the whole platform. Application and collector development remain awaiting explicit approval.
 
 Record purpose → evidence → decision → limitation → next action. Keep a short journal entry with links to the relevant change. Use commit history for exact edits and decision records for why choices were made.
 

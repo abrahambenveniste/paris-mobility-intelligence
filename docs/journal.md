@@ -15,3 +15,13 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitations:** ground truth, API field quality, historical availability, static-download access, job geography, and some licence terms remain unresolved. No collector, model, dashboard, or website is implemented.
 
 **Next:** settle the first research workflow, then inspect access and representative data against the [M0 checklist](roadmap.md).
+
+## 2026-11-05 — Reliability direction and readiness
+
+**Decision:** the owner chose a balanced view of passenger waiting experience and timetable punctuality. Components and weights remain to be defined from evidence; 50/50 weighting is not assumed.
+
+**Working preference:** conserve session usage through brief replies, compact documentation commits, and fewer redundant tool calls.
+
+**Evidence and limits:** the existing source inventory remains the baseline. Authentication, representative data downloads, actual-event evidence, cancellations, history, and fine job geography have not been empirically verified. No application or collector has been built.
+
+**Next:** confirm static-data credentials, then check API and static samples before choosing supported reliability measures. Implementation still requires the owner's explicit green light.

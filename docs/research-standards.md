@@ -15,6 +15,8 @@ For every metric, record the question, target quantity, unit of analysis, formul
 
 ## Reliability
 
+The owner selected a balanced view of passenger waiting experience and timetable punctuality on 2026-11-05. Retain both as visible components. Their measurement, eligibility, and combination depend on the audit; no equal-weight formula has been agreed. Actual passenger waiting time also depends on passenger arrival behavior, so any waiting-time estimate must state that assumption.
+
 Inspect exact schedules versus frequency service before defining delay; see the [GTFS frequencies reference](https://gtfs.org/documentation/schedule/reference/#frequenciestxt). Predicted delay and prediction variability can be reported with their actual meaning. Operational punctuality, headways, service counts, and cancellations require suitable observation evidence.
 
 Do not count repeated forecasts as independent vehicle events. Audit event identity and matching errors. Treat missingness as a possible source/feed/collector failure; do not silently turn missing records into cancelled services or zero delays.
