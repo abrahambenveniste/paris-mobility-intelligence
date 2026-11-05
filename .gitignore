@@ -1,0 +1,27 @@
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials*
+secrets/
+
+# Data, generated outputs, and logs
+/data/
+/artifacts/
+/exports/
+/logs/
+*.parquet
+*.zip
+
+# Local environments and editor/system files
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
