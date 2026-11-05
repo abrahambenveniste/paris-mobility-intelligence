@@ -1,5 +1,8 @@
 # Local network explorer
 
+> Scope update, 6 November 2026: the app now covers all 16 published métro lines and excludes buses. See [current selection, coverage and tests](metro-expansion.md). The two-line counts and examples below document the earlier implementation; they are historical, not current coverage. Traffic uses a line selector; the original two-line query has been replaced by mode-based discovery.
+
+
 ## Purpose and scope
 
 Project 2 begins with an inspectable map of métro 4 and bus 38. Search or select a boarding point, inspect its identifier, and request provider estimates. This is the first network-view increment, not a validated simulation of transport operations.

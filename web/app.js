@@ -6,7 +6,7 @@ const dateLabel = new Intl.DateTimeFormat('en-GB', {timeZone:'Europe/Paris', day
 function el(tag, text, cls) { const node = document.createElement(tag); if(text !== undefined) node.textContent = text; if(cls) node.className = cls; return node; }
 function route(id) { return network.routes.find(r => r.id === id); }
 function key(stop) { return stop.line_id + stop.id; }
-function badge(r) { const b = el('span', r.name, 'badge'); b.style.setProperty('--route-color', r.color); return b; }
+function badge(r) { const b = el('span', r.name, 'badge'); b.style.setProperty('--route-color', r.color); const rgb=r.color.slice(1).match(/../g).map(v=>parseInt(v,16)); b.style.color=(rgb[0]*.299+rgb[1]*.587+rgb[2]*.114)>150?'#172d30':'#fff'; return b; }
 function clean(text) { return text.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase(); }
 function visibleStops() { const query = clean($('search').value.trim()); return network.stops.filter(s => (activeLine === 'all' || s.line_id === activeLine) && clean(s.name+' '+s.commune+' '+s.id).includes(query)); }
 function updateFilters() {
@@ -88,12 +88,13 @@ async function init() {
   try {
     const response=await fetch('/api/network'); if(!response.ok)throw new Error('Network data could not be loaded.'); network=await response.json();
     $('point-count').textContent=network.stops.length;
-    $('traffic-metro').addEventListener('click',()=>loadTraffic('STIF:Line::C01374:'));
-    $('traffic-bus').addEventListener('click',()=>loadTraffic('STIF:Line::C01083:'));
-    for(const r of network.routes) { const button=el('button',undefined,'filter'); button.dataset.line=r.id;button.setAttribute('aria-pressed','false');button.append(el('span',r.mode),badge(r));$('line-filters').append(button); }
-    $('line-filters').addEventListener('click',event=>{const button=event.target.closest('button');if(!button)return;activeLine=button.dataset.line;updateFilters();renderList();fit();});
+    $('line-count').textContent=network.routes.length;
+    for(const r of network.routes) { const option=el('option',r.name); option.value=r.id; $('traffic-line').append(option); }
+    $('traffic-check').addEventListener('click',()=>loadTraffic($('traffic-line').value));
+    for(const r of network.routes) { const button=el('button',undefined,'filter'); button.dataset.line=r.id;button.setAttribute('aria-pressed','false');button.setAttribute('aria-label','Métro '+r.name);button.append(badge(r));$('line-filters').append(button); }
+    $('line-filters').addEventListener('click',event=>{const button=event.target.closest('button');if(!button)return;activeLine=button.dataset.line;if(activeLine!=='all')$('traffic-line').value=activeLine;selected=null;++requestId;$('empty-detail').hidden=false;$('selected-detail').hidden=true;for(const marker of markers.values())marker.setStyle({radius:4.5,weight:2,fillColor:'#fff'});updateFilters();renderList();fit();});
     $('search').addEventListener('input',renderList);$('refresh').addEventListener('click',loadDepartures);$('fit-map').addEventListener('click',fit);
-    $('mapping-note').textContent=`${network.unmapped.length} coverage-listed boarding point${network.unmapped.length===1?' is':'s are'} not mapped because no exact coordinate-reference match was found.${network.unmapped.length?' '+network.unmapped.map(s=>s.name).join('; ')+'.':''} No substitute location is guessed.`;
+    $('mapping-note').textContent=`${network.unmapped.length} coverage-listed boarding point${network.unmapped.length===1?' is':'s are'} not mapped because no exact coordinate-reference match was found.${network.unmapped.length?' '+network.unmapped.map(s=>s.name).join('; ')+'.':''} No substitute location is guessed. ${network.stops.filter(s=>!s.live_supported).length} mapped points are absent from the real-time coverage reference.`;
     $('snapshot-date').textContent=`Reference snapshot downloaded ${dateLabel.format(new Date(network.prepared_at))} (Paris). Download time is not the publisher’s update time. Run prepare_data.py to refresh it.`;
     for(const source of network.sources) { const link=el('a',source.dataset.replaceAll('-',' ')+' ↗');link.href=source.url;link.target='_blank';link.rel='noreferrer';$('source-links').append(link); }
     if(window.L) {

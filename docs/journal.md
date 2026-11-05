@@ -99,3 +99,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** conservative matching omits station-only notices. Reported effects and periods are not measured service loss or incident duration. Redistribution terms remain unresolved, including upstream feed metadata labels; raw samples remain untracked.
 
 **Next:** review the interface and explain the direct-link filter before choosing further network modelling. Implementation and validation were assistant-performed; no owner exercise completion is claimed.
+
+## 2026-11-06 — Métro-only expansion
+
+**Purpose:** the owner explicitly requested all métro lines and removal of buses from the active view.
+
+**Evidence:** the route source uses `Subway`, not numeric `1`. Mode discovery returned 16 routes, including 3B and 7B. Preparation retrieved 803 mapped boarding-point records and 804 coverage pairs: 801 matched, two mapped records lacked coverage, three coverage records lacked map matches. See [per-line results and teaching example](metro-expansion.md).
+
+**Decision:** derive stop/coverage queries and UI choices from published métro routes. Retain readable bis labels, numeric sorting, on-demand requests, local-only delivery and separate caches. Reject an old two-line snapshot at startup rather than silently showing buses.
+
+**Validation:** 22 offline tests and the JavaScript syntax check passed. No raw data or credentials are published.
+
+**Limitation and next action:** reference coverage is not live availability, and boarding points are not unique stations. Inspect the expanded view and investigate the five unmatched records before further modelling. Assistant-performed implementation is distinct from owner-completed learning exercises.

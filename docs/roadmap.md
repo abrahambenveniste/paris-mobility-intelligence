@@ -1,5 +1,7 @@
 # Roadmap
 
+Scope update, 6 November 2026: project 2 now covers all published métro lines; buses are excluded. The [métro expansion](metro-expansion.md) supersedes the two-line scope mentioned in earlier milestones. Network modelling and closure scenarios remain future work.
+
 Updated: 2026-11-05. Project 2 now comes first, explicitly authorised for local delivery. The original stage table below describes the broader backlog; its former reliability-first sequence is superseded by D013.
 
 **Delivered increment:** [local network explorer](network-explorer.md), métro 4 and bus 38, official geometries and on-demand estimates. Connected transfer topology, disruptions and closure scenarios remain future project-2 work. Full M0 readiness is module-specific: the map can proceed while reliability evidence remains incomplete.

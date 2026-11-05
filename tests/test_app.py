@@ -9,7 +9,7 @@ import unittest
 from unittest.mock import patch
 from http.server import ThreadingHTTPServer
 from app import RequestCache, handler_class, normalize_departures, timestamp
-from prepare_data import build_network
+from prepare_data import build_network, metro_codes, line_query
 
 LINE = 'STIF:Line::C01374:'
 STOP = 'STIF:StopPoint:Q:1:'
@@ -84,11 +84,37 @@ class CacheTests(unittest.TestCase):
 
 
 class NetworkTests(unittest.TestCase):
+    def test_metro_selection_excludes_bus_and_duplicates(self):
+        _, routes = self.examples()
+        self.assertEqual(metro_codes(routes), ['C01374', 'C01384'])
+        routes[1]['route_type'] = 'Bus'
+        with self.assertRaises(ValueError): metro_codes(routes)
+        with self.assertRaises(ValueError): metro_codes([routes[0], routes[0]])
+        with self.assertRaises(ValueError): metro_codes([])
+
+    def test_bis_labels_and_numeric_sort(self):
+        stops, routes = self.examples()
+        routes[0]['route_short_name'] = '14'
+        routes[1]['route_short_name'] = '3B'
+        result = build_network(stops, routes, [], [])
+        self.assertEqual([r['name'] for r in result['routes']], ['3bis', '14'])
+        self.assertEqual(result['routes'][0]['source_name'], '3B')
+        self.assertEqual(result['scope'], 'metro')
+        self.assertTrue(all(r['mode'] == 'Métro' for r in result['routes']))
+
+    def test_queries_use_complete_identifiers(self):
+        self.assertEqual(line_query('line', ['C01374', 'C01384'], 'STIF:Line::', ':'),
+                         'line in ("STIF:Line::C01374:","STIF:Line::C01384:")')
+
+    def test_each_route_requires_stops(self):
+        stops, routes = self.examples()
+        with self.assertRaises(ValueError): build_network(stops[:1], routes, [], [])
+
     def examples(self):
         stops, routes = [], []
-        for i, code in enumerate(('C01374', 'C01083')):
+        for i, code in enumerate(('C01374', 'C01384')):
             stops.append({'id': 'IDFM:' + code, 'stop_id': f'IDFM:{i+1}', 'stop_lat': '48.85', 'stop_lon': '2.35', 'stop_name': 'Example'})
-            routes.append({'route_id': 'IDFM:' + code, 'route_short_name': str(i), 'route_color': '123456',
+            routes.append({'route_id': 'IDFM:' + code, 'route_short_name': str(i+1), 'route_type': 'Subway', 'route_color': '123456',
                            'shape': {'geometry': {'type': 'LineString', 'coordinates': [[2.35,48.85],[2.36,48.86]]}}})
         return stops, routes
 
@@ -114,7 +140,7 @@ class HTTPTests(unittest.TestCase):
             thread.start()
             try:
                 with patch('app.fetch_departures') as upstream:
-                    for path, expected in [('/.env',404),('/data/pilot-network.json',404),('/api/departures?line=bad&stop=bad',400),('/api/network',200)]:
+                    for path, expected in [('/.env',404),('/data/pilot-network.json',404),('/api/departures?line=bad&stop=bad',400),('/api/traffic?line=STIF:Line::C01083:',400),('/api/network',200)]:
                         connection = http.client.HTTPConnection('127.0.0.1', server.server_port)
                         connection.request('GET', path)
                         response = connection.getresponse()

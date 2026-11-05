@@ -2,11 +2,15 @@
 from datetime import datetime, timezone
 from html.parser import HTMLParser
 import json
+import re
 from urllib.parse import quote
 from urllib.request import Request, urlopen
 
-PILOT = {'STIF:Line::C01374:': 'line:IDFM:C01374',
-         'STIF:Line::C01083:': 'line:IDFM:C01083'}
+def line_uri(line):
+    match = re.fullmatch(r'STIF:Line::(C\d+):', line)
+    if not match:
+        raise ValueError('Unexpected line identifier')
+    return 'line:IDFM:' + match[1]
 
 
 class PlainText(HTMLParser):
@@ -43,7 +47,7 @@ def local_time(value):
 
 
 def normalize_reports(payload, line, now):
-    target = PILOT[line]
+    target = line_uri(line)
     if 'error' in payload or not isinstance(payload.get('line_reports'), list):
         raise ValueError('Traffic response did not contain line reports')
     pagination = payload['pagination']
@@ -88,12 +92,11 @@ def normalize_reports(payload, line, now):
 
 
 def fetch_reports(line, key):
-    if line not in PILOT:
-        raise ValueError('Unknown pilot line')
+    target = line_uri(line)
     if not key:
         raise RuntimeError('Add PRIM_API_KEY to .env and restart the server.')
     url = ('https://prim.iledefrance-mobilites.fr/marketplace/v2/navitia/line_reports/lines/'
-           + quote(PILOT[line], safe='') + '/line_reports?count=100')
+           + quote(target, safe='') + '/line_reports?count=100')
     request = Request(url, headers={'apiKey': key, 'Accept': 'application/json',
                                    'User-Agent': 'ParisMobilityIntelligence/0.1'})
     with urlopen(request, timeout=15) as response:

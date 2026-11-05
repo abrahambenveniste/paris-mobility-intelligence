@@ -8,7 +8,7 @@ import threading
 import time
 from urllib.parse import parse_qs, urlencode, urlsplit
 from urllib.request import Request, urlopen
-from traffic import PILOT, fetch_reports
+from traffic import fetch_reports
 
 ROOT = Path(__file__).resolve().parent
 WEB = ROOT / 'web'
@@ -115,6 +115,7 @@ class RequestCache:
 
 
 def handler_class(network, key, cache, traffic_cache=None):
+    allowed_lines = {r['id'] for r in network.get('routes', []) if r.get('mode') == 'Métro'}
     allowed = {(s['line_id'], s['monitoring_ref']) for s in network['stops'] if s['live_supported']}
 
     class Handler(BaseHTTPRequestHandler):
@@ -145,8 +146,8 @@ def handler_class(network, key, cache, traffic_cache=None):
                 return self.send(200, network)
             if url.path == '/api/traffic':
                 line = parse_qs(url.query).get('line', [''])[0]
-                if line not in PILOT:
-                    return self.send(400, {'error': 'Select a supported pilot line.'})
+                if line not in allowed_lines:
+                    return self.send(400, {'error': 'Select a supported metro line.'})
                 if traffic_cache is None:
                     return self.send(503, {'error': 'Traffic reports are not configured.'})
                 try:
@@ -160,7 +161,7 @@ def handler_class(network, key, cache, traffic_cache=None):
                 query = parse_qs(url.query)
                 line, stop = query.get('line', [''])[0], query.get('stop', [''])[0]
                 if (line, stop) not in allowed:
-                    return self.send(400, {'error': 'This boarding point is not in the supported pilot.'})
+                    return self.send(400, {'error': 'This boarding point is not in the supported metro network.'})
                 try:
                     result = cache.get((line, stop), lambda: fetch_departures(stop, line, key))
                     return self.send(200, result)
@@ -185,6 +186,8 @@ def main():
     if not NETWORK.exists():
         raise SystemExit('Run python prepare_data.py first to download the small pilot network.')
     network = json.loads(NETWORK.read_text(encoding='utf-8'))
+    if network.get('scope') != 'metro':
+        raise SystemExit('Run python prepare_data.py to replace the old two-line snapshot with the metro network.')
     cache = RequestCache(ROOT / 'artifacts' / 'app-request-budget.json')
     traffic_cache = RequestCache(ROOT / 'artifacts' / 'traffic-request-budget.json', ttl=300)
     server = ThreadingHTTPServer(('127.0.0.1', args.port), handler_class(network, read_keys().get('PRIM_API_KEY', ''), cache, traffic_cache))

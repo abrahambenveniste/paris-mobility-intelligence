@@ -1,5 +1,8 @@
 # Adding reported conditions to the map
 
+> Scope update, 6 November 2026: the app now covers all 16 published métro lines and excludes buses. See [current selection, coverage and tests](metro-expansion.md). The two-line counts and examples below document the earlier implementation; they are historical, not current coverage. Traffic uses a line selector; the original two-line query has been replaced by mode-based discovery.
+
+
 ## Purpose
 
 Answer a small question: “Has the provider published a report explicitly linked to this pilot line?” This project-2 increment adds on-demand notices beside the map. It does not implement project 8's history or early-warning research.

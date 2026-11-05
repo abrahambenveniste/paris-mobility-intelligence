@@ -4,8 +4,8 @@ from datetime import datetime, timezone
 import unittest
 from traffic import normalize_reports
 
-LINE = 'STIF:Line::C01083:'
-TARGET = 'line:IDFM:C01083'
+LINE = 'STIF:Line::C01384:'
+TARGET = 'line:IDFM:C01384'
 NOW = datetime(2026, 1, 1, tzinfo=timezone.utc)
 
 
