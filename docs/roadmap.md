@@ -24,7 +24,7 @@ After collection is approved, archive arrival and disruption streams during M1 s
 - [x] Record owner-reported API account quotas.
 - [x] Identify primary sources and document preliminary evidence gaps.
 - [ ] Clarify the first research use case and pilot selection criteria.
-- [ ] Verify API authentication and the current static-data access flow.
+- [x] Verify API authentication and restricted static-catalogue access; full GTFS download and real-time endpoint checks remain pending.
 - [ ] Retrieve and inspect small representative source samples.
 - [ ] Build a coverage/identifier/freshness assessment from evidence.
 - [ ] Establish which actual-event and cancellation fields are usable.

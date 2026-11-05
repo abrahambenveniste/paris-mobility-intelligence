@@ -2,7 +2,7 @@
 
 Reviewed: 2026-11-05. This is a documented-source inventory, not a completed empirical data audit.
 
-**Evidence labels:** documented = described by a primary publisher; account-reported = quota/account information supplied by the project owner; empirically checked = successfully retrieved and inspected by this project. No transport dataset or authenticated response has yet been empirically checked.
+**Evidence labels:** documented = described by a primary publisher; account-reported = quota/account information supplied by the project owner; empirically checked = successfully retrieved and inspected by this project. Two minimal authenticated responses have now been checked; full datasets and real-time feeds remain unaudited.
 
 ## Transport sources
 
@@ -33,9 +33,9 @@ Residents in employment, establishments, and jobs located at workplaces are diff
 
 ## Account access and quotas
 
-The owner reports an active PRIM account and both API and static-data tokens. Successful authentication and downloads remain untested. Store credentials locally in the ignored `.env`; `.env.example` contains blank variable names only.
+Both credentials are saved locally in the ignored `.env`; `.env.example` contains blank variable names only. On 2026-11-05 at approximately 22:28 UTC, the API credential returned HTTP 200 and one line from the generic Navitia endpoint; the static credential returned HTTP 200 and one record from the restricted GTFS catalogue. The same requests without credentials returned 401 and 403 respectively. These checks establish access to those endpoints, not GTFS archive integrity or next-passage/disruption coverage.
 
-PRIM's [authentication documentation](https://prim.iledefrance-mobilites.fr/content/files/2024/01/-FR--Documentation-fonctionnelle-PRIM---Syst-me-d-authentification-.pdf) describes a separate **Données statiques** token for automated downloads including GTFS and the coverage reference. Both tokens are now confirmed obtained by the owner; verify the current account/download flow with representative samples.
+PRIM's [static authentication instructions](https://prim.iledefrance-mobilites.fr/fr/aide-et-contact/documentation/donnees-disponibles/jeux-de-donnees/generer-un-jeton-pour-acceder-aux-jeux-de-donnees-restreints) specify an Authorization header containing the apikey scheme and static token. The dynamic request used the apiKey header. Neither credential appears in the published evidence.
 
 Relevant limits copied from the owner's dashboard on 2026-11-05:
 

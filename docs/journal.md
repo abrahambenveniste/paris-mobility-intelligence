@@ -33,3 +33,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Change:** prepared an ignored local `.env` and published a blank `.env.example` for reproducible setup.
 
 **Next:** the owner fills the local credential file, then access and sample content can be checked. Token validity and dataset quality remain unverified; no application or collector is implemented.
+
+## 2026-11-05 — Credential access verified
+
+**Purpose:** verify the saved credentials without exposing their values.
+
+**Evidence:** both local variables are populated and `.env` is ignored by Git. At approximately 22:28 UTC, GET `https://prim.iledefrance-mobilites.fr/marketplace/v2/navitia/lines?count=1` returned HTTP 200 and one line with the API credential; without it, HTTP 401. GET `https://data.iledefrance-mobilites.fr/api/explore/v2.1/catalog/datasets/offre-horaires-tc-gtfs-idfm/records?limit=1` returned HTTP 200 and one catalogue record with the static credential; without it, HTTP 403. Four one-off requests; no scheduled collector or application created.
+
+**Decision:** access to the two tested endpoints is confirmed. Credentials and response bodies remain outside Git.
+
+**Limit:** catalogue metadata access does not validate the GTFS archive. Next-passage/disruption endpoints, pilot coverage, and field quality remain untested.
+
+**Next:** inspect the coverage reference, GTFS contents, and representative live responses during M0.
