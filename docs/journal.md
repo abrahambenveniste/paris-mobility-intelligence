@@ -75,3 +75,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limit:** boarding-point coverage is not station coverage; estimates are not actual passages. Transfer topology, disruptions, closure simulation and hosting remain unimplemented. Tests establish handling of defined cases, not network-wide source accuracy.
 
 **Next:** owner review of the local interface, then resolve the unmatched stop and specify the next network-analysis increment. See [setup and methods](network-explorer.md).
+
+## 2026-11-05 — Explain the implementation and make learning visible
+
+**Purpose:** the owner requested beginner-friendly code explanations, data samples, basic tool-choice rationales and guidance on asking useful questions.
+
+**Evidence:** reviewed the walkthrough against the implementation and ran `python examples/explain_prediction.py` successfully. The synthetic input produced one expected departure at 12:05 UTC, with zero invalid or past entries. No external requests or credentials were needed.
+
+**Decision:** foreground the learning walkthrough in the README, explain Python, browser JavaScript, map layers, identifier joins and validation, and keep a prompt guide with explicit learning checkpoints. Preserve the technical audit rather than replacing it with promotional claims.
+
+**Limitation:** assistant-generated code and successful assistant-run checks do not establish the owner's independent understanding. Exercises remain uncompleted until the owner attempts them; samples are labelled synthetic, observed or derived.
+
+**Next:** work through one small code example with the owner, ask one understanding question, and document their explanation or changes when completed. No application features were changed in this increment.

@@ -20,6 +20,7 @@ Updated: 2026-11-05. Status distinguishes user decisions from proposals.
 | D012 | Keep the project simple, useful, and explainable to experts | Start with understandable measures for one metro line and one bus route. Add complexity only to answer a defined question; the four-module vision remains the longer-term scope |
 | D013 | Build project 2 first, using métro 4 and bus 38; local first | Explicit owner approval and two answered scope questions. First increment: reference network and on-demand predictions; no hosting or scheduled collection |
 | D014 | Initial implementation: Python standard library, plain browser JavaScript, Leaflet | Implementation choice to minimise setup and make transformations inspectable. No database or framework needed for this increment |
+| D015 | Make learning and explainability visible throughout the project | Owner requested beginner explanations, code and data examples, basic design rationales, and useful prompts. Document assisted development honestly; demonstrate understanding through owner-completed exercises and explanations |
 
 ## Proposed
 

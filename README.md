@@ -2,6 +2,12 @@
 
 A research platform for understanding transport reliability, network connectivity, disruptions, and neighbourhood access in Paris.
 
+This is also a documented learning project: follow how public transport data becomes a usable map, why each tool was chosen, and what the results cannot tell us. Technical claims should be understandable and reproducible by someone new to programming.
+
+**Start here:** [beginner walkthrough: data → Python → map](docs/learning-walkthrough.md). For working with an AI assistant, see [questions, prompts, and learning checkpoints](docs/working-and-learning.md).
+
+Development is AI-assisted. The owner defines goals and approves scope; implementation and documentation have been produced with Codex assistance. The walkthrough includes exercises to establish personal understanding; these are not claimed as completed until the owner has done them.
+
 **Status: first local network explorer implemented for métro 4 and bus 38.** Search 118 boarding points, inspect official route shapes, and request current departure estimates. One coverage point remains unmapped. Disruptions, closure simulation, historical analytics, and hosting are future work.
 
 ## Run locally
