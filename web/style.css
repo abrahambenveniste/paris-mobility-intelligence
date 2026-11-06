@@ -5,3 +5,5 @@
 .traffic-actions select{padding:10px;border:1px solid #becdc6;background:white;border-radius:6px;color:#174745}.traffic-actions{align-items:center}.filter[aria-label]{padding:7px}
 
 .quality-panel{margin:24px 0;padding:24px;border:1px solid #dce2d9;background:#fff;border-radius:12px}.quality-panel h2{margin:0}.quality-counts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}.quality-counts div{background:#f4f7f2;border-radius:8px;padding:16px}.quality-counts strong{display:block;font-size:28px;color:#174745}.quality-counts span{display:block;font-size:13px;margin-top:8px}.quality-panel summary{cursor:pointer;padding:12px 0}.quality-panel #quality-gaps{font-size:14px;overflow-wrap:anywhere}@media(max-width:650px){.quality-counts{grid-template-columns:repeat(2,1fr)}}
+
+.station-badges{display:flex;gap:4px;flex-wrap:wrap;max-width:130px}.point-estimates{padding:12px 0;border-top:1px solid #dce2d9}.point-estimates h3{font-size:13px;color:#55716b}.line-options summary{cursor:pointer;font-size:13px;margin-bottom:12px}.line-options{margin-bottom:12px}#station-lines .filter{display:flex;align-items:center;gap:4px}

@@ -1,6 +1,7 @@
 'use strict';
 const $ = id => document.getElementById(id);
 let network, map, routeLayers = [], markers = new Map(), activeLine = 'all', selected = null, requestId = 0;
+let groups = [], selectedStation = null, selectedPoints = [];
 const clock = new Intl.DateTimeFormat('en-GB', {timeZone:'Europe/Paris', hour:'2-digit', minute:'2-digit'});
 const dateLabel = new Intl.DateTimeFormat('en-GB', {timeZone:'Europe/Paris', day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'});
 function el(tag, text, cls) { const node = document.createElement(tag); if(text !== undefined) node.textContent = text; if(cls) node.className = cls; return node; }
@@ -28,46 +29,82 @@ function renderQuality() {
 function renderList() {
   renderQuality();
   const stops = visibleStops(); $('stop-list').replaceChildren(); $('result-count').textContent = `${stops.length} points`;
-  for(const stop of stops) {
-    const button = el('button',undefined,'stop-row'); button.classList.toggle('selected',selected && key(selected)===key(stop));
-    button.setAttribute('aria-label',`${route(stop.line_id).mode} ${route(stop.line_id).name}, ${stop.name}, boarding point ${stop.id}`);
-    button.setAttribute('aria-pressed',String(Boolean(selected && key(selected)===key(stop))));
-    button.append(badge(route(stop.line_id))); const names = el('span',undefined,'names'); names.append(el('strong',stop.name),el('small',`${stop.commune} · ${stop.id.replace('IDFM:','Point ')}`)); button.append(names,el('span','↗','arrow')); button.addEventListener('click',()=>selectStop(stop)); $('stop-list').append(button);
+  const visibleIds = new Set(stops.map(key));
+  const listed = groups.filter(group=>group.stops.some(stop=>visibleIds.has(key(stop))));
+  $('result-count').textContent = `${listed.length} station name groups`;
+  for(const group of listed) {
+    const button=el('button',undefined,'stop-row');button.setAttribute('aria-label',`${group.name}, ${group.commune}`);
+    button.classList.toggle('selected',selectedStation?.id===group.id);
+    const names=el('span',undefined,'names');names.append(el('strong',group.name),el('small',group.commune));button.append(names);
+    const badges=el('span',undefined,'station-badges');
+    for(const r of network.routes)if(group.stops.some(stop=>stop.line_id===r.id))badges.append(badge(r));
+    button.append(badges);button.addEventListener('click',()=>selectStation(group));$('stop-list').append(button);
   }
-  if(!stops.length) $('stop-list').append(el('p','No boarding points match your search.','notice'));
+  if(!listed.length)$('stop-list').append(el('p','No station names match your search.','notice'));
   const shown = new Set(stops.map(key));
   if(map) for(const [id, marker] of markers) { if(shown.has(id)) marker.addTo(map); else marker.remove(); }
   if(map) for(const layer of routeLayers) { if(activeLine==='all'||layer.routeId===activeLine) layer.addTo(map); else layer.remove(); }
 }
 function fit() { if(!map)return; const stops=visibleStops(); if(stops.length) map.fitBounds(stops.map(s=>[s.lat,s.lon]),{padding:[35,35],maxZoom:14}); }
-function selectStop(stop) {
-  selected=stop; $('empty-detail').hidden=true; $('selected-detail').hidden=false;
-  const r=route(stop.line_id); $('selected-line').textContent=`${r.mode} ${r.name} · NEXT REPORTED PASSAGES`; $('selected-name').textContent=stop.name; $('selected-platform').textContent=`${stop.id.replace('IDFM:','Boarding point ')} · ${stop.commune}`;
-  if(map) { map.setView([stop.lat,stop.lon],Math.max(map.getZoom(),14),{animate:false}); for(const [id,m] of markers) m.setStyle({radius:id===key(stop)?9:4.5,weight:id===key(stop)?3:2,fillColor:id===key(stop)?route(stop.line_id).color:'#fff'}); }
-  renderList(); loadDepartures();
+function selectStation(group) {
+  selectedStation=group;selected=null;selectedPoints=[];++requestId;
+  $('station-choice').hidden=false;$('selected-detail').hidden=true;$('empty-detail').hidden=false;
+  $('station-name').textContent=group.name;$('station-place').textContent=group.commune;
+  $('station-lines').replaceChildren();
+  for(const r of network.routes) {
+    const points=stationLineStops(group,r.id);if(!points.length)continue;
+    const button=el('button',undefined,'filter');button.append(badge(r),el('span',` ${points.length} points`));
+    button.setAttribute('aria-label',`View ${group.name} métro ${r.name}`);
+    button.addEventListener('click',()=>selectStationLine(group,r.id));$('station-lines').append(button);
+  }
+  if(map) {map.fitBounds(group.stops.map(s=>[s.lat,s.lon]),{padding:[35,35],maxZoom:15});for(const marker of markers.values())marker.setStyle({radius:4.5,weight:2,fillColor:'#fff'});}
+  renderList();
+}
+function selectStationLine(group,line) {
+  selectedPoints=stationLineStops(group,line);selected=selectedPoints[0];
+  const r=route(line);$('empty-detail').hidden=true;$('selected-detail').hidden=false;
+  $('selected-name').textContent=group.name;$('selected-line').textContent=`Métro ${r.name} · REPORTED DESTINATIONS`;
+  $('selected-platform').textContent=`${selectedPoints.length} boarding-point records · ${group.commune}. Estimates are listed by source point; destinations are reported, not inferred directions.`;
+  $('traffic-line').value=line;
+  if(map)for(const [id,marker] of markers)marker.setStyle({radius:selectedPoints.some(s=>key(s)===id)?8:4.5,weight:2,fillColor:selectedPoints.some(s=>key(s)===id)?r.color:'#fff'});
+  loadDepartures();
 }
 async function loadDepartures() {
-  if(!selected)return; const stop=selected, sequence=++requestId;
-  $('departures').replaceChildren(); $('fetch-info').textContent=''; $('refresh').disabled=true;
-  if(!stop.live_supported) { $('live-status').textContent='This point is not listed in the real-time coverage reference.'; $('refresh').disabled=false; return; }
-  $('live-status').textContent='Requesting provider estimates…';
-  try {
-    const response=await fetch('/api/departures?'+new URLSearchParams({line:stop.line_id,stop:stop.monitoring_ref})); const data=await response.json(); if(sequence!==requestId)return; if(!response.ok)throw new Error(data.error||'Could not retrieve estimates.');
-    $('live-status').textContent=data.cached?'CACHED RESPONSE · NO NEW API CALL':'LATEST REQUEST COMPLETE';
-    if(!data.departures.length)$('departures').append(el('p','No future estimates were returned for this line.','notice'));
+  if(!selectedPoints.length)return;
+  const points=[...selectedPoints], line=selected.line_id, sequence=++requestId;
+  $('departures').replaceChildren();$('fetch-info').textContent='';$('refresh').disabled=true;
+  $('live-status').textContent='Requesting estimates for this station and line…';
+  const results=await Promise.allSettled(points.map(async stop=>{
+    if(!stop.live_supported)return null;
+    const response=await fetch('/api/departures?'+new URLSearchParams({line,stop:stop.monitoring_ref}));
+    const data=await response.json();if(!response.ok)throw new Error(data.error||'Estimates unavailable');return data;
+  }));
+  if(sequence!==requestId)return;
+  let failures=0,loaded=0,cached=0;
+  for(let i=0;i<points.length;i++) {
+    const stop=points[i],result=results[i],section=el('section',undefined,'point-estimates');
+    section.append(el('h3',stop.id.replace('IDFM:','Point ')));
+    if(result.status==='rejected') {failures++;section.append(el('p','Could not retrieve this point. Other results may still be available.','notice'));}
+    else if(result.value===null)section.append(el('p','Not listed in the live-coverage reference. No API request made.','notice'));
+    else {
+      const data=result.value;loaded++;if(data.cached)cached++;
+      if(!data.departures.length)section.append(el('p','No future estimates returned for this point. This does not prove no service.','notice'));
     for(const departure of data.departures.slice(0,6)) {
       const row=el('div',undefined,'departure'), info=el('div'); info.append(el('span',departure.destination,'destination'));
       const age=departure.recorded_at?Math.max(0,Math.floor((Date.now()-Date.parse(departure.recorded_at))/1000)):null;
       const ageText=age===null?'Source-record time unavailable':`Source record: ${age<60?age+'s':Math.floor(age/60)+'m'} ago${age>120?' · older record':''}`;
       info.append(el('span',ageText,'age'+(age>120?' older':'')));
       let label='Reported cancelled'; if(!departure.cancelled) { const seconds=(Date.parse(departure.expected_at)-Date.now())/1000; label=seconds<0?'Time passed':seconds<60?'<1 min':Math.ceil(seconds/60)+' min'; }
-      const due=el('span',label,'due'); if(departure.expected_at)due.append(el('small',`${clock.format(new Date(departure.expected_at))} · estimated ${departure.kind}`)); row.append(info,due); $('departures').append(row);
+      const due=el('span',label,'due'); if(departure.expected_at)due.append(el('small',`${clock.format(new Date(departure.expected_at))} · estimated ${departure.kind}`)); row.append(info,due); section.append(row);
     }
-    let note=`Fetched ${clock.format(new Date(data.fetched_at))} Paris time. Cached for up to 2 minutes. Refresh to update countdowns.`;
-    if(data.excluded_past||data.excluded_invalid)note+=` ${data.excluded_past} past and ${data.excluded_invalid} invalid-time entries omitted.`;
-    $('fetch-info').textContent=note;
-  } catch(error) { if(sequence===requestId) { $('live-status').textContent='ESTIMATES UNAVAILABLE'; $('departures').append(el('p',error.message,'notice')); } }
-  finally { if(sequence===requestId)$('refresh').disabled=false; }
+
+      section.append(el('p',`${data.cached?'Cached':'Fetched'} ${clock.format(new Date(data.fetched_at))} Paris time. ${data.excluded_past} past and ${data.excluded_invalid} invalid-time entries omitted.`,'muted small'));
+    }
+    $('departures').append(section);
+  }
+  $('live-status').textContent=`${loaded} point response(s) loaded · ${cached} cached · ${failures} failed`;
+  $('fetch-info').textContent='Each covered point uses one request unless cached (2 minutes). Refresh updates countdowns. Records from different points are not deduplicated into confirmed train journeys.';
+  $('refresh').disabled=false;
 }
 let trafficSequence = 0;
 function providerDate(value) { return value ? value.replace('T',' ') + ' (Paris)' : 'not supplied'; }
@@ -100,14 +137,14 @@ async function loadTraffic(line) {
 }
 async function init() {
   try {
-    const response=await fetch('/api/network'); if(!response.ok)throw new Error('Network data could not be loaded.'); network=await response.json();
+    const response=await fetch('/api/network'); if(!response.ok)throw new Error('Network data could not be loaded.'); network=await response.json();groups=stationGroups(network.stops);
     $('point-count').textContent=network.stops.length;
     $('line-count').textContent=network.routes.length;
     for(const r of network.routes) { const option=el('option',r.name); option.value=r.id; $('traffic-line').append(option); }
     $('traffic-check').addEventListener('click',()=>loadTraffic($('traffic-line').value));
     for(const r of network.routes) { const button=el('button',undefined,'filter'); button.dataset.line=r.id;button.setAttribute('aria-pressed','false');button.setAttribute('aria-label','Métro '+r.name);button.append(badge(r));$('line-filters').append(button); }
-    $('line-filters').addEventListener('click',event=>{const button=event.target.closest('button');if(!button)return;activeLine=button.dataset.line;if(activeLine!=='all')$('traffic-line').value=activeLine;selected=null;++requestId;$('empty-detail').hidden=false;$('selected-detail').hidden=true;for(const marker of markers.values())marker.setStyle({radius:4.5,weight:2,fillColor:'#fff'});updateFilters();renderList();fit();});
-    $('search').addEventListener('input',renderList);$('refresh').addEventListener('click',loadDepartures);$('fit-map').addEventListener('click',fit);
+    $('line-filters').addEventListener('click',event=>{const button=event.target.closest('button');if(!button)return;activeLine=button.dataset.line;if(activeLine!=='all')$('traffic-line').value=activeLine;selected=null;selectedStation=null;selectedPoints=[];$('station-choice').hidden=true;++requestId;$('empty-detail').hidden=false;$('selected-detail').hidden=true;for(const marker of markers.values())marker.setStyle({radius:4.5,weight:2,fillColor:'#fff'});updateFilters();renderList();fit();});
+    $('search').addEventListener('input',()=>{selected=null;selectedStation=null;selectedPoints=[];++requestId;$('station-choice').hidden=true;$('selected-detail').hidden=true;$('empty-detail').hidden=false;renderList();});$('station-traffic').addEventListener('click',()=>{if(selected){loadTraffic(selected.line_id);$('traffic-title').scrollIntoView({behavior:'smooth'});}});$('refresh').addEventListener('click',loadDepartures);$('fit-map').addEventListener('click',fit);
     $('mapping-note').textContent=`${network.unmapped.length} coverage-listed boarding point${network.unmapped.length===1?' is':'s are'} not mapped because no exact coordinate-reference match was found.${network.unmapped.length?' '+network.unmapped.map(s=>s.name).join('; ')+'.':''} No substitute location is guessed. ${network.stops.filter(s=>!s.live_supported).length} mapped points are absent from the real-time coverage reference.`;
     $('snapshot-date').textContent=`Reference snapshot downloaded ${dateLabel.format(new Date(network.prepared_at))} (Paris). Download time is not the publisher’s update time. Run prepare_data.py to refresh it.`;
     for(const source of network.sources) { const link=el('a',source.dataset.replaceAll('-',' ')+' ↗');link.href=source.url;link.target='_blank';link.rel='noreferrer';$('source-links').append(link); }
@@ -115,7 +152,7 @@ async function init() {
       map=L.map('map',{zoomControl:false}).setView([48.8566,2.3522],12); L.control.zoom({position:'topright'}).addTo(map);
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> · Routes/stops: Île-de-France Mobilités'}).on('tileerror',()=>{$('map-warning').hidden=false;$('map-warning').textContent='Street tiles are unavailable. Route geometries and boarding points remain usable.';}).addTo(map);
       for(const r of network.routes) {const layer=L.geoJSON(r.geometry,{style:{color:r.color,weight:3,opacity:.7},interactive:false});layer.routeId=r.id;routeLayers.push(layer);}
-      for(const stop of network.stops) { const r=route(stop.line_id), marker=L.circleMarker([stop.lat,stop.lon],{radius:4.5,color:r.color,fillColor:'#fff',fillOpacity:1,weight:2});const label=el('span',`${r.mode} ${r.name} · ${stop.name} · ${stop.id}`);marker.bindTooltip(label);marker.on('click',()=>selectStop(stop));markers.set(key(stop),marker); }
+      for(const stop of network.stops) { const r=route(stop.line_id), marker=L.circleMarker([stop.lat,stop.lon],{radius:4.5,color:r.color,fillColor:'#fff',fillOpacity:1,weight:2});const label=el('span',`${r.mode} ${r.name} · ${stop.name} · ${stop.id}`);marker.bindTooltip(label);marker.on('click',()=>selectStation(groups.find(g=>g.stops.includes(stop))));markers.set(key(stop),marker); }
     } else { $('map').textContent='Map library unavailable. You can still use the boarding-point list and estimates.'; }
     renderList();fit();
   } catch(error) { $('app-error').hidden=false;$('app-error').textContent=error.message;$('result-count').textContent='Network unavailable'; }

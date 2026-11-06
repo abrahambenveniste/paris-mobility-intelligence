@@ -123,3 +123,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** matching references does not prove fresh predictions or normal service. Carrefour Pleyel's differing identifiers remain unresolved; no automatic reconciliation was made.
 
 **Next:** inspect authoritative relationships for unmatched IDs. Code and checks were assistant-performed; owner understanding remains to be demonstrated through the question and exercise.
+
+## 2026-11-06 — Station-first usability
+
+**Purpose:** implement the owner's station-first choice and approval to keep nearby, differently named stations separate.
+
+**Evidence:** the existing 803 records form 327 exact name/commune display groups. Châtelet has ten records across five lines; Les Halles remains separate. Browser checks confirmed search, station/line selection, two empty successful live responses and cached refresh. Four JavaScript tests and 22 Python tests pass.
+
+**Decision:** keep raw identifiers and coverage flags, show per-point estimates after line selection, preserve partial errors, and offer the selected line's traffic notices. Search and station selection alone make no live request.
+
+**Limitation:** display grouping does not prove transfers or identify platform directions. The late-night responses supplied no future estimates; non-empty live rendering was not revalidated in this increment.
+
+**Next:** owner review before choosing further changes. See [method and examples](station-first.md). Owner decisions are recorded separately from assistant-written code and checks.

@@ -24,6 +24,7 @@ Updated: 2026-11-05. Status distinguishes user decisions from proposals.
 | D016 | Next project-2 increment: on-demand directly linked traffic notices | Implementation choice under the owner's instruction to continue project 2. Use targeted line reports; exclude station-only associations from line status. No project-8 predictive model or background collection |
 | D017 | Expand project 2 to all published métro lines; exclude buses | Explicit owner request on 6 November 2026, superseding the two-line scope in D006/D013. Discover métro routes by source mode, preserve on-demand calls and document coverage gaps |
 | D018 | Expose reference matches and gaps per line before modelling closures | Implementation choice under continued project-2 authorisation. Use the saved snapshot; separate missing coverage from missing map matches. Counts are not reliability or service-availability scores |
+| D019 | Prioritise station-first usability; keep differently named nearby stations separate | Explicit owner choices. Group identical source name/commune pairs for display, then choose a line and show source-point estimates. Do not infer transfers or directions |
 
 ## Proposed
 

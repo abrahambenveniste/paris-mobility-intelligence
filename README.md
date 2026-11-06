@@ -10,6 +10,8 @@ Development is AI-assisted. The owner defines goals and approves scope; implemen
 
 **Status: local explorer for all 16 published Paris métro lines (1–14, 3bis and 7bis).** Search 803 boarding-point records, inspect official route shapes, request departure estimates, and check directly linked traffic notices. Bus 38 has been removed from the active scope. Closure simulation, historical analytics, and hosting are future work.
 
+**Station-first navigation:** search a station name, select it, then choose a métro line to load its boarding-point estimates and reported destinations. Châtelet and Les Halles remain separate. [Grouping rules, examples and validation](docs/station-first.md).
+
 [Metro expansion: selection logic, coverage and validation](docs/metro-expansion.md). The inspected snapshot has 801 mapped points listed for real-time coverage, two without a coverage match, and three additional coverage points left unmapped. These are boarding-point records, not unique stations.
 
 For traffic notices, select a métro line and click “Check notices” below the map. Reports are cached for five minutes. A dashed route indicates a linked active notice, not a full-line closure. [How notices are filtered](docs/traffic-notices.md).
@@ -25,7 +27,7 @@ python prepare_data.py
 python app.py
 ```
 
-Open http://127.0.0.1:8765. Preparation discovers published métro lines and downloads their reference subsets; rerun it when you want updated reference data, then restart the server. Stop the server with Ctrl+C. Predictions are requested only when selecting a point or refreshing, with a two-minute cache.
+Open http://127.0.0.1:8765. Preparation discovers published métro lines and downloads their reference subsets; rerun it when you want updated reference data, then restart the server. Stop the server with Ctrl+C. Selecting a station's line requests its covered boarding points; refreshing reuses a two-minute cache where available. Searching alone makes no live request.
 
 [Setup, methodology, sources, and limits](docs/network-explorer.md). Run the lightweight offline tests with `python -m unittest discover -s tests -v`.
 
