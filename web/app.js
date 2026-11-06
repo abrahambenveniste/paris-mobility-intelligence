@@ -12,7 +12,21 @@ function visibleStops() { const query = clean($('search').value.trim()); return 
 function updateFilters() {
   for(const button of $('line-filters').children) { const yes = button.dataset.line === activeLine; button.classList.toggle('active',yes); button.setAttribute('aria-pressed',String(yes)); }
 }
+function renderQuality() {
+  const data = coverageSummary(network, activeLine);
+  $('quality-scope').textContent = (activeLine === 'all' ? 'All métro lines' : 'Métro '+route(activeLine).name) + ' · follows the line filter above; stop searches do not change these totals.';
+  const counts = $('quality-counts'); counts.replaceChildren();
+  for(const [label, count] of [['Mapped records', data.mapped], ['Listed for live predictions', data.matched], ['Mapped, no coverage match', data.missingCoverage.length], ['Coverage-listed, not mapped', data.missingMap.length]]) {
+    const card = el('div'); card.append(el('strong',String(count)),el('span',label));counts.append(card);
+  }
+  const gaps = $('quality-gaps'); gaps.replaceChildren();
+  if(!data.missingCoverage.length && !data.missingMap.length) gaps.append(el('p','No identifier mismatches in this subset. This does not establish source accuracy.'));
+  for(const stop of data.missingCoverage)gaps.append(el('p',`Métro ${route(stop.line_id).name} · ${stop.name} · ${stop.id}: mapped, but absent from the live-coverage reference. Predictions are unavailable through this app.`));
+  for(const stop of data.missingMap)gaps.append(el('p',`Métro ${route(stop.line_id).name} · ${stop.name} · ${stop.monitoring_ref}: listed for live coverage, but no exact map-record match. No position is guessed.`));
+  $('quality-date').textContent = 'Reference snapshot downloaded '+dateLabel.format(new Date(network.prepared_at))+' (Paris). This is a download time, not the publisher’s update time.';
+}
 function renderList() {
+  renderQuality();
   const stops = visibleStops(); $('stop-list').replaceChildren(); $('result-count').textContent = `${stops.length} points`;
   for(const stop of stops) {
     const button = el('button',undefined,'stop-row'); button.classList.toggle('selected',selected && key(selected)===key(stop));

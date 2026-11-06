@@ -171,6 +171,7 @@ def handler_class(network, key, cache, traffic_cache=None):
                     return self.send(502, {'error': 'PRIM is unavailable or returned an unexpected response. Try again later.'})
             assets = {'/': ('index.html', 'text/html; charset=utf-8'),
                       '/app.js': ('app.js', 'text/javascript; charset=utf-8'),
+                      '/quality.js': ('quality.js', 'text/javascript; charset=utf-8'),
                       '/style.css': ('style.css', 'text/css; charset=utf-8')}
             if url.path not in assets:
                 return self.send(404, {'error': 'Not found'})

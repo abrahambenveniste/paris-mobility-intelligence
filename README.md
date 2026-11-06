@@ -14,6 +14,8 @@ Development is AI-assisted. The owner defines goals and approves scope; implemen
 
 For traffic notices, select a métro line and click “Check notices” below the map. Reports are cached for five minutes. A dashed route indicates a linked active notice, not a full-line closure. [How notices are filtered](docs/traffic-notices.md).
 
+The **Reference coverage** panel follows your line filter and lets you inspect unmatched records. It uses the saved snapshot without additional PRIM calls. [Code, examples and validation](docs/coverage-view.md).
+
 ## Run locally
 
 Requires Python 3.10+ and internet access; no Python packages or database needed. Copy `.env.example` to `.env` and enter your own PRIM credentials. Keep this file private.

@@ -111,3 +111,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Validation:** 22 offline tests and the JavaScript syntax check passed. No raw data or credentials are published.
 
 **Limitation and next action:** reference coverage is not live availability, and boarding points are not unique stations. Inspect the expanded view and investigate the five unmatched records before further modelling. Assistant-performed implementation is distinct from owner-completed learning exercises.
+
+## 2026-11-06 — Reference coverage inspector
+
+**Purpose:** make input gaps visible inside project 2, before using the network for scenarios.
+
+**Evidence:** the existing snapshot yields 803 mapped records, 801 matched coverage records and five mismatches across two directions. Browser checks confirmed global and line-13 totals plus gap details. Two JavaScript tests and 22 Python tests pass. No new PRIM requests were required.
+
+**Decision:** add a line-filtered coverage panel and inspectable names/IDs, using a small pure JavaScript function. Explain association counts and distinguish lookup coverage from operational service. See [teaching notes](coverage-view.md).
+
+**Limitation:** matching references does not prove fresh predictions or normal service. Carrefour Pleyel's differing identifiers remain unresolved; no automatic reconciliation was made.
+
+**Next:** inspect authoritative relationships for unmatched IDs. Code and checks were assistant-performed; owner understanding remains to be demonstrated through the question and exercise.
