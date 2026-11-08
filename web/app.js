@@ -47,6 +47,7 @@ function renderList() {
 }
 function fit() { if(!map)return; const stops=visibleStops(); if(stops.length) map.fitBounds(stops.map(s=>[s.lat,s.lon]),{padding:[35,35],maxZoom:14}); }
 function selectStation(group) {
+  resetStationTraffic();
   selectedStation=group;selected=null;selectedPoints=[];++requestId;
   $('station-choice').hidden=false;$('selected-detail').hidden=true;$('empty-detail').hidden=false;
   $('station-name').textContent=group.name;$('station-place').textContent=group.commune;
@@ -61,6 +62,7 @@ function selectStation(group) {
   renderList();
 }
 function selectStationLine(group,line) {
+  resetStationTraffic();
   selectedPoints=stationLineStops(group,line);selected=selectedPoints[0];
   const r=route(line);$('empty-detail').hidden=true;$('selected-detail').hidden=false;
   $('selected-name').textContent=group.name;$('selected-line').textContent=`Métro ${r.name} · REPORTED DESTINATIONS`;
@@ -117,15 +119,22 @@ async function loadDepartures() {
   $('refresh').disabled=false;
 }
 let trafficSequence = 0;
+const trafficRequests = new WeakMap();
+function resetStationTraffic() {
+  const panel=$('station-traffic-result');
+  trafficRequests.set(panel,{});
+  panel.replaceChildren(el('p','No notice request made for this selection.','muted small'));
+}
 function providerDate(value) { return value ? value.replace('T',' ') + ' (Paris)' : 'not supplied'; }
-async function loadTraffic(line) {
-  const sequence = ++trafficSequence, panel = $('traffic-result');
+async function loadTraffic(line, panel = $('traffic-result')) {
+  const sequence = ++trafficSequence, request={};
+  trafficRequests.set(panel,request);
   panel.replaceChildren(el('p', 'Checking published notices…'));
   for(const layer of routeLayers) layer.setStyle({dashArray:null,weight:3});
   try {
     const response = await fetch('/api/traffic?' + new URLSearchParams({line}));
     const data = await response.json();
-    if(sequence !== trafficSequence)return;
+    if(trafficRequests.get(panel)!==request)return;
     if(!response.ok)throw new Error(data.error || 'Traffic reports unavailable.');
     panel.replaceChildren();
     const r = route(line);
@@ -142,8 +151,8 @@ async function loadTraffic(line) {
       card.append(el('small', 'Report ID: '+report.id));panel.append(card);
     }
     panel.append(el('p', `${data.excluded_unlinked} other returned records excluded because no direct line link was found. Station/accessibility notices can be omitted by this conservative filter. Report periods are not measured incident durations.`, 'muted small'));
-    if(data.reports.some(report=>report.status==='active'))for(const layer of routeLayers)if(layer.routeId===line)layer.setStyle({dashArray:'8 6',weight:5});
-  } catch(error) { if(sequence===trafficSequence)panel.replaceChildren(el('p',error.message,'notice error')); }
+    if(sequence===trafficSequence&&data.reports.some(report=>report.status==='active'))for(const layer of routeLayers)if(layer.routeId===line)layer.setStyle({dashArray:'8 6',weight:5});
+  } catch(error) { if(trafficRequests.get(panel)===request)panel.replaceChildren(el('p',error.message,'notice error')); }
 }
 async function init() {
   try {
@@ -154,12 +163,13 @@ async function init() {
     $('traffic-check').addEventListener('click',()=>loadTraffic($('traffic-line').value));
     for(const r of network.routes) { const button=el('button',undefined,'filter'); button.dataset.line=r.id;button.setAttribute('aria-pressed','false');button.setAttribute('aria-label','Métro '+r.name);button.append(badge(r));$('line-filters').append(button); }
     $('line-filters').addEventListener('click',event=>{const button=event.target.closest('button');if(!button)return;activeLine=button.dataset.line;if(activeLine!=='all')$('traffic-line').value=activeLine;selected=null;selectedStation=null;selectedPoints=[];$('station-choice').hidden=true;++requestId;$('empty-detail').hidden=false;$('selected-detail').hidden=true;for(const marker of markers.values())marker.setStyle({radius:4.5,weight:2,fillColor:'#fff'});updateFilters();renderList();fit();});
-    $('search').addEventListener('input',()=>{selected=null;selectedStation=null;selectedPoints=[];++requestId;$('station-choice').hidden=true;$('selected-detail').hidden=true;$('empty-detail').hidden=false;renderList();});$('station-traffic').addEventListener('click',()=>{if(selected){loadTraffic(selected.line_id);$('traffic-title').scrollIntoView({behavior:'smooth'});}});$('refresh').addEventListener('click',loadDepartures);$('fit-map').addEventListener('click',fit);
+    $('search').addEventListener('input',()=>{selected=null;selectedStation=null;selectedPoints=[];++requestId;$('station-choice').hidden=true;$('selected-detail').hidden=true;$('empty-detail').hidden=false;renderList();});$('station-traffic').addEventListener('click',()=>{if(selected){loadTraffic(selected.line_id,$('station-traffic-result'));}});$('refresh').addEventListener('click',loadDepartures);$('fit-map').addEventListener('click',fit);
     $('mapping-note').textContent=`${network.unmapped.length} coverage-listed boarding point${network.unmapped.length===1?' is':'s are'} not mapped because no exact coordinate-reference match was found.${network.unmapped.length?' '+network.unmapped.map(s=>s.name).join('; ')+'.':''} No substitute location is guessed. ${network.stops.filter(s=>!s.live_supported).length} mapped points are absent from the real-time coverage reference.`;
     $('snapshot-date').textContent=`Reference snapshot downloaded ${dateLabel.format(new Date(network.prepared_at))} (Paris). Download time is not the publisher’s update time. Run prepare_data.py to refresh it.`;
     for(const source of network.sources) { const link=el('a',source.dataset.replaceAll('-',' ')+' ↗');link.href=source.url;link.target='_blank';link.rel='noreferrer';$('source-links').append(link); }
     if(window.L) {
       map=L.map('map',{zoomControl:false}).setView([48.8566,2.3522],12); L.control.zoom({position:'topright'}).addTo(map);
+      new ResizeObserver(()=>map.invalidateSize({pan:false})).observe($('map'));
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a> · Routes/stops: Île-de-France Mobilités'}).on('tileerror',()=>{$('map-warning').hidden=false;$('map-warning').textContent='Street tiles are unavailable. Route geometries and boarding points remain usable.';}).addTo(map);
       for(const r of network.routes) {const layer=L.geoJSON(r.geometry,{style:{color:r.color,weight:3,opacity:.7},interactive:false});layer.routeId=r.id;routeLayers.push(layer);}
       for(const stop of network.stops) { const r=route(stop.line_id), marker=L.circleMarker([stop.lat,stop.lon],{radius:4.5,color:r.color,fillColor:'#fff',fillOpacity:1,weight:2});const label=el('span',`${r.mode} ${r.name} · ${stop.name} · ${stop.id}`);marker.bindTooltip(label);marker.on('click',()=>selectStation(groups.find(g=>g.stops.includes(stop))));markers.set(key(stop),marker); }

@@ -147,3 +147,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** identical predictions do not establish train identity; freshly fetched data may contain old records. No new claim about actual arrivals, cancellations inferred from gaps, or verified platform directions.
 
 **Next:** owner review and explanation of prediction freshness. See [code, labelled samples and validation](station-first.md#destination-grouping--8-november-2026). Implementation and checks were performed with Codex assistance.
+
+## 2026-11-08 — Line notices beside departures
+
+**Purpose:** implement the owner's chosen next step: read selected-line notices without leaving station departures.
+
+**Evidence:** browser inspection of Châtelet / métro 4 showed zero directly linked reports, 21 excluded records, the completeness warning, preserved departures and cached notice reuse. Reselecting the line cleared the previous notice. The bounded check used two upstream departure requests and one traffic request; repeats reused caches. All 28 existing tests and JavaScript syntax checks passed.
+
+**Decision:** share the existing renderer between both notice locations; preserve line-level scope, on-demand loading and five-minute caching. Guard each panel against outdated request results.
+
+**Limitation:** this live check exercised an empty linked-report result, not a fresh populated notice. No claim of normal service or station-specific disruption follows from it.
+
+**Next:** owner review. See [implementation, samples and limits](inline-notices.md). Code and checks are AI-assisted.

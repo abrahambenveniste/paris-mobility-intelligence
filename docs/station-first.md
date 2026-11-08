@@ -61,3 +61,5 @@ A JavaScript `Map` keeps a list for each destination. Adding a record to a list 
 **Limitations:** destination spelling variants remain separate. Multiple observations are not necessarily distinct trains. A source record can be old even when freshly fetched. Countdown labels update on refresh; a cached estimate whose time passed remains explicitly labelled “Time passed”. These are predictions, not observed passages.
 
 **Next:** owner review of the destination view before another feature. Understanding question: why is a freshly fetched response not necessarily a fresh prediction?
+
+Selected-line notices can now be checked alongside departures: [implementation and limits](inline-notices.md).

@@ -14,7 +14,7 @@ Development is AI-assisted. The owner defines goals and approves scope; implemen
 
 [Metro expansion: selection logic, coverage and validation](docs/metro-expansion.md). The inspected snapshot has 801 mapped points listed for real-time coverage, two without a coverage match, and three additional coverage points left unmapped. These are boarding-point records, not unique stations.
 
-For traffic notices, select a métro line and click “Check notices” below the map. Reports are cached for five minutes. A dashed route indicates a linked active notice, not a full-line closure. [How notices are filtered](docs/traffic-notices.md).
+For traffic notices, click “Check notices for this line” beside the selected station’s departures. A separate line-level lookup remains below the map. Notices concern the line, not necessarily the selected station. Reports are cached for five minutes. A dashed route indicates a linked active notice, not a full-line closure. [How notices are filtered](docs/traffic-notices.md).
 
 The **Reference coverage** panel follows your line filter and lets you inspect unmatched records. It uses the saved snapshot without additional PRIM calls. [Code, examples and validation](docs/coverage-view.md).
 

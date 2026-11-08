@@ -52,3 +52,5 @@ Seven new synthetic tests plus eleven existing tests pass. JavaScript syntax is 
 Browser checks confirmed the bus notice, cache reuse and métro empty-result warning. Four upstream calls in this increment: two bounded source-inspection requests and two browser-driven checks. The repeated bus check used the cache.
 
 Next: owner review and one understanding check—why must a station lift notice not automatically mark an entire line as interrupted?
+
+Current station-view integration: [notices beside departures](inline-notices.md).
