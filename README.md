@@ -33,6 +33,10 @@ Open http://127.0.0.1:8765. Preparation discovers published métro lines and dow
 
 [Setup, methodology, sources, and limits](docs/network-explorer.md). Run the lightweight offline tests with `python -m unittest discover -s tests -v`.
 
+## Project 1: collection pilot
+
+A local collector now saves prediction snapshots for two Châtelet / métro-4 points every five minutes while running. Start the explorer, then `Start Collector.cmd`. [Setup, data-quality evidence and scientific limits](docs/reliability-pilot.md). This is not yet a reliability index.
+
 ## Four projects, one map
 
 | Project | Intended outcome | Evidence requirement |

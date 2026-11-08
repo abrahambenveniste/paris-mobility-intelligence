@@ -185,3 +185,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** narrower phones and touch gestures still need real-device review. Existing data limitations remain unchanged.
 
 **Next:** owner review through the local link; keep the local server running while using it. Implementation and checks are AI-assisted.
+
+## 2026-11-08 — Project 1 local collection foundation
+
+**Purpose:** begin the owner-approved line-4 reliability project with inspectable history and collection-quality evidence.
+
+**Evidence:** a bounded live cycle saved two successful Châtelet point responses; immediate restart skipped duplication. All 31 tests pass after fixing explicit SQLite connection cleanup on Windows.
+
+**Decision:** use Python's built-in SQLite, five-minute sampling and the existing explorer's request cache/budget. Keep the process user-operated; save normalized responses, reference fingerprints, failures and collection gaps locally. Initial two-point coverage is an implementation pilot, not a claim of whole-line representativeness.
+
+**Limitation:** the existing normalized responses lack stable journey identifiers and discard past entries. No punctuality, actual headway, cancellation-rate or forecast-accuracy claims follow. Background collection was not left running after the one-cycle check.
+
+**Next:** accumulate and inspect data quality, then validate journey identification before prediction-stability analysis. See [pilot instructions and methodology](reliability-pilot.md). Code and validation are AI-assisted.

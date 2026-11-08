@@ -29,6 +29,7 @@ Updated: 2026-11-08. Status distinguishes user decisions from proposals.
 | D021 | Show selected-line notices beside departure estimates | Explicit owner choice. Reuse the existing line report endpoint and five-minute cache; retain on-demand loading, line-level labels and independent departure results |
 | D022 | Finish the current local explorer as v0.1; defer fine-tuning | Owner prioritised a usable tool and conserving usage. Add simple startup and handoff documentation; hosting, simulation and other modules remain separate |
 | D023 | Improve small-screen usability and provide a working local link | Owner approved responsive layout work. Keep the map compact and visible, reduce empty list space and enlarge touch controls; no hosting implied |
+| D024 | Begin project 1 on line 4, collecting only while the owner runs it locally | Explicit owner approval. Initial implementation samples two already-inspected Châtelet points every five minutes; this is not whole-line coverage. Save collection failures and gaps separately; scoring awaits suitable evidence |
 
 ## Proposed
 
