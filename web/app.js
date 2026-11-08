@@ -64,7 +64,7 @@ function selectStationLine(group,line) {
   selectedPoints=stationLineStops(group,line);selected=selectedPoints[0];
   const r=route(line);$('empty-detail').hidden=true;$('selected-detail').hidden=false;
   $('selected-name').textContent=group.name;$('selected-line').textContent=`Métro ${r.name} · REPORTED DESTINATIONS`;
-  $('selected-platform').textContent=`${selectedPoints.length} boarding-point records · ${group.commune}. Estimates are listed by source point; destinations are reported, not inferred directions.`;
+  $('selected-platform').textContent=`${selectedPoints.length} boarding-point records · ${group.commune}. Estimates are grouped by reported destination, with their source points preserved.`;
   $('traffic-line').value=line;
   if(map)for(const [id,marker] of markers)marker.setStyle({radius:selectedPoints.some(s=>key(s)===id)?8:4.5,weight:2,fillColor:selectedPoints.some(s=>key(s)===id)?r.color:'#fff'});
   loadDepartures();
@@ -81,6 +81,8 @@ async function loadDepartures() {
   }));
   if(sequence!==requestId)return;
   let failures=0,loaded=0,cached=0;
+  const observations=[],availability=el('details',undefined,'point-availability');
+  availability.append(el('summary','Source responses and data availability'));
   for(let i=0;i<points.length;i++) {
     const stop=points[i],result=results[i],section=el('section',undefined,'point-estimates');
     section.append(el('h3',stop.id.replace('IDFM:','Point ')));
@@ -89,8 +91,17 @@ async function loadDepartures() {
     else {
       const data=result.value;loaded++;if(data.cached)cached++;
       if(!data.departures.length)section.append(el('p','No future estimates returned for this point. This does not prove no service.','notice'));
-    for(const departure of data.departures.slice(0,6)) {
-      const row=el('div',undefined,'departure'), info=el('div'); info.append(el('span',departure.destination,'destination'));
+      for(const departure of data.departures)observations.push({...departure,point_id:stop.id});
+      section.append(el('p',`${data.cached?'Cached':'Fetched'} ${clock.format(new Date(data.fetched_at))} Paris time. ${data.excluded_past} past and ${data.excluded_invalid} invalid-time entries omitted.`,'muted small'));
+    }
+    if(result.status==='rejected'||result.value===null||!result.value.departures.length)availability.open=true;
+    availability.append(section);
+  }
+  for(const group of destinationGroups(observations)) {
+    const section=el('section',undefined,'point-estimates');
+    section.append(el('h3',`Towards ${group.destination}`));
+    for(const departure of group.estimates) {
+      const row=el('div',undefined,'departure'), info=el('div'); info.append(el('span',departure.point_id.replace('IDFM:','Point '),'destination'));
       const age=departure.recorded_at?Math.max(0,Math.floor((Date.now()-Date.parse(departure.recorded_at))/1000)):null;
       const ageText=age===null?'Source-record time unavailable':`Source record: ${age<60?age+'s':Math.floor(age/60)+'m'} ago${age>120?' · older record':''}`;
       info.append(el('span',ageText,'age'+(age>120?' older':'')));
@@ -98,10 +109,9 @@ async function loadDepartures() {
       const due=el('span',label,'due'); if(departure.expected_at)due.append(el('small',`${clock.format(new Date(departure.expected_at))} · estimated ${departure.kind}`)); row.append(info,due); section.append(row);
     }
 
-      section.append(el('p',`${data.cached?'Cached':'Fetched'} ${clock.format(new Date(data.fetched_at))} Paris time. ${data.excluded_past} past and ${data.excluded_invalid} invalid-time entries omitted.`,'muted small'));
-    }
     $('departures').append(section);
   }
+  $('departures').append(availability);
   $('live-status').textContent=`${loaded} point response(s) loaded · ${cached} cached · ${failures} failed`;
   $('fetch-info').textContent='Each covered point uses one request unless cached (2 minutes). Refresh updates countdowns. Records from different points are not deduplicated into confirmed train journeys.';
   $('refresh').disabled=false;

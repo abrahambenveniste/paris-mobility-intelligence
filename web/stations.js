@@ -13,4 +13,17 @@ function stationGroups(stops) {
 function stationLineStops(group, line) {
   return group.stops.filter(stop => stop.line_id === line);
 }
-if (typeof module !== 'undefined') module.exports = {stationGroups, stationLineStops};
+// Keep each source observation: identical estimates do not prove the same train.
+function destinationGroups(observations) {
+  const groups = new Map();
+  for (const observation of observations) {
+    const destination = observation.destination || 'Unknown destination';
+    if (!groups.has(destination)) groups.set(destination, []);
+    groups.get(destination).push(observation);
+  }
+  const time = item => Number.isFinite(Date.parse(item.expected_at)) ? Date.parse(item.expected_at) : Infinity;
+  return [...groups].sort(([a],[b]) => a.localeCompare(b,'fr')).map(([destination, estimates]) => ({
+    destination, estimates: estimates.sort((a,b) => time(a)-time(b))
+  }));
+}
+if (typeof module !== 'undefined') module.exports = {stationGroups, stationLineStops, destinationGroups};

@@ -1,6 +1,6 @@
 # Decisions and open questions
 
-Updated: 2026-11-05. Status distinguishes user decisions from proposals.
+Updated: 2026-11-08. Status distinguishes user decisions from proposals.
 
 ## Accepted
 
@@ -25,6 +25,7 @@ Updated: 2026-11-05. Status distinguishes user decisions from proposals.
 | D017 | Expand project 2 to all published métro lines; exclude buses | Explicit owner request on 6 November 2026, superseding the two-line scope in D006/D013. Discover métro routes by source mode, preserve on-demand calls and document coverage gaps |
 | D018 | Expose reference matches and gaps per line before modelling closures | Implementation choice under continued project-2 authorisation. Use the saved snapshot; separate missing coverage from missing map matches. Counts are not reliability or service-availability scores |
 | D019 | Prioritise station-first usability; keep differently named nearby stations separate | Explicit owner choices. Group identical source name/commune pairs for display, then choose a line and show source-point estimates. Do not infer transfers or directions |
+| D020 | Group estimates by reported destination after station/line selection | Owner accepted the recommended usability increment. Preserve every source observation, sort by estimated timestamp, retain freshness and expose unsuccessful or empty point responses. No inferred direction or train identity |
 
 ## Proposed
 

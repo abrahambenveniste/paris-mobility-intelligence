@@ -10,7 +10,7 @@ Development is AI-assisted. The owner defines goals and approves scope; implemen
 
 **Status: local explorer for all 16 published Paris métro lines (1–14, 3bis and 7bis).** Search 803 boarding-point records, inspect official route shapes, request departure estimates, and check directly linked traffic notices. Bus 38 has been removed from the active scope. Closure simulation, historical analytics, and hosting are future work.
 
-**Station-first navigation:** search a station name, select it, then choose a métro line to load its boarding-point estimates and reported destinations. Châtelet and Les Halles remain separate. [Grouping rules, examples and validation](docs/station-first.md).
+**Station-first navigation:** search a station name, select it, then choose a métro line. Estimates are grouped by reported destination and ordered by estimated time, with source points and record freshness visible. Châtelet and Les Halles remain separate. [Grouping rules, examples and validation](docs/station-first.md).
 
 [Metro expansion: selection logic, coverage and validation](docs/metro-expansion.md). The inspected snapshot has 801 mapped points listed for real-time coverage, two without a coverage match, and three additional coverage points left unmapped. These are boarding-point records, not unique stations.
 

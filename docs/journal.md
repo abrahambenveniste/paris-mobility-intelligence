@@ -135,3 +135,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** display grouping does not prove transfers or identify platform directions. The late-night responses supplied no future estimates; non-empty live rendering was not revalidated in this increment.
 
 **Next:** owner review before choosing further changes. See [method and examples](station-first.md). Owner decisions are recorded separately from assistant-written code and checks.
+
+## 2026-11-08 — Estimates grouped by reported destination
+
+**Purpose:** complete the owner-approved destination-first presentation within the station-first flow.
+
+**Evidence:** two Châtelet / métro-4 responses supplied eight estimates across two destinations. Browser checks confirmed source IDs, older-record warnings, source details and cached refresh. All 22 Python and six JavaScript tests passed; syntax and whitespace checks passed.
+
+**Decision:** group exact reported destinations, sort estimated times, preserve all source observations, and open data-availability details for missing, failed or uncovered responses. No new dependency or background request loop.
+
+**Limitation:** identical predictions do not establish train identity; freshly fetched data may contain old records. No new claim about actual arrivals, cancellations inferred from gaps, or verified platform directions.
+
+**Next:** owner review and explanation of prediction freshness. See [code, labelled samples and validation](station-first.md#destination-grouping--8-november-2026). Implementation and checks were performed with Codex assistance.
