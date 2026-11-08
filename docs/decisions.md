@@ -1,6 +1,6 @@
 # Decisions and open questions
 
-Updated: 2026-11-08. Status distinguishes user decisions from proposals.
+Updated: 2026-11-09. Status distinguishes user decisions from proposals.
 
 ## Accepted
 
@@ -30,6 +30,7 @@ Updated: 2026-11-08. Status distinguishes user decisions from proposals.
 | D022 | Finish the current local explorer as v0.1; defer fine-tuning | Owner prioritised a usable tool and conserving usage. Add simple startup and handoff documentation; hosting, simulation and other modules remain separate |
 | D023 | Improve small-screen usability and provide a working local link | Owner approved responsive layout work. Keep the map compact and visible, reduce empty list space and enlarge touch controls; no hosting implied |
 | D024 | Begin project 1 on line 4, collecting only while the owner runs it locally | Explicit owner approval. Initial implementation samples two already-inspected Châtelet points every five minutes; this is not whole-line coverage. Save collection failures and gaps separately; scoring awaits suitable evidence |
+| D025 | Begin Disruption Intelligence with local line-4 notice history | Owner chose history, line 4 and user-operated collection. Preserve versions and collection checks; no inferred incident boundaries or predictive claims |
 
 ## Proposed
 

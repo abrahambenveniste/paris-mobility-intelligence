@@ -37,6 +37,10 @@ Open http://127.0.0.1:8765. Preparation discovers published métro lines and dow
 
 A local collector now saves prediction snapshots for two Châtelet / métro-4 points every five minutes while running. Start the explorer, then `Start Collector.cmd`. [Setup, data-quality evidence and scientific limits](docs/reliability-pilot.md). This is not yet a reliability index.
 
+## Disruption Intelligence: notice history
+
+Line-4 notices can now be archived locally with changed versions preserved. Start the explorer, then `Start Notice History.cmd`; use `python disruption_history.py --history` to inspect saved versions. [Instructions, examples and limits](docs/disruption-history.md). Disappearance from the feed is not treated as incident resolution.
+
 ## Four projects, one map
 
 | Project | Intended outcome | Evidence requirement |

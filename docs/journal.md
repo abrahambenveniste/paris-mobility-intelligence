@@ -197,3 +197,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** the existing normalized responses lack stable journey identifiers and discard past entries. No punctuality, actual headway, cancellation-rate or forecast-accuracy claims follow. Background collection was not left running after the one-cycle check.
 
 **Next:** accumulate and inspect data quality, then validate journey identification before prediction-stability analysis. See [pilot instructions and methodology](reliability-pilot.md). Code and validation are AI-assisted.
+
+## 2026-11-09 — Line-4 notice history
+
+**Purpose:** implement the owner's incident-history direction with local line-4 collection.
+
+**Evidence:** one live check saved an empty successful response, zero notice IDs and zero versions; immediate restart skipped duplication. Synthetic tests verified repeated, changed, missing and reappearing notices. All 34 tests pass after correcting search to match message text/IDs rather than JSON field names.
+
+**Decision:** store checks, content versions and sightings in local SQLite; reuse the explorer's targeted traffic endpoint/cache/budget. Provide a launcher, summary and searchable command-line history. Preserve normalized response metadata and distinguish collection time from reported periods.
+
+**Limitation:** no populated live notice was available during validation. Publication history is not an actual incident log; no resolution or duration is inferred. A website timeline remains future work.
+
+**Next:** owner-operated collection and review of actual notice changes. See [instructions and methodology](disruption-history.md). The collector was stopped after the bounded check; implementation and checks are AI-assisted.
