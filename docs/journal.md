@@ -171,3 +171,17 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** this completes the current local explorer scope, not closure simulation or the other research modules. Windows double-click interaction was not separately exercised; existing browser evidence is linked from the guide.
 
 **Next:** owner use of the tool, then later refinements. See [local v0.1 guide](local-release.md). Implementation and checks are AI-assisted.
+
+## 2026-11-08 — Compact responsive explorer
+
+**Purpose:** reduce scrolling on smaller screens while keeping map context beside station information.
+
+**Decision:** CSS makes the map sticky and height-limited; below 850px it uses a compact 180–260px height. Station results shrink to their contents, with a maximum scroll height. Small-screen inputs use 16px text and primary controls have at least 44px height. No data or request logic changed.
+
+**Code:** `.map-panel{position:sticky;top:0}` keeps map context visible while the page scrolls; the small-screen media query changes presentation based on available width.
+
+**Evidence:** browser inspection at 754 CSS pixels reported matching document and scroll widths (no horizontal overflow), a roughly 215px map, and successful Châtelet station/line selection. This is a zoomed desktop check, not physical-phone validation.
+
+**Limitation:** narrower phones and touch gestures still need real-device review. Existing data limitations remain unchanged.
+
+**Next:** owner review through the local link; keep the local server running while using it. Implementation and checks are AI-assisted.

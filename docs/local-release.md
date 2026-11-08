@@ -49,3 +49,5 @@ Visual polish, broader accessibility/browser checks, verified transfers, closure
 Understanding checkpoint: what is the difference between running this tool locally and hosting it for other people?
 
 Release checks: all 28 offline tests and JavaScript syntax passed. Local HTTP checks returned the page, JavaScript and the 16-line/803-record snapshot. Browser-opening dispatch was checked with a mocked browser; the Windows double-click interaction was not separately exercised. These checks made no upstream PRIM requests.
+
+Small-screen update: the map stays compact and visible while scrolling, result lists shrink to their contents, and controls are larger. Checked at 754 CSS pixels in a desktop browser; real-phone verification remains outstanding.

@@ -9,3 +9,28 @@
 .station-badges{display:flex;gap:4px;flex-wrap:wrap;max-width:130px}.point-estimates{padding:12px 0;border-top:1px solid #dce2d9}.point-estimates h3{font-size:13px;color:#55716b}.line-options summary{cursor:pointer;font-size:13px;margin-bottom:12px}.line-options{margin-bottom:12px}#station-lines .filter{display:flex;align-items:center;gap:4px}
 
 .station-notices{margin:16px 0;padding:14px 0;border-block:1px solid #dce2d9}.station-notices h3{font-size:14px;margin:0 0 8px}.inline-notices{max-height:320px;overflow:auto;overflow-wrap:anywhere}.inline-notices h3{margin-top:14px}.inline-notices .traffic-card{padding:8px 10px;margin:12px 0}
+
+/* Keep the map useful while reading longer station results. */
+.workspace{overflow:clip;align-items:start}
+.map-panel{position:sticky;top:12px;height:calc(100vh - 24px);max-height:800px;min-height:400px;width:100%}
+#map{min-height:0}
+.stop-list{height:auto;max-height:240px;min-height:64px}
+@media(max-width:850px){
+  .workspace{align-items:stretch}
+  .map-panel{top:0;height:clamp(180px,30vh,260px);min-height:0;z-index:500;background:white;border-bottom:1px solid var(--line)}
+  #map{height:auto;min-height:0;flex:1}
+  .map-bar{padding:7px 12px}
+  .map-caption{display:none}
+  .filters{padding:14px 14px 0}
+  .detail{padding:16px 14px}
+  .stop-list{max-height:160px}
+  .search input{font-size:16px}
+  .filter,.refresh,.traffic-actions button,.traffic-actions select{min-height:44px}
+  .refresh{min-width:44px}
+  .detail p{font-size:13px}
+  .small,.live-status,.estimate-note{font-size:12px!important}
+  .departure .age,.departure .due small{font-size:12px}
+  .departure>div{min-width:0;overflow-wrap:anywhere}
+  .quality-panel,.traffic-panel{padding:16px}
+  .inline-notices{max-height:240px}
+}

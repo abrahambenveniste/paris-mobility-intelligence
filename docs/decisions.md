@@ -28,6 +28,7 @@ Updated: 2026-11-08. Status distinguishes user decisions from proposals.
 | D020 | Group estimates by reported destination after station/line selection | Owner accepted the recommended usability increment. Preserve every source observation, sort by estimated timestamp, retain freshness and expose unsuccessful or empty point responses. No inferred direction or train identity |
 | D021 | Show selected-line notices beside departure estimates | Explicit owner choice. Reuse the existing line report endpoint and five-minute cache; retain on-demand loading, line-level labels and independent departure results |
 | D022 | Finish the current local explorer as v0.1; defer fine-tuning | Owner prioritised a usable tool and conserving usage. Add simple startup and handoff documentation; hosting, simulation and other modules remain separate |
+| D023 | Improve small-screen usability and provide a working local link | Owner approved responsive layout work. Keep the map compact and visible, reduce empty list space and enlarge touch controls; no hosting implied |
 
 ## Proposed
 
