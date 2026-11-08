@@ -2,7 +2,7 @@ from contextlib import closing
 from pathlib import Path
 import tempfile
 import unittest
-from disruption_history import connect, collect_check, summary, history, LINE
+from disruption_history import connect, collect_check, summary, history, saved_history, LINE
 
 
 def payload(text='Synthetic planned works', reports=True):
@@ -13,6 +13,21 @@ def payload(text='Synthetic planned works', reports=True):
 
 
 class NoticeHistoryTests(unittest.TestCase):
+    def test_web_history_is_read_only_and_filters_versions(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/'db'
+            self.assertFalse(saved_history(path)['available'])
+            self.assertFalse(path.exists())
+            with closing(connect(path)) as db:
+                collect_check(db,payload,now=1000)
+                collect_check(db,lambda:payload('Changed message'),now=1300)
+            before=path.read_bytes()
+            result=saved_history(path,'CHANGED')
+            self.assertEqual(result['matched_versions'],1)
+            self.assertEqual(result['versions'][0]['report']['text'],'Changed message')
+            self.assertEqual(result['summary']['content_versions'],2)
+            self.assertEqual(path.read_bytes(),before)
+
     def test_repeat_change_disappearance_and_reappearance(self):
         with tempfile.TemporaryDirectory() as folder, closing(connect(Path(folder)/'db')) as db:
             for i,p in enumerate([payload(),payload(),payload('Synthetic updated works'),

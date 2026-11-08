@@ -145,6 +145,15 @@ def handler_class(network, key, cache, traffic_cache=None):
             url = urlsplit(self.path)
             if url.path == '/api/network':
                 return self.send(200, network)
+            if url.path == '/api/notice-history':
+                from disruption_history import saved_history
+                search = parse_qs(url.query).get('search', [''])[0]
+                if len(search) > 200:
+                    return self.send(400, {'error': 'Search is limited to 200 characters.'})
+                try:
+                    return self.send(200, saved_history(search=search))
+                except Exception:
+                    return self.send(503, {'error':'Saved history is unavailable. Try again after the current collection check.'})
             if url.path == '/api/traffic':
                 line = parse_qs(url.query).get('line', [''])[0]
                 if line not in allowed_lines:
@@ -171,6 +180,8 @@ def handler_class(network, key, cache, traffic_cache=None):
                 except Exception:
                     return self.send(502, {'error': 'PRIM is unavailable or returned an unexpected response. Try again later.'})
             assets = {'/': ('index.html', 'text/html; charset=utf-8'),
+                      '/history': ('history.html', 'text/html; charset=utf-8'),
+                      '/history.js': ('history.js', 'text/javascript; charset=utf-8'),
                       '/app.js': ('app.js', 'text/javascript; charset=utf-8'),
                       '/quality.js': ('quality.js', 'text/javascript; charset=utf-8'),
                       '/stations.js': ('stations.js', 'text/javascript; charset=utf-8'),

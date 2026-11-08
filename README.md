@@ -39,7 +39,7 @@ A local collector now saves prediction snapshots for two Châtelet / métro-4 po
 
 ## Disruption Intelligence: notice history
 
-Line-4 notices can now be archived locally with changed versions preserved. Start the explorer, then `Start Notice History.cmd`; use `python disruption_history.py --history` to inspect saved versions. [Instructions, examples and limits](docs/disruption-history.md). Disappearance from the feed is not treated as incident resolution.
+Line-4 notices can now be archived locally with changed versions preserved. Start the explorer, then `Start Notice History.cmd`; open [saved notice history](http://127.0.0.1:8765/history) to search saved versions, or use `python disruption_history.py --history`. [Instructions, examples and limits](docs/disruption-history.md). Disappearance from the feed is not treated as incident resolution.
 
 ## Four projects, one map
 

@@ -104,6 +104,17 @@ def history(db, search=''):
             if search.casefold() in (identity+' '+json.loads(content)['text']).casefold()]
 
 
+def saved_history(path=DATABASE, search=''):
+    if not path.exists():
+        return {'available':False,'versions':[],'summary':{},'latest_check':None}
+    with closing(sqlite3.connect(path.resolve().as_uri()+'?mode=ro',uri=True,timeout=5)) as db:
+        db.execute('BEGIN')  # One consistent snapshot while the collector may write.
+        rows=history(db,search)
+        latest=db.execute('SELECT observed_at,status FROM checks ORDER BY id DESC LIMIT 1').fetchone()
+        return {'available':True,'versions':rows[-200:][::-1], 'matched_versions':len(rows),
+                'summary':summary(db),'latest_check':dict(zip(('observed_at','status'),latest)) if latest else None}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--once',action='store_true')

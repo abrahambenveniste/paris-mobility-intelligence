@@ -31,6 +31,7 @@ Updated: 2026-11-09. Status distinguishes user decisions from proposals.
 | D023 | Improve small-screen usability and provide a working local link | Owner approved responsive layout work. Keep the map compact and visible, reduce empty list space and enlarge touch controls; no hosting implied |
 | D024 | Begin project 1 on line 4, collecting only while the owner runs it locally | Explicit owner approval. Initial implementation samples two already-inspected Châtelet points every five minutes; this is not whole-line coverage. Save collection failures and gaps separately; scoring awaits suitable evidence |
 | D025 | Begin Disruption Intelligence with local line-4 notice history | Owner chose history, line 4 and user-operated collection. Preserve versions and collection checks; no inferred incident boundaries or predictive claims |
+| D026 | Add a read-only website view of line-4 notice history | Implementation under the owner’s instruction to continue. Search local versions and display collection quality without PRIM requests or inferred incident boundaries |
 
 ## Proposed
 

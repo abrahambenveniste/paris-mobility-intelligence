@@ -1,0 +1,32 @@
+'use strict';
+const byId=id=>document.getElementById(id);
+const element=(tag,text,cls)=>{const node=document.createElement(tag);node.textContent=text;if(cls)node.className=cls;return node;};
+let historyRequest=0;
+async function loadHistory(){
+  const request=++historyRequest;
+  byId('history-status').textContent='Reading saved history…';
+  byId('history-quality').textContent='';byId('versions').replaceChildren();
+  try{
+    const response=await fetch('/api/notice-history?'+new URLSearchParams({search:byId('query').value}));
+    const data=await response.json();if(request!==historyRequest)return;
+    if(!response.ok)throw Error(data.error||'History unavailable.');
+    if(!data.available){byId('history-status').textContent='No archive yet. Start the notice collector to save your first check.';return;}
+    const counts=data.summary.checks_by_status;
+    byId('history-status').textContent=`${data.summary.notice_ids} notice IDs · ${data.summary.content_versions} distinct content versions · showing ${data.versions.length} of ${data.matched_versions} matching versions`;
+    byId('history-quality').textContent=`Saved checks: ${counts.ok||0} with notices, ${counts.empty||0} empty, ${counts.error||0} failed. Excess time between checks: ${data.summary.excess_seconds_between_checks}s.${data.latest_check?` Last completed check: ${data.latest_check.observed_at} (UTC), ${data.latest_check.status}.`:''}`;
+    if(!data.versions.length)byId('versions').append(element('p',data.summary.content_versions?'No saved versions match your search.':'No notice versions saved yet. Empty or failed checks do not establish normal service.','notice'));
+    for(const version of data.versions){
+      const report=version.report,card=element('article','','traffic-panel');
+      card.append(element('h2',`Notice ${version.notice_id}`));
+      card.append(element('p',`Reported status: ${report.status} · Effect: ${report.effect}`,'eyebrow'));
+      card.append(element('p',report.text||'No message text supplied.'));
+      card.append(element('p',`First collected: ${version.first_collected_at} (UTC). Last collected: ${version.last_collected_at} (UTC). ${version.sample_count} sightings, potentially cached.`,'muted'));
+      card.append(element('p',`Provider update: ${report.updated_at_local||'not supplied'} (Europe/Paris).`,'muted'));
+      for(const period of report.periods_local||[])card.append(element('p',`Reported application: ${period.begin||'unspecified'} → ${period.end||'unspecified'} (Europe/Paris).`));
+      const details=element('details','');details.append(element('summary','Version fingerprint'),element('p',version.version,'history-fingerprint'));card.append(details);byId('versions').append(card);
+    }
+  }catch(error){if(request===historyRequest)byId('history-status').textContent=error.message;}
+}
+byId('history-search').addEventListener('submit',event=>{event.preventDefault();loadHistory();});
+byId('reload').addEventListener('click',loadHistory);
+loadHistory();

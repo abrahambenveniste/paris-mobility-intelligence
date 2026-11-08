@@ -209,3 +209,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** no populated live notice was available during validation. Publication history is not an actual incident log; no resolution or duration is inferred. A website timeline remains future work.
 
 **Next:** owner-operated collection and review of actual notice changes. See [instructions and methodology](disruption-history.md). The collector was stopped after the bounded check; implementation and checks are AI-assisted.
+
+## 2026-11-09 — Website notice-history view
+
+**Purpose:** let the owner search and inspect the local archive through the explorer.
+
+**Evidence:** browser checks showed the existing one-empty-check archive accurately, with search and refresh working. All 35 tests pass; a new test verifies filtered history and unchanged database bytes after read-only access. JavaScript syntax passes.
+
+**Decision:** serve a separate `/history` page and read-only local API. Show up to 200 matching content versions, collection-quality counts, reported dates and fingerprints. No upstream calls are triggered by browsing.
+
+**Limitation:** no live populated notices are available yet; populated data/search are tested synthetically. Version sightings are not incident counts, durations or a full chronological event sequence.
+
+**Next:** run the local collector and review actual publication changes. See [history documentation](disruption-history.md). Implementation and validation are AI-assisted.

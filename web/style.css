@@ -34,3 +34,5 @@
   .quality-panel,.traffic-panel{padding:16px}
   .inline-notices{max-height:240px}
 }
+
+#history-search input{max-width:100%;min-width:0;padding:12px;border:1px solid var(--line);border-radius:6px;font-size:16px}#versions article{overflow-wrap:anywhere}.history-fingerprint{font-family:monospace;overflow-wrap:anywhere}

@@ -15,7 +15,7 @@ python disruption_history.py --history
 python disruption_history.py --search "travaux"
 ```
 
-`--once` makes at most one check. Report/history/search read the saved database without contacting PRIM. Search matches message text or notice ID, case-insensitively. The first interface is command-line JSON; a website history view is not yet implemented. Use `--port` if the explorer runs on a different port.
+`--once` makes at most one check. Report/history/search read the saved database without contacting PRIM. Search matches message text or notice ID, case-insensitively. The website history view is available at http://127.0.0.1:8765/history while the explorer runs. It shows saved versions, search and collection-quality counts; the command-line JSON remains available. Use `--port` if the explorer runs on a different port.
 
 ## Storage and method
 
@@ -49,6 +49,14 @@ All 28 Python and six JavaScript tests pass. New tests cover changed/repeated/re
 - Failed checks and empty successful checks remain different. No notice disappearance, reported end date or last-collected time proves incident resolution. We do not calculate actual disruption duration or severity scores.
 - Notice text and databases remain local. Dataset redistribution terms remain unresolved and separate from repository licensing.
 
-Next: accumulate history, inspect actual notice changes, then add a visual timeline. No collector was left running after the bounded validation. Implementation and tests are AI-assisted; the owner selected direction and scope.
+Next: accumulate history and inspect actual notice changes in the website history view. No collector was left running after the bounded validation. Implementation and tests are AI-assisted; the owner selected direction and scope.
 
 Understanding checkpoint: why must we distinguish a notice's reported end date from the last time our collector saw it?
+
+## Website history view — 9 November 2026
+
+Purpose: inspect saved publications without command-line work. The `/api/notice-history` endpoint opens SQLite with `mode=ro` in a consistent read transaction; it neither creates a missing archive nor contacts PRIM. Search matches notice IDs/message text. The UI shows up to 200 matching versions ordered newest-first by first collection time, with reported status, effect, message, application periods, provider update and collection timestamps. Identical content can recur; this version view is not a complete sequence of change events or an incident-duration chart.
+
+Observed input: the existing archive contains one empty successful check. Output: zero notice IDs/versions, one empty check, and an explicit warning against assuming normal service. Browser search and refresh preserved this state without upstream requests. All 29 Python and six JavaScript tests pass; a new test confirms missing-file handling, filtered populated versions and byte-for-byte database preservation after reading. Populated cards were not verified against a live notice in this increment.
+
+Implementation is AI-assisted. Next: gather real notices and review their version history; physical incident boundaries remain unverified.
