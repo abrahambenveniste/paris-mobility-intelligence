@@ -27,6 +27,7 @@ Updated: 2026-11-08. Status distinguishes user decisions from proposals.
 | D019 | Prioritise station-first usability; keep differently named nearby stations separate | Explicit owner choices. Group identical source name/commune pairs for display, then choose a line and show source-point estimates. Do not infer transfers or directions |
 | D020 | Group estimates by reported destination after station/line selection | Owner accepted the recommended usability increment. Preserve every source observation, sort by estimated timestamp, retain freshness and expose unsuccessful or empty point responses. No inferred direction or train identity |
 | D021 | Show selected-line notices beside departure estimates | Explicit owner choice. Reuse the existing line report endpoint and five-minute cache; retain on-demand loading, line-level labels and independent departure results |
+| D022 | Finish the current local explorer as v0.1; defer fine-tuning | Owner prioritised a usable tool and conserving usage. Add simple startup and handoff documentation; hosting, simulation and other modules remain separate |
 
 ## Proposed
 

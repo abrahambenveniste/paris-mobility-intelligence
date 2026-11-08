@@ -20,6 +20,8 @@ The **Reference coverage** panel follows your line filter and lets you inspect u
 
 ## Run locally
 
+**Configured Windows computer:** double-click `Start Explorer.cmd`. [Quick usage guide and local v0.1 scope](docs/local-release.md). Keep its terminal open while using the tool.
+
 Requires Python 3.10+ and internet access; no Python packages or database needed. Copy `.env.example` to `.env` and enter your own PRIM credentials. Keep this file private.
 
 ```powershell

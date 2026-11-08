@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import threading
 import time
+import webbrowser
 from urllib.parse import parse_qs, urlencode, urlsplit
 from urllib.request import Request, urlopen
 from traffic import fetch_reports
@@ -184,16 +185,29 @@ def handler_class(network, key, cache, traffic_cache=None):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port', type=int, default=8765)
+    parser.add_argument('--open', action='store_true', help='Open the local explorer in your default browser')
     args = parser.parse_args()
     if not NETWORK.exists():
-        raise SystemExit('Run python prepare_data.py first to download the small pilot network.')
+        raise SystemExit('First-time setup: run python prepare_data.py to download the metro reference network, then start again.')
     network = json.loads(NETWORK.read_text(encoding='utf-8'))
     if network.get('scope') != 'metro':
         raise SystemExit('Run python prepare_data.py to replace the old two-line snapshot with the metro network.')
     cache = RequestCache(ROOT / 'artifacts' / 'app-request-budget.json')
     traffic_cache = RequestCache(ROOT / 'artifacts' / 'traffic-request-budget.json', ttl=300)
-    server = ThreadingHTTPServer(('127.0.0.1', args.port), handler_class(network, read_keys().get('PRIM_API_KEY', ''), cache, traffic_cache))
-    print(f'Paris Mobility Intelligence: http://127.0.0.1:{args.port}', flush=True)
+    key = read_keys().get('PRIM_API_KEY', '')
+    if not key:
+        print('PRIM_API_KEY is missing from .env. The map works, but live requests need your key.', flush=True)
+    try:
+        server = ThreadingHTTPServer(('127.0.0.1', args.port), handler_class(network, key, cache, traffic_cache))
+    except OSError:
+        raise SystemExit(f'Cannot open local port {args.port}. Close another running copy or use python app.py --port 8766.')
+    address = f'http://127.0.0.1:{server.server_port}'
+    print(f'Paris Mobility Intelligence: {address}\nKeep this terminal open. Press Ctrl+C to stop.', flush=True)
+    if args.open:
+        try:
+            webbrowser.open(address)
+        except webbrowser.Error:
+            print('Open the address above in your browser.', flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

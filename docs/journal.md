@@ -159,3 +159,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** this live check exercised an empty linked-report result, not a fresh populated notice. No claim of normal service or station-specific disruption follows from it.
 
 **Next:** owner review. See [implementation, samples and limits](inline-notices.md). Code and checks are AI-assisted.
+
+## 2026-11-08 — Local explorer v0.1 handoff
+
+**Purpose:** finish a usable version now, as requested by the owner, and defer fine-tuning.
+
+**Evidence:** all 28 offline tests and JavaScript syntax passed. Local HTTP checks served the page, script and 16-line/803-record snapshot. Browser-opening dispatch was checked with a mocked browser; no upstream PRIM calls were needed.
+
+**Decision:** add a Windows double-click launcher, optional browser opening, friendly startup guidance and a concise usage/troubleshooting guide. No new dependency or hosted service.
+
+**Limitation:** this completes the current local explorer scope, not closure simulation or the other research modules. Windows double-click interaction was not separately exercised; existing browser evidence is linked from the guide.
+
+**Next:** owner use of the tool, then later refinements. See [local v0.1 guide](local-release.md). Implementation and checks are AI-assisted.
