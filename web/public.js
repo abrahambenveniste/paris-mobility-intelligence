@@ -5,6 +5,31 @@ const clean=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 let network,groups=[],map,activeLine='all',layers=[],markers=[],liveEnabled=false;
 const route=id=>network.routes.find(r=>r.id===id);
 function badge(r){const b=el('span',r.name,'badge');b.style.setProperty('--route-color',r.color);return b;}
+function setupJourneys(){
+  for(const g of groups){const point=g.stops[0],key=point.id+'|'+point.line_id;for(const id of ['journey-from','journey-to']){const option=el('option',`${g.name} · ${g.commune}`);option.value=key;$(id).append(option);}}
+  for(const r of network.routes){const option=el('option',`Métro ${r.name}`);option.value=r.id;$('journey-avoid').append(option);}
+  $('journey-submit').disabled=!liveEnabled;
+  $('journey-form').addEventListener('submit',async event=>{
+    event.preventDefault();const out=$('journey-results'),button=$('journey-submit'),from=$('journey-from').value,to=$('journey-to').value;
+    if(from===to){out.replaceChildren(el('p','Choose two different stations.','notice'));return;}
+    button.disabled=true;out.replaceChildren(el('p','Finding routes…'));
+    try{
+      const params=new URLSearchParams({from,to,avoid:$('journey-avoid').value}),response=await fetch('/api/journeys?'+params),data=await response.json();
+      if(!response.ok)throw Error(data.error||'Routes are unavailable.');out.replaceChildren();
+      out.append(el('p',`${data.cached?'Cached':'Fetched'} ${new Date(data.fetched_at).toLocaleString('en-GB',{timeZone:'Europe/Paris'})} Paris time.`, 'small muted'));
+      if(!data.journeys.length)out.append(el('p',data.message||'No route was returned.'));
+      for(const [index,j] of data.journeys.entries()){
+        const card=el('section',undefined,'journey-result');card.append(el('h3',`Option ${index+1} · approximately ${Math.ceil(j.duration/60)} min`));
+        for(const s of j.sections){let label;
+          if(s.kind==='public_transport')label=`Métro ${s.line||'?'} towards ${s.direction||'destination not provided'} · ${s.from||'?'} → ${s.to||'?'} · ${s.freshness==='realtime'?'real-time data':s.freshness==='base_schedule'?'scheduled data':`data freshness: ${s.freshness||'unknown'}`}`;
+          else if(s.kind==='waiting')label=`Wait · ${Math.ceil((s.duration||0)/60)} min`;
+          else label=`${s.kind==='transfer'?'Transfer':'Walk'} · ${s.from||'start'} → ${s.to||'end'} · ${Math.ceil((s.duration||0)/60)} min`;
+          card.append(el('p',label));
+        }out.append(card);
+      }
+    }catch(error){out.replaceChildren(el('p',error.message,'notice'));}finally{button.disabled=false;}
+  });
+}
 function selectStation(group){
   const panel=$('station-info');panel.replaceChildren(el('h2',group.name),el('p',group.commune,'muted'));
   const list=el('div',undefined,'line-filters');
@@ -78,6 +103,7 @@ async function init(){
     try{const features=await fetch('/api/features');liveEnabled=features.ok&&(await features.json()).live===true;}catch(_){liveEnabled=false;}
     if(liveEnabled)$('preview-notice').textContent='Public preview. Arrival estimates and line notices are available on demand; historical analysis remains local. Reference routes do not represent live vehicle positions.';
     $('live-sources').hidden=!liveEnabled;
+    setupJourneys();
     $('point-count').textContent=network.stops.length;$('line-count').textContent=network.routes.length;
     $('snapshot-date').textContent=`Reference snapshot downloaded ${new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris',dateStyle:'medium',timeStyle:'short'}).format(new Date(network.prepared_at))} (Paris time). This is a download time, not a live update.`;
     for(const r of network.routes){const button=el('button',undefined,'filter');button.dataset.line=r.id;button.setAttribute('aria-label','Métro '+r.name);button.append(badge(r));$('line-filters').append(button);}

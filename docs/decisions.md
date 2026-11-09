@@ -39,6 +39,7 @@ Updated: 2026-11-09. Status distinguishes user decisions from proposals.
 | D031 | Publish a map-only public preview first | Owner explicitly selected an early preview; label live arrivals, traffic notices and history unavailable until the complete hosted backend is ready. Keep the local full explorer and collectors unchanged |
 | D032 | Add public on-demand arrivals and line notices | Owner authorised implementation for a low-traffic demo. Keep local collection user-operated; no background cloud polling. Require safe quota accounting and review public data terms before enabling |
 | D033 | Test on-demand alternatives for a reported métro disruption | Owner approved a bounded routing feasibility pilot. Inspect provider responses before deciding on a public interface; distinguish a manually avoided line from an automatically detected closed segment |
+| D034 | Add a public métro-and-walking journey interface | Owner approved an origin, destination and optional line-to-avoid interface. Use PRIM's planner; do not claim automatic incident avoidance or guaranteed service |
 
 ## Proposed
 

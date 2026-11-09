@@ -15,7 +15,8 @@ class PublicBudget:
         with self.lock:
             now = time.monotonic()
             previous = self.cache.get(identifier)
-            if previous and now - previous[0] < (300 if kind == 'traffic' else 120):
+            ttl = 60 if len(identifier) > 1 and identifier[1] == 'journey' else (300 if kind == 'traffic' else 120)
+            if previous and now - previous[0] < ttl:
                 return {**previous[1], 'cached': True}
             # Reserve before calling PRIM; errors count. A database failure fails closed.
             with self.connect() as conn:

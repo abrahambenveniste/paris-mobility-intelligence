@@ -56,7 +56,7 @@ Notices from all 16 métro lines can be archived locally with changed versions p
 
 ## Public website
 
-The [public métro map preview](https://paris-mobility-intelligence.onrender.com) lets anyone select a station and line and request arrival estimates grouped by reported destination or line-level notices. Requests are on demand; estimates are not confirmed arrivals and empty notices do not establish normal service. The local historical archive remains private, and disruption collection remains user-operated on the owner's computer. [Deployment details, quotas and source terms](docs/public-release.md).
+The [public métro map preview](https://paris-mobility-intelligence.onrender.com) lets anyone request arrival estimates, line notices, and suggested journeys between métro stations with an optional line to avoid. Requests are on demand; estimates are not confirmed arrivals and route availability is not guaranteed. The local historical archive remains private, and disruption collection remains user-operated on the owner's computer. [Deployment details, quotas and source terms](docs/public-release.md).
 
 ## Read the project
 

@@ -28,6 +28,12 @@ Five focused offline tests pass. The arrivals source's [catalogue](https://prim.
 
 **Deployment evidence, 9 November 2026:** the restricted PostgreSQL role connected using the provider's CA and verified TLS; it could access the quota table but could not read the notice-history table. A synthetic database reservation and cached repeat succeeded. The public Render service was configured with server-only credentials. A browser check at Châtelet on line 4 returned four departure estimates for one selected point; a separate line-notice request returned no directly linked notices. These are single observations, not a guarantee of coverage or service. The deployment uses on-demand calls, not cloud-side collection. The map and results remain public while local history is private. Quotas are conservative but do not account for other clients using the same PRIM account.
 
+## Alternative-route interface
+
+The owner requested a station-to-station interface with an optional whole métro line to avoid. The interface calls the [PRIM journey planner](https://prim.iledefrance-mobilites.fr/fr/apis/idfm-navitia-general-v2), requesting realtime data and métro plus walking. Coordinates come from a representative published boarding point; they are not confirmed station entrances. The server verifies that returned transit legs are métro and do not use the avoided line. It displays walking, transfers, waiting and each transit leg's reported data freshness. The application does not automatically translate notices into closures or guarantee accessible, available or disruption-free routes.
+
+Requests use the existing conservative public traffic budget (100 reservations per rolling 24 hours, shared with notices) despite PRIM measuring the journey endpoint separately. Successful identical journey requests are cached for 60 seconds. Local and other clients are not counted by this budget. A local browser check for Châtelet → Bastille while excluding line 1 returned options using line 7, lines 4 and 5, and walking; sampled métro legs were marked scheduled. The route is only a provider suggestion, not independent verification of actual service.
+
 ## First hosting-preparation increment
 
 **Purpose:** enable a host to provide PRIM credentials without checking them into Git. Actual code in `app.py`:

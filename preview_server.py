@@ -27,12 +27,15 @@ def preview_handler(network, live=None):
             elif path == '/api/features':
                 raw = json.dumps({'live': live is not None}).encode('utf-8')
                 mime, status = 'application/json; charset=utf-8', 200
-            elif path in ('/api/traffic', '/api/departures') and live is not None:
+            elif path in ('/api/traffic', '/api/departures', '/api/journeys') and live is not None:
                 query = parse_qs(url.query)
                 try:
                     if self.headers.get('Sec-Fetch-Site') == 'cross-site':
                         raise ValueError('Cross-site requests are not accepted.')
-                    value = live.lookup(path.rsplit('/', 1)[-1], query.get('line', [''])[0], query.get('stop', [''])[0])
+                    if path == '/api/journeys':
+                        value = live.journeys(query.get('from', [''])[0], query.get('to', [''])[0], query.get('avoid', [''])[0])
+                    else:
+                        value = live.lookup(path.rsplit('/', 1)[-1], query.get('line', [''])[0], query.get('stop', [''])[0])
                     status = 200
                 except ValueError:
                     status, value = 400, {'error': 'Select a published métro line and boarding point.'}

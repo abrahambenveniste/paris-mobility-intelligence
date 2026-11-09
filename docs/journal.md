@@ -409,3 +409,17 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** the sample does not establish that PRIM's planner incorporated the future closure. No public route planner, automated closure detection or live-routing guarantee was built. Data and availability can change.
 
 **Next:** verify additional known disruption cases and design a bounded public interface with shared quotas and clear freshness labels. Investigation and documentation are AI-assisted.
+
+## 2026-11-09 — Alternative-route interface
+
+**Purpose:** let a visitor request métro and walking routes between two stations while optionally avoiding an entire line.
+
+**Code:** `('forbidden_uris[]', avoided)` tells PRIM which user-selected line to exclude; the server verifies the returned métro legs do not include it. The line is not inferred to be closed.
+
+**Evidence:** a real PRIM response and local browser test for Châtelet → Bastille avoiding line 1 returned three options: line 7, lines 4/5, and walking. The métro legs were labelled scheduled. Three focused journey tests, five public-server tests and JavaScript syntax passed. Invalid station or line identifiers are rejected before provider calls.
+
+**Decision:** use a representative source-point coordinate per station, display walk/transfer/wait legs, retain provider freshness, and share the existing persistent public traffic budget; cache matching requests for 60 seconds. No periodic cloud collection or new database schema is required.
+
+**Limitations:** the route is not verified on the ground. Coordinates do not establish station entrances; filtering a whole line may exclude working sections. Incident detection, disruption completeness, accessibility and actual service are not guaranteed. Other clients sharing the API key are outside the public budget. The map does not yet draw the journey.
+
+**Next:** deploy the public interface and verify a bounded real request. Implementation and checks are AI-assisted.
