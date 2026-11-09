@@ -397,3 +397,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Validation:** the deployed public Châtelet line-4 view returned estimates under “Towards Bagneux - Lucie Aubrac” and “Towards Porte de Clignancourt” after checking two source points. Five focused offline Python tests and JavaScript syntax passed. This is one observation, not proof of coverage for every station.
 
 **Next:** monitor quota use and partial-response handling. Implementation and checks are AI-assisted.
+
+## 2026-11-09 — Alternative route feasibility
+
+**Purpose:** investigate routing around reported métro incidents with a small number of requests.
+
+**Evidence:** a normal Châtelet → Bastille request returned line 1; explicitly excluding line 1 produced alternatives using other métro lines. A separate future line-6 interruption test returned the same walking-plus-métro route in scheduled and realtime modes. The sampled public-transport sections reported `base_schedule`. See [the routing pilot](audits/2026-11-09-routing-pilot.md) for inputs, responses and limits.
+
+**Decision:** use the PRIM journey planner as a candidate rather than infer routes from map geometry. Metro and walking were included in this test; no bus mode was requested. An excluded whole line is an explicit user scenario, not proof the line is closed.
+
+**Limitation:** the sample does not establish that PRIM's planner incorporated the future closure. No public route planner, automated closure detection or live-routing guarantee was built. Data and availability can change.
+
+**Next:** verify additional known disruption cases and design a bounded public interface with shared quotas and clear freshness labels. Investigation and documentation are AI-assisted.
