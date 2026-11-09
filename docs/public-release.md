@@ -6,9 +6,9 @@ The owner wants a website accessible to everyone. Disruption collection should c
 
 ## What exists today
 
-The GitHub repository is public. The map, departure queries, local SQLite archive and collectors run on the owner's computer. `127.0.0.1` is a loopback address: it cannot be used by other people's devices as a public site. There is no deployed public website or public sync service yet. The owner reported creating a Render account and chose a free tier; no deployment has been made.
+The GitHub repository is public. A [map-only preview](https://paris-mobility-intelligence.onrender.com) is deployed on Render's free tier. Departure queries, the SQLite archive and collectors still run locally; `127.0.0.1` is accessible only on the owner's computer. No public synchronization service exists yet.
 
-## Public map preview — preparation
+## Public map preview — deployed 9 November 2026
 
 The owner approved publishing a clearly labelled map-only preview first, while the full live application is completed separately. The preview uses the public [métro route shapes](https://data.iledefrance-mobilites.fr/explore/dataset/traces-des-lignes-de-transport-en-commun-idfm/) and [stop/line associations](https://data.iledefrance-mobilites.fr/explore/dataset/arrets-lignes/); the publisher's catalog metadata identifies both as ODbL. It does not require API credentials, transmit the private archive, or expose arrival/traffic endpoints. The restricted real-time coverage dataset is not used: its absence is not shown as zero coverage.
 
@@ -16,7 +16,9 @@ The owner approved publishing a clearly labelled map-only preview first, while t
 
 **Observed validation:** anonymous source requests succeeded; a full local preparation produced 16 lines and 803 boarding-point records. Browser inspection confirmed the visible preview limitation, map, Châtelet search and five line choices. A focused HTTP test checked the map and network routes, and confirmed local secrets, database files and live endpoints return 404. JavaScript syntax passed. This is a single snapshot and does not validate network completeness or actual service.
 
-**Limitations:** public live arrivals, traffic notices, collection history and the full analytics remain unavailable. The public preview is a separate read-only map experience and does not expose the local application. Hosting success and a public URL must be verified separately. The owner chose the free plan; no payment method or paid service is needed for this preview.
+**Deployment evidence:** Render built source commit `0cc70f9`, reporting 16 lines and 803 boarding-point records. An anonymous HTTP request returned 200, and a browser check confirmed the preview notice and Châtelet search. The service was connected as a public Git repository; updating the deployed code requires a manual redeploy.
+
+**Limitations:** public live arrivals, traffic notices, collection history and the full analytics remain unavailable. The public preview is a separate read-only map experience and does not expose the local application. The owner chose Render's free plan.
 
 ## First hosting-preparation increment
 
@@ -51,7 +53,7 @@ WHERE id>? ORDER BY id LIMIT ?
 
 **Validation:** 37 Python tests and six JavaScript tests pass. Synthetic tests cover repeatable batches, cursor boundaries, changed notices, errors, malformed arguments and inconsistent records. No Supabase schema, policies or synchronization endpoint has been created or tested. The fixed example UUID used for the dry run is a test value and is not stored as the identity of the owner's archive.
 
-**Next:** design and validate the private cloud schema and permissions, choose a persistent unique ID for the real archive, then implement authenticated atomic uploads and a read-only public view. Check source terms before any notice is published. No public website exists yet.
+**Next at this stage:** design and validate the private cloud schema and permissions, choose a persistent unique ID for the real archive, then implement authenticated atomic uploads and a read-only public view. Check source terms before any notice is published. The later map-only deployment is described above.
 
 ## Private cloud table — 9 November 2026
 

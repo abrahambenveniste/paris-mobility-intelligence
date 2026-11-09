@@ -56,7 +56,7 @@ Notices from all 16 métro lines can be archived locally with changed versions p
 
 ## Public website
 
-The owner has selected a public audience; the application is **not yet hosted**. Disruption collection will remain user-operated on the owner’s computer. [Deployment preparation and source-term findings](docs/public-release.md).
+The [public métro map preview](https://paris-mobility-intelligence.onrender.com) is available to everyone. It shows reference routes and stations, not live arrivals, disruption notices or history. Those features remain local while the full public version is prepared. Disruption collection remains user-operated on the owner’s computer. [Deployment details and source terms](docs/public-release.md).
 
 ## Read the project
 

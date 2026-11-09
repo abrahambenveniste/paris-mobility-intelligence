@@ -302,6 +302,18 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 
 **Decision:** use a separate read-only preview server and anonymous reference-data build; no PRIM credentials or historical database are exposed. The restricted live-coverage dataset is omitted and not interpreted as zero coverage. Display source and ODbL attribution.
 
-**Limitation:** live arrivals, notices and history are unavailable in this public preview; the full local tool remains separate. The public host and URL still require deployment verification. A free host may sleep between visits; source snapshots refresh on rebuild.
+**Limitation:** live arrivals, notices and history are unavailable in this public preview; the full local tool remains separate. A free host may sleep between visits; source snapshots refresh on rebuild.
 
-**Next:** deploy the preview on the selected free Render service, verify the public URL, then continue the complete hosted backend. See [public-release details](public-release.md). Implementation and checks are AI-assisted.
+**Next:** continue the complete hosted backend. See [public-release details](public-release.md). Implementation and checks are AI-assisted.
+
+## 2026-11-09 — Public preview deployed
+
+**Purpose:** make the map accessible to everyone quickly.
+
+**Evidence:** Render built commit `0cc70f9`, reporting 16 lines and 803 boarding-point records. An anonymous request returned HTTP 200; a browser check confirmed the public preview label and Châtelet search.
+
+**Decision:** deploy the read-only preview on the selected free Render service at https://paris-mobility-intelligence.onrender.com. No API credentials or local history were uploaded.
+
+**Limitation:** this is a reference snapshot, not live service. Arrivals, notices and history are not public; the free service may sleep. Deployments from the public Git connection require a manual redeploy.
+
+**Next:** separately complete the secure hosted features and source-term checks. Implementation and checks are AI-assisted.
