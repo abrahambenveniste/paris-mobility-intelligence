@@ -43,6 +43,26 @@ WHERE id>? ORDER BY id LIMIT ?
 
 **Next:** design and validate the private cloud schema and permissions, choose a persistent unique ID for the real archive, then implement authenticated atomic uploads and a read-only public view. Check source terms before any notice is published. No public website exists yet.
 
+## Private cloud table — 9 November 2026
+
+**Purpose:** give future synchronized checks a durable destination while keeping the database private. The owner created a free Supabase project and asked us to continue toward a public website.
+
+**Implementation:** [`cloud/001_private_checks.sql`](../cloud/001_private_checks.sql) creates the `pmi_private.notice_checks` table. The two-part primary key `(archive_id, check_id)` identifies a check within a particular archive. Status, collection times, gaps, source metadata and normalized notice content have separate fields. The SQL enables row-level security and revokes schema/table access from PostgreSQL's `PUBLIC`, Supabase `anon` and `authenticated` roles. No public view, API, credentials or real notice data was added. A database owner or privileged backend can still access this table; RLS is not a substitute for protecting those credentials.
+
+Actual code:
+
+```sql
+PRIMARY KEY (archive_id, check_id)
+```
+
+**Synthetic input:** two records with the same archive ID and check ID would represent the same local check. **Output:** PostgreSQL's primary key prevents both from being inserted as distinct rows. This is an identity constraint, not a complete upload/retry mechanism.
+
+**Empirically tested in the owner's Supabase project:** a rolled-back transaction created the schema and accepted one synthetic empty check; `anon` and `authenticated` lacked schema access and row-level security was enabled. A separate intentionally inconsistent synthetic check was rejected by a check constraint. After creating the empty structure, a read-only query confirmed: anonymous read/write `false`; authenticated read/write `false`; RLS `true`; stored checks `0`. No real notice records were uploaded. These role checks do not constitute a full penetration test or a hosted-app test.
+
+**Limit:** there is no uploader, backend read role, cloud API, public site, or durable shared API quota yet. Do not place an administrator connection string in browser code. The private schema and table are not a public application. Review the data terms before publishing notice content. A receiving writer must verify retries, reject conflicting identities and commit each batch atomically before advancing its cursor.
+
+**Next:** implement and test authenticated synchronization and a separately controlled read path. Then adapt and deploy the web server, verify dataset terms, and test a real public URL. No background cloud collection is authorized.
+
 ## Proposed deployment design — not yet implemented
 
 1. Host the web interface and a compatible backend on a managed service; do not expose the development server or local files to the internet.

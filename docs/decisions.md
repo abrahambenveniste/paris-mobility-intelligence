@@ -35,6 +35,7 @@ Updated: 2026-11-09. Status distinguishes user decisions from proposals.
 | D027 | Expand local disruption history to all published métro lines and integrate map navigation | Owner explicitly requested all lines and a combined tool. Use a 30-minute per-line interval, preserve line-4 history and show collection quality; local-only collection remains user-operated |
 | D028 | Public audience for a future hosted version | Owner explicitly selected public access. Hosted infrastructure, data terms, secrets and operating costs must be addressed before a functional release |
 | D029 | Public website, but disruption collection runs only while the owner’s computer is on | Explicit owner answer. A future hosted interface may show the most recently synchronized history and its gaps; no cloud-side scheduled collector |
+| D030 | Prepare a private Supabase table for synchronized notice checks | Owner asked to continue toward a public tool. Use a private schema, restricted grants, RLS and an archive/check identity; public access and upload remain separate implementation steps |
 
 ## Proposed
 

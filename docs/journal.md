@@ -269,3 +269,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** the owner reported creating a Supabase project; we have not connected to it or created/tested a database schema. The sample UUID is synthetic and no archive identity is yet provisioned.
 
 **Next:** implement and validate the private cloud schema and authenticated synchronization before public deployment. See [hosting preparation](public-release.md). Implementation and testing are AI-assisted.
+
+## 2026-11-09 — Private cloud notice-check table
+
+**Purpose:** prepare a secure destination for local notice history on the way to the owner-requested public website.
+
+**Evidence:** the schema was tested in a rolled-back Supabase transaction with one synthetic empty check; an inconsistent synthetic check was rejected. After creation, SQL checks reported anonymous read/write false, authenticated read/write false, RLS enabled and zero stored checks. No real data was uploaded.
+
+**Decision:** create `pmi_private.notice_checks` with archive/check primary key, status constraints, RLS and no grants to anonymous or authenticated roles. Record the reproducible SQL in GitHub. The owner selected a free Supabase project; no cloud scheduling was enabled.
+
+**Limitation:** privileged database owners can still access the table. No uploader, narrowly scoped database role, public read API, shared API quota or hosted website exists yet; role checks are not a complete security audit. The app still runs locally.
+
+**Next:** implement and verify authenticated atomic synchronization, then a controlled read path and hosted application, subject to applicable source terms. See [public release preparation](public-release.md). Implementation and validation are AI-assisted.
