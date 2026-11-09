@@ -371,3 +371,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** the public deployment and actual provider calls still need verification. The public and local collectors have separate counters and share the PRIM account. The arrivals catalogue contains conflicting licence labels; the publisher's broader [licensing guidance](https://prim.iledefrance-mobilites.fr/fr/licences) and [open-data FAQ](https://data.iledefrance-mobilites.fr/pages/contact/) identify Licence Mobilité for API data. The source-specific discrepancy remains documented.
 
 **Next:** configure hosting secrets, deploy and verify the public site with bounded on-demand requests. Implementation and tests are AI-assisted.
+
+## 2026-11-09 — On-demand public data deployed
+
+**Purpose:** let a visitor inspect real-time information from the map, without running a continuous cloud collector.
+
+**Evidence:** the public website returned a live-enabled status. A browser check selected Châtelet, line 4, and one boarding point; the arrivals button returned four estimated departures. The notices button returned no directly linked line notices. Both outputs included the request time and limitations.
+
+**Decision:** enable the existing free Render service with a server-only PRIM key and restricted database connection. Keep request reservations in Supabase; serve cached successful responses for two minutes for arrivals and five for notices. Display the two results separately.
+
+**Limitation:** a single successful request does not prove full network coverage or future availability. Local and hosted clients have separate budgets while sharing the PRIM account. Free Render sleeps after inactivity; the user's computer controls local historical collection. The PRIM unit-arrival catalogue's conflicting licence labels are documented in [public release](public-release.md).
+
+**Next:** monitor provider quotas and source terms; improve historical research features separately. Implementation and verification are AI-assisted.

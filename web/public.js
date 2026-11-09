@@ -21,9 +21,11 @@ function selectLine(group,r){
   if(!liveEnabled){panel.append(el('p','Live information is not enabled on this preview yet.','small muted'));return;}
   const stops=group.stops.filter(s=>s.line_id===r.id), select=el('select');select.setAttribute('aria-label','Choose boarding point');
   for(const stop of stops){const option=el('option',`Boarding point ${stop.id.replace('IDFM:','')}`);option.value=stop.id;select.append(option);}
-  const departures=el('button','Get arrival estimates','filter'),traffic=el('button','Get line notices','filter'),out=el('div',undefined,'point-estimates');
-  panel.append(el('p','Select one boarding point to request estimates. Coverage may vary.','small muted'),select,departures,traffic,out);
+  const departures=el('button','Get arrival estimates','filter'),traffic=el('button','Get line notices','filter');
+  const arrivalOut=el('div',undefined,'point-estimates'),trafficOut=el('div',undefined,'point-estimates');
+  panel.append(el('p','Select one boarding point to request estimates. Coverage may vary.','small muted'),select,departures,traffic,arrivalOut,trafficOut);
   async function request(kind){
+    const out=kind==='departures'?arrivalOut:trafficOut;
     departures.disabled=traffic.disabled=true;out.replaceChildren(el('p','Requesting information…'));
     try{
       const params=new URLSearchParams({line:r.id});if(kind==='departures')params.set('stop','STIF:StopPoint:Q:'+select.value.replace('IDFM:','')+':');

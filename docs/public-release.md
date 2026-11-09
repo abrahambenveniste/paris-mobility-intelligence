@@ -6,7 +6,7 @@ The owner wants a website accessible to everyone. Disruption collection should c
 
 ## What exists today
 
-The GitHub repository is public. A [map-only preview](https://paris-mobility-intelligence.onrender.com) is deployed on Render's free tier. Departure queries, the SQLite archive and collectors still run locally; `127.0.0.1` is accessible only on the owner's computer. No public synchronization service exists yet.
+The GitHub repository is public. A [métro map preview](https://paris-mobility-intelligence.onrender.com) is deployed on Render's free tier with on-demand arrival estimates and line notices. The SQLite archive and collectors remain local; `127.0.0.1` is accessible only on the owner's computer. No public synchronization service exists yet.
 
 ## Public map preview — deployed 9 November 2026
 
@@ -18,13 +18,15 @@ The owner approved publishing a clearly labelled map-only preview first, while t
 
 **Deployment evidence:** Render built source commit `0cc70f9`, reporting 16 lines and 803 boarding-point records. An anonymous HTTP request returned 200, and a browser check confirmed the preview notice and Châtelet search. The service was connected as a public Git repository; updating the deployed code requires a manual redeploy.
 
-**Limitations:** public live arrivals, traffic notices, collection history and the full analytics remain unavailable. The public preview is a separate read-only map experience and does not expose the local application. The owner chose Render's free plan.
+**Limitations at that stage:** live arrivals and notices were not yet public; the later on-demand deployment is documented below. Historical collection and analytics remain local. The owner chose Render's free plan.
 
 ## Preparing on-demand public information
 
 The public interface and backend now have an opt-in live-data path, disabled by default. A visitor chooses one boarding point and clicks for estimates, or clicks for directly linked line notices. There is no periodic cloud collection. `cloud/002_public_request_budget.sql` defines a private PostgreSQL reservation table; `public_budget.py` applies a 100-call rolling 24-hour cap per endpoint and serializes reservations. Cached responses are held only in memory. These public limits do not account for other clients using the same PRIM key, including local collectors.
 
-Five focused offline tests pass. No real budget database transaction, real cloud request, restricted database user, Render secret or public live deployment has been verified. The arrivals source's [catalogue](https://prim.iledefrance-mobilites.fr/fr/apis/idfm-ivtr-requete_unitaire) currently lists both Licence Mobilité and ODbL; the [Navitia traffic catalogue](https://prim.iledefrance-mobilites.fr/apis/idfm-navitia-line_reports-v2) identifies Licence Mobilité. Determine the applicable conditions and attribution before enabling public feed display. Keep `PMI_PUBLIC_LIVE` unset until the private database role, TLS and quota policy have been verified.
+Five focused offline tests pass. The arrivals source's [catalogue](https://prim.iledefrance-mobilites.fr/fr/apis/idfm-ivtr-requete_unitaire) currently lists both Licence Mobilité and ODbL; the [Navitia traffic catalogue](https://prim.iledefrance-mobilites.fr/apis/idfm-navitia-line_reports-v2) identifies Licence Mobilité. The publisher's [general guidance](https://data.iledefrance-mobilites.fr/pages/contact/) identifies Licence Mobilité for API data, but the source-specific discrepancy remains documented.
+
+**Deployment evidence, 9 November 2026:** the restricted PostgreSQL role connected using the provider's CA and verified TLS; it could access the quota table but could not read the notice-history table. A synthetic database reservation and cached repeat succeeded. The public Render service was configured with server-only credentials. A browser check at Châtelet on line 4 returned four departure estimates for one selected point; a separate line-notice request returned no directly linked notices. These are single observations, not a guarantee of coverage or service. The deployment uses on-demand calls, not cloud-side collection. The map and results remain public while local history is private. Quotas are conservative but do not account for other clients using the same PRIM account.
 
 ## First hosting-preparation increment
 
