@@ -8,6 +8,16 @@ The owner wants a website accessible to everyone. Disruption collection should c
 
 The GitHub repository is public. The map, departure queries, local SQLite archive and collectors run on the owner's computer. `127.0.0.1` is a loopback address: it cannot be used by other people's devices as a public site. There is no deployed public website or public sync service yet. The owner reported creating a Render account and chose a free tier; no deployment has been made.
 
+## Public map preview — preparation
+
+The owner approved publishing a clearly labelled map-only preview first, while the full live application is completed separately. The preview uses the public [métro route shapes](https://data.iledefrance-mobilites.fr/explore/dataset/traces-des-lignes-de-transport-en-commun-idfm/) and [stop/line associations](https://data.iledefrance-mobilites.fr/explore/dataset/arrets-lignes/); the publisher's catalog metadata identifies both as ODbL. It does not require API credentials, transmit the private archive, or expose arrival/traffic endpoints. The restricted real-time coverage dataset is not used: its absence is not shown as zero coverage.
+
+`python prepare_public.py` fetches and validates the published reference subset into ignored `data/public-network.json`. On Render use build command `python prepare_public.py` and start command `python preview_server.py --public`; local preview omits `--public` and listens only on localhost. The public server exposes only the map assets and the prepared network subset. Build output is generated on the host, not committed to Git. Render's free tier sleeps after inactivity; the reference data is refreshed on each build, not continuously.
+
+**Observed validation:** anonymous source requests succeeded; a full local preparation produced 16 lines and 803 boarding-point records. Browser inspection confirmed the visible preview limitation, map, Châtelet search and five line choices. A focused HTTP test checked the map and network routes, and confirmed local secrets, database files and live endpoints return 404. JavaScript syntax passed. This is a single snapshot and does not validate network completeness or actual service.
+
+**Limitations:** public live arrivals, traffic notices, collection history and the full analytics remain unavailable. The public preview is a separate read-only map experience and does not expose the local application. Hosting success and a public URL must be verified separately. The owner chose the free plan; no payment method or paid service is needed for this preview.
+
 ## First hosting-preparation increment
 
 **Purpose:** enable a host to provide PRIM credentials without checking them into Git. Actual code in `app.py`:

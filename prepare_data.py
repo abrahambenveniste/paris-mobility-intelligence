@@ -34,7 +34,10 @@ def records(dataset, where, key):
         # Stable IDs limit changes between pages; preparation is still not an atomic source snapshot.
         order = 'id,stop_id' if dataset == 'arrets-lignes' else ('line,ns2_stoppointref' if dataset.startswith('perimetre') else 'route_id')
         url = BASE + dataset + '/records?' + urlencode({'where': where, 'limit': 100, 'offset': offset, 'order_by': order})
-        request = Request(url, headers={'Authorization': 'apikey ' + key, 'User-Agent': 'ParisMobilityIntelligence/0.1'})
+        headers = {'User-Agent': 'ParisMobilityIntelligence/0.1', 'Accept-Encoding': 'identity'}
+        if key:
+            headers['Authorization'] = 'apikey ' + key
+        request = Request(url, headers=headers)
         with urlopen(request, timeout=20) as response:
             raw = response.read(3_000_001)
             if len(raw) > 3_000_000:

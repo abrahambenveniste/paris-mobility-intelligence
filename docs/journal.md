@@ -293,3 +293,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** no writer credential or trusted CA has been provisioned; Python-to-Supabase transfer has not been tested end to end. There is no automatic synchronization, public read API, hosted server or public website. Source terms still need review.
 
 **Next:** provision a narrowly scoped writer connection and verify a bounded synthetic end-to-end upload before real synchronization; then develop the hosted read path and public deployment. See [public-release preparation](public-release.md). Implementation and checks are AI-assisted.
+
+## 2026-11-09 — Public map preview
+
+**Purpose:** provide a shareable first version quickly after the owner approved a clearly labelled map-only preview.
+
+**Evidence:** two anonymous public reference datasets prepared 16 métro lines and 803 boarding-point records. Browser checks confirmed the preview label, map, Châtelet search and five line choices. A focused HTTP test checked public assets and network data, and denied secret, database and live API routes. JavaScript syntax passed.
+
+**Decision:** use a separate read-only preview server and anonymous reference-data build; no PRIM credentials or historical database are exposed. The restricted live-coverage dataset is omitted and not interpreted as zero coverage. Display source and ODbL attribution.
+
+**Limitation:** live arrivals, notices and history are unavailable in this public preview; the full local tool remains separate. The public host and URL still require deployment verification. A free host may sleep between visits; source snapshots refresh on rebuild.
+
+**Next:** deploy the preview on the selected free Render service, verify the public URL, then continue the complete hosted backend. See [public-release details](public-release.md). Implementation and checks are AI-assisted.
