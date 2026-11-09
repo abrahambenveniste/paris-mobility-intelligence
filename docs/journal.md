@@ -257,3 +257,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** the existing server is local-only; shared quota enforcement, cloud persistence, authenticated synchronization, public-server controls and source terms remain unfinished.
 
 **Next:** prepare and validate those remaining pieces before connecting the repository to Render. See [public-release preparation](public-release.md). Implementation and checks are AI-assisted.
+
+## 2026-11-09 — Local synchronization preview
+
+**Purpose:** prepare the owner's local notice history for a future public website without prematurely uploading data.
+
+**Evidence:** local dry run found 16 saved checks and 13 notice sightings, with no data sent. All 43 tests pass. Synthetic checks covered batching, repeatability, cursor continuation, changed versions, empty/errors and inconsistent records.
+
+**Decision:** generate deterministic batches from a read-only SQLite snapshot and validate the response against stored notice fingerprints. Do not persist a sync cursor or transmit source data until the receiving transaction, access control and licence conditions are ready.
+
+**Limitation:** the owner reported creating a Supabase project; we have not connected to it or created/tested a database schema. The sample UUID is synthetic and no archive identity is yet provisioned.
+
+**Next:** implement and validate the private cloud schema and authenticated synchronization before public deployment. See [hosting preparation](public-release.md). Implementation and testing are AI-assisted.

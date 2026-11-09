@@ -23,6 +23,26 @@ if os.environ.get(name):
 
 **Limit:** this does not make the app deployable. The server is still bound to localhost, and public request handling, persistent shared quotas, secure history synchronization and source-data terms remain unfinished. Do not expose the current local-only server directly or deploy this increment alone as a working public service.
 
+## Local sync preparation — 9 November 2026
+
+**Purpose:** prepare resumable notice batches before connecting the new Supabase project. The owner reported creating a free project; no database connection or cloud write has been made.
+
+`sync_preview.py` reads the local SQLite archive in a single read-only transaction. A caller supplies an archive UUID and a check cursor. Each batch contains at most 100 checks, their line and collection times, gaps, result status, selected response metadata and the exact saved notice versions. It never advances a stored cursor, writes a file, prints notice content or sends data. A future destination must commit a batch atomically and deduplicate using the archive UUID plus local check ID before any cursor is advanced; that destination is not implemented yet.
+
+Actual code:
+
+```python
+WHERE id>? ORDER BY id LIMIT ?
+```
+
+**Synthetic input:** three checks: a notice, a changed version, then an empty response. **Output:** a first batch with two checks and distinct fingerprints; resuming at its cursor returns the empty check. Repeating the same request produces the same batch. Failed checks stay separate from empty checks. A response/sightings mismatch is rejected.
+
+**Observed local input:** the current archive. **Output:** 16 checks and 13 notice sightings; `sent: false`. No notice text, raw data or credentials are committed or transmitted.
+
+**Validation:** 37 Python tests and six JavaScript tests pass. Synthetic tests cover repeatable batches, cursor boundaries, changed notices, errors, malformed arguments and inconsistent records. No Supabase schema, policies or synchronization endpoint has been created or tested. The fixed example UUID used for the dry run is a test value and is not stored as the identity of the owner's archive.
+
+**Next:** design and validate the private cloud schema and permissions, choose a persistent unique ID for the real archive, then implement authenticated atomic uploads and a read-only public view. Check source terms before any notice is published. No public website exists yet.
+
 ## Proposed deployment design — not yet implemented
 
 1. Host the web interface and a compatible backend on a managed service; do not expose the development server or local files to the internet.
