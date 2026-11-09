@@ -347,3 +347,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitations:** the new PostgreSQL table and live website are not configured or deployed; database permissions, concurrent transactions and Render integration have not been tested end to end. The budget controls this public service only, not local or other PRIM clients. The stop-to-monitoring-reference conversion does not establish real-time coverage. PRIM's unit-arrivals catalogue labels its licence both Licence Mobilité and ODbL; clarify applicable terms before public release. The Navitia line reports catalogue identifies Licence Mobilité. The public website remains map-only.
 
 **Next:** resolve feed terms, provision a restricted database role and verified TLS, validate real database budget behavior, configure the hosting secrets, then test and deploy the buttons. Implementation and tests are AI-assisted.
+
+## 2026-11-09 — Quota table provisioned
+
+**Purpose:** prepare restart-safe limits for the requested public on-demand information.
+
+**Evidence:** the Supabase SQL editor reported success when running `cloud/002_public_request_budget.sql`. The migration creates a private reservation table with row-level security and revokes public, anonymous and authenticated access.
+
+**Decision:** store only request kind and reservation time, not source responses or API credentials. No background polling was added.
+
+**Limitation:** no restricted application role or hosted connection has been verified. Table creation alone does not show that the Python budget works with real PostgreSQL, and does not account for calls from local collectors. The public live buttons are still disabled.
+
+**Next:** provision and test a restricted database connection, resolve the published licence discrepancy and verify public hosting end to end. Implementation is AI-assisted.
