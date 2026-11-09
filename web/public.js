@@ -6,15 +6,23 @@ let network,groups=[],map,activeLine='all',layers=[],markers=[],liveEnabled=fals
 const route=id=>network.routes.find(r=>r.id===id);
 function badge(r){const b=el('span',r.name,'badge');b.style.setProperty('--route-color',r.color);return b;}
 function setupJourneys(){
-  for(const g of groups){const point=g.stops[0],key=point.id+'|'+point.line_id;for(const id of ['journey-from','journey-to']){const option=el('option',`${g.name} · ${g.commune}`);option.value=key;$(id).append(option);}}
+  const labels=new Map(),names=new Map();let revision=0;
+  for(const g of groups){const point=g.stops[0],key=point.id+'|'+point.line_id,label=`${g.name} · ${g.commune}`;labels.set(clean(label),key);const name=clean(g.name);names.set(name,names.has(name)?null:key);const option=el('option');option.value=label;$('journey-stations').append(option);}
   for(const r of network.routes){const option=el('option',`Métro ${r.name}`);option.value=r.id;$('journey-avoid').append(option);}
   $('journey-submit').disabled=!liveEnabled;
+  function changed(){revision++;$('journey-results').replaceChildren();}
+  for(const id of ['journey-from','journey-to','journey-avoid'])$(id).addEventListener('input',changed);
+  $('journey-swap').addEventListener('click',()=>{const from=$('journey-from');const to=$('journey-to');[from.value,to.value]=[to.value,from.value];changed();});
   $('journey-form').addEventListener('submit',async event=>{
-    event.preventDefault();const out=$('journey-results'),button=$('journey-submit'),from=$('journey-from').value,to=$('journey-to').value;
+    event.preventDefault();const out=$('journey-results'),button=$('journey-submit');
+    const start=clean($('journey-from').value.trim()),end=clean($('journey-to').value.trim());
+    const from=labels.get(start)||names.get(start),to=labels.get(end)||names.get(end),current=++revision;
+    if(!from||!to){out.replaceChildren(el('p','Choose a station from the suggestions for both fields.','notice'));return;}
     if(from===to){out.replaceChildren(el('p','Choose two different stations.','notice'));return;}
     button.disabled=true;out.replaceChildren(el('p','Finding routes…'));
     try{
       const params=new URLSearchParams({from,to,avoid:$('journey-avoid').value}),response=await fetch('/api/journeys?'+params),data=await response.json();
+      if(current!==revision)return;
       if(!response.ok)throw Error(data.error||'Routes are unavailable.');out.replaceChildren();
       out.append(el('p',`${data.cached?'Cached':'Fetched'} ${new Date(data.fetched_at).toLocaleString('en-GB',{timeZone:'Europe/Paris'})} Paris time.`, 'small muted'));
       if(!data.journeys.length)out.append(el('p',data.message||'No route was returned.'));
@@ -27,7 +35,7 @@ function setupJourneys(){
           card.append(el('p',label));
         }out.append(card);
       }
-    }catch(error){out.replaceChildren(el('p',error.message,'notice'));}finally{button.disabled=false;}
+    }catch(error){if(current===revision)out.replaceChildren(el('p',error.message,'notice'));}finally{button.disabled=false;}
   });
 }
 function selectStation(group){
@@ -38,6 +46,9 @@ function selectStation(group){
     button.addEventListener('click',()=>selectLine(group,r));list.append(button);
   }
   panel.append(list,el('p','Exact name and commune groups are for display; they do not verify transfers.','small muted'));
+  const actions=el('div',undefined,'station-actions');
+  for(const [id,label] of [['journey-from','Set as start'],['journey-to','Set as destination']]){const button=el('button',label,'filter');button.addEventListener('click',()=>{const input=$(id);input.value=`${group.name} · ${group.commune}`;input.dispatchEvent(new Event('input',{bubbles:true}));input.focus();});actions.append(button);}
+  panel.append(actions);
   panel.append(el('div',undefined,'public-live'));
   if(map)map.fitBounds(group.stops.map(s=>[s.lat,s.lon]),{padding:[35,35],maxZoom:15});
 }

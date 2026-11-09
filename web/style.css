@@ -37,3 +37,20 @@
 }
 
 #history-search input{max-width:100%;min-width:0;padding:12px;border:1px solid var(--line);border-radius:6px;font-size:16px}#versions article{overflow-wrap:anywhere}.history-fingerprint{font-family:monospace;overflow-wrap:anywhere}
+
+/* Public map: the journey form stays beside the map and above station details. */
+.public-workspace{grid-template-columns:minmax(360px,420px) minmax(0,1fr)}
+.public-workspace .journey-panel{padding:24px 22px 20px;border-bottom:1px solid var(--line);background:#fff}
+.journey-panel h2{font-size:21px;line-height:1.2;margin-bottom:6px}
+.journey-intro{font-size:12px;color:var(--muted);margin-bottom:18px}
+.journey-panel .journey-form{display:grid;grid-template-columns:1fr auto;gap:7px 8px;margin:0}
+.journey-form label{display:block;grid-column:1/-1;font-size:11px;font-weight:650;margin-top:4px}
+.journey-form input,.journey-form select{grid-column:1/-1;width:100%;max-width:none;min-width:0;min-height:43px;padding:10px 12px;border:1px solid #cbd8d0;border-radius:8px;background:#f9fbf8;color:var(--ink);font:inherit;font-size:14px}
+.journey-form input:focus,.journey-form select:focus{outline:2px solid #799f84;outline-offset:1px}
+.journey-form .journey-swap{grid-column:2;justify-self:end;border:0;background:transparent;color:#326d5a;font:inherit;font-size:11px;font-weight:650;padding:2px 3px;min-height:25px}
+.journey-form .journey-submit{grid-column:1/-1;border:0;background:#24584c;color:#fff;border-radius:8px;min-height:44px;padding:10px 14px;margin-top:7px;text-align:left;font-weight:650;display:flex;justify-content:space-between;align-items:center}
+.journey-submit:disabled{opacity:.55;cursor:not-allowed}.journey-submit:not(:disabled):hover{background:#193f37}
+.journey-note,.journey-credit{color:#657571;font-size:11px;line-height:1.5;margin:12px 0 0}.journey-credit{margin-top:14px}
+.journey-result{border-top:1px solid var(--line);padding:12px 0;font-size:12px}.journey-result h3{font-size:14px;margin:0 0 8px}.journey-result p{margin:7px 0;overflow-wrap:anywhere}
+.station-actions{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}.station-actions .filter{min-height:36px}
+@media(max-width:850px){.public-workspace{display:flex}.public-workspace .map-panel{position:relative}.public-workspace .journey-panel{padding:20px 16px}.journey-form input,.journey-form select{font-size:16px;min-height:46px}.journey-result{font-size:13px}.journey-note,.journey-credit{font-size:12px}}

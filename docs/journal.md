@@ -425,3 +425,17 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Public validation:** the deployed interface returned métro 7, métro 4/5 and walking options for Châtelet → Bastille while avoiding line 1; the shown métro legs were labelled scheduled. This was one end-to-end check, not validation of all routes.
 
 **Next:** improve route usability and test additional disruption scenarios. Implementation and checks are AI-assisted.
+
+## 2026-11-09 — Journey planner beside the map
+
+**Purpose:** make the route planner easier to find and use while exploring stations.
+
+**Decision:** place the form in the map's sidebar on wide screens and below the map on narrow screens. Replace long station dropdowns with native searchable suggestions, accept unambiguous names without accents, add a swap button, and let the selected station populate either field. Existing route methodology and quota controls remain unchanged.
+
+**Code:** `labels.get(start) || names.get(start)` resolves a full suggested station/commune label or an unambiguous station name to the existing published source point. Ambiguous names require choosing the full suggestion.
+
+**Evidence:** a local browser test entered `Chatelet` and `Bastille`, avoided métro 1, and received métro 7, métro 4/5 and walking suggestions. Swap exchanged the fields; selecting Châtelet populated the start; identical endpoints produced an explanation. Five focused public-server tests and JavaScript syntax passed. A narrow browser view was visually inspected; a separate wide-screen browser check was unavailable.
+
+**Limitations:** station suggestions depend on the current browser's native datalist support. Results remain PRIM suggestions and may use scheduled data; the map does not yet draw the route. No automatic incident avoidance or new historical collection was added.
+
+**Next:** deploy and verify the public layout. Implementation and checks are AI-assisted.
