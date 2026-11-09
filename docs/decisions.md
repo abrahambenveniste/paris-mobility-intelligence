@@ -37,6 +37,7 @@ Updated: 2026-11-09. Status distinguishes user decisions from proposals.
 | D029 | Public website, but disruption collection runs only while the owner’s computer is on | Explicit owner answer. A future hosted interface may show the most recently synchronized history and its gaps; no cloud-side scheduled collector |
 | D030 | Prepare a private Supabase table for synchronized notice checks | Owner asked to continue toward a public tool. Use a private schema, restricted grants, RLS and an archive/check identity; public access and upload remain separate implementation steps |
 | D031 | Publish a map-only public preview first | Owner explicitly selected an early preview; label live arrivals, traffic notices and history unavailable until the complete hosted backend is ready. Keep the local full explorer and collectors unchanged |
+| D032 | Add public on-demand arrivals and line notices | Owner authorised implementation for a low-traffic demo. Keep local collection user-operated; no background cloud polling. Require safe quota accounting and review public data terms before enabling |
 
 ## Proposed
 

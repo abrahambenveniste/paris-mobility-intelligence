@@ -317,3 +317,19 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** this is a reference snapshot, not live service. Arrivals, notices and history are not public; the free service may sleep. Deployments from the public Git connection require a manual redeploy.
 
 **Next:** separately complete the secure hosted features and source-term checks. Implementation and checks are AI-assisted.
+
+## 2026-11-09 — On-demand public live data: first increment
+
+**Purpose:** prepare visitor-triggered arrival estimates and line notices, without continuous collection.
+
+**Decision:** reuse the existing response validation and constrain requests to published métro lines and boarding points. Keep the public API disabled until it has a persistent quota budget. No credential is sent to the browser.
+
+**Code:** `budget.get(('traffic', line), lambda: fetch_reports(line, self.key))` reserves or reuses a request through the future budget before calling PRIM.
+
+**Example:** a known line and boarding point can return `{"departures": []}`; this means the response contained no usable estimates, not that service stopped. An unknown point is rejected before any upstream request.
+
+**Evidence:** three focused offline tests passed, covering the existing public map, invalid identifiers, disabled configuration and suppression of sensitive upstream error details. All test responses and credentials were synthetic.
+
+**Limitations:** public endpoints are not connected to the running server or user interface. Persistent quota accounting, shared use with local collectors, public data terms and end-to-end hosting configuration remain unresolved. The derived stop reference does not establish real-time coverage.
+
+**Next:** implement a restart-safe shared quota and cache, check the terms for the two feeds, connect the buttons and verify the deployment. Implementation and tests are AI-assisted.
