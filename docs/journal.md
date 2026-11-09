@@ -422,4 +422,6 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 
 **Limitations:** the route is not verified on the ground. Coordinates do not establish station entrances; filtering a whole line may exclude working sections. Incident detection, disruption completeness, accessibility and actual service are not guaranteed. Other clients sharing the API key are outside the public budget. The map does not yet draw the journey.
 
-**Next:** deploy the public interface and verify a bounded real request. Implementation and checks are AI-assisted.
+**Public validation:** the deployed interface returned métro 7, métro 4/5 and walking options for Châtelet → Bastille while avoiding line 1; the shown métro legs were labelled scheduled. This was one end-to-end check, not validation of all routes.
+
+**Next:** improve route usability and test additional disruption scenarios. Implementation and checks are AI-assisted.
