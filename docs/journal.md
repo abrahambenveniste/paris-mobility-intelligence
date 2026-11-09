@@ -394,4 +394,6 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 
 **Limitation:** one click uses up to one API request per source point; cached responses may use fewer. Empty or partial responses do not prove a direction has no service. Destination labels are not verified physical platform names and may change.
 
-**Next:** verify the public Châtelet view and monitor quota use. Implementation and checks are AI-assisted.
+**Validation:** the deployed public Châtelet line-4 view returned estimates under “Towards Bagneux - Lucie Aubrac” and “Towards Porte de Clignancourt” after checking two source points. Five focused offline Python tests and JavaScript syntax passed. This is one observation, not proof of coverage for every station.
+
+**Next:** monitor quota use and partial-response handling. Implementation and checks are AI-assisted.
