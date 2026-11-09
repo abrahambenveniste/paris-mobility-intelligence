@@ -24,9 +24,14 @@ def preview_handler(network, live=None):
             if path == '/api/network':
                 raw = json.dumps(network,ensure_ascii=False).encode('utf-8')
                 mime, status = 'application/json; charset=utf-8', 200
+            elif path == '/api/features':
+                raw = json.dumps({'live': live is not None}).encode('utf-8')
+                mime, status = 'application/json; charset=utf-8', 200
             elif path in ('/api/traffic', '/api/departures') and live is not None:
                 query = parse_qs(url.query)
                 try:
+                    if self.headers.get('Sec-Fetch-Site') == 'cross-site':
+                        raise ValueError('Cross-site requests are not accepted.')
                     value = live.lookup(path.rsplit('/', 1)[-1], query.get('line', [''])[0], query.get('stop', [''])[0])
                     status = 200
                 except ValueError:
@@ -66,7 +71,17 @@ def main():
     if network.get('scope') != 'public_map_preview' or not network.get('routes') or not network.get('stops'):
         raise SystemExit('Invalid public reference snapshot; run python prepare_public.py again.')
     port=int(os.environ.get('PORT','8766'))
-    server=ThreadingHTTPServer(('0.0.0.0' if args.public else '127.0.0.1',port),preview_handler(network))
+    live = None
+    if os.environ.get('PMI_PUBLIC_LIVE') == '1':
+        key, dsn, ca = (os.environ.get(name, '') for name in ('PRIM_API_KEY', 'PMI_BUDGET_DATABASE_URL', 'PMI_DATABASE_CA'))
+        if not key or not dsn or not ca:
+            raise SystemExit('Live mode requires a PRIM key, budget database and CA certificate.')
+        import psycopg
+        from public_budget import PublicBudget
+        def connect():
+            return psycopg.connect(dsn, sslmode='verify-full', sslrootcert=ca, connect_timeout=5)
+        live = PublicLive(network, key, PublicBudget(connect))
+    server=ThreadingHTTPServer(('0.0.0.0' if args.public else '127.0.0.1',port),preview_handler(network, live))
     print(f'Public map preview listening on port {port}',flush=True)
     try:
         server.serve_forever()

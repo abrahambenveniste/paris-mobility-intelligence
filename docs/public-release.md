@@ -20,6 +20,12 @@ The owner approved publishing a clearly labelled map-only preview first, while t
 
 **Limitations:** public live arrivals, traffic notices, collection history and the full analytics remain unavailable. The public preview is a separate read-only map experience and does not expose the local application. The owner chose Render's free plan.
 
+## Preparing on-demand public information
+
+The public interface and backend now have an opt-in live-data path, disabled by default. A visitor chooses one boarding point and clicks for estimates, or clicks for directly linked line notices. There is no periodic cloud collection. `cloud/002_public_request_budget.sql` defines a private PostgreSQL reservation table; `public_budget.py` applies a 100-call rolling 24-hour cap per endpoint and serializes reservations. Cached responses are held only in memory. These public limits do not account for other clients using the same PRIM key, including local collectors.
+
+Five focused offline tests pass. No real budget database transaction, real cloud request, restricted database user, Render secret or public live deployment has been verified. The arrivals source's [catalogue](https://prim.iledefrance-mobilites.fr/fr/apis/idfm-ivtr-requete_unitaire) currently lists both Licence Mobilité and ODbL; the [Navitia traffic catalogue](https://prim.iledefrance-mobilites.fr/apis/idfm-navitia-line_reports-v2) identifies Licence Mobilité. Determine the applicable conditions and attribution before enabling public feed display. Keep `PMI_PUBLIC_LIVE` unset until the private database role, TLS and quota policy have been verified.
+
 ## First hosting-preparation increment
 
 **Purpose:** enable a host to provide PRIM credentials without checking them into Git. Actual code in `app.py`:

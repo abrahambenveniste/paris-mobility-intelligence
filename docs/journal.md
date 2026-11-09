@@ -333,3 +333,17 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitations:** public endpoints are not connected to the running server or user interface. Persistent quota accounting, shared use with local collectors, public data terms and end-to-end hosting configuration remain unresolved. The derived stop reference does not establish real-time coverage.
 
 **Next:** implement a restart-safe shared quota and cache, check the terms for the two feeds, connect the buttons and verify the deployment. Implementation and tests are AI-assisted.
+
+## 2026-11-09 — Public live-data controls
+
+**Purpose:** prepare a low-traffic public demo with a button per request and no background polling.
+
+**Decision:** select one boarding point for an arrival lookup; use an atomic PostgreSQL reservation before a provider call, a 100-call rolling 24-hour cap per endpoint, one reservation per second across both endpoints, and short in-memory response caches. The budget is separate from the local collectors; their use and any other clients still count against the same PRIM account. Reserve sufficient headroom and monitor the account quota.
+
+**Code:** `SELECT pg_advisory_xact_lock(%s)` serializes budget reservations so simultaneous requests cannot both take the last slot. The reservation is recorded before the API call, including when that call later fails.
+
+**Synthetic example:** requesting an invalid boarding point makes zero PRIM calls; repeating a successful line lookup within five minutes can reuse the response. Five focused offline tests pass, including quota exhaustion and database failure. JavaScript syntax passes. No real database or upstream call was used for these tests.
+
+**Limitations:** the new PostgreSQL table and live website are not configured or deployed; database permissions, concurrent transactions and Render integration have not been tested end to end. The budget controls this public service only, not local or other PRIM clients. The stop-to-monitoring-reference conversion does not establish real-time coverage. PRIM's unit-arrivals catalogue labels its licence both Licence Mobilité and ODbL; clarify applicable terms before public release. The Navitia line reports catalogue identifies Licence Mobilité. The public website remains map-only.
+
+**Next:** resolve feed terms, provision a restricted database role and verified TLS, validate real database budget behavior, configure the hosting secrets, then test and deploy the buttons. Implementation and tests are AI-assisted.
