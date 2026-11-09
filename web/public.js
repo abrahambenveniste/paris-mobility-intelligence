@@ -57,6 +57,7 @@ async function init(){
     const response=await fetch('/api/network');if(!response.ok)throw Error('Reference data could not be loaded.');network=await response.json();groups=stationGroups(network.stops);
     try{const features=await fetch('/api/features');liveEnabled=features.ok&&(await features.json()).live===true;}catch(_){liveEnabled=false;}
     if(liveEnabled)$('preview-notice').textContent='Public preview. Arrival estimates and line notices are available on demand; historical analysis remains local. Reference routes do not represent live vehicle positions.';
+    $('live-sources').hidden=!liveEnabled;
     $('point-count').textContent=network.stops.length;$('line-count').textContent=network.routes.length;
     $('snapshot-date').textContent=`Reference snapshot downloaded ${new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/Paris',dateStyle:'medium',timeStyle:'short'}).format(new Date(network.prepared_at))} (Paris time). This is a download time, not a live update.`;
     for(const r of network.routes){const button=el('button',undefined,'filter');button.dataset.line=r.id;button.setAttribute('aria-label','Métro '+r.name);button.append(badge(r));$('line-filters').append(button);}

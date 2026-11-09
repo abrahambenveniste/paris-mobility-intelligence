@@ -359,3 +359,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** no restricted application role or hosted connection has been verified. Table creation alone does not show that the Python budget works with real PostgreSQL, and does not account for calls from local collectors. The public live buttons are still disabled.
 
 **Next:** provision and test a restricted database connection, resolve the published licence discrepancy and verify public hosting end to end. Implementation is AI-assisted.
+
+## 2026-11-09 — Restricted quota connection verified
+
+**Purpose:** connect the planned public buttons to a durable quota counter without granting access to archived notices.
+
+**Evidence:** a restricted PostgreSQL login connected to the Supabase transaction pooler using the provider's downloaded CA and `verify-full`. Permission checks returned quota-table access true and notice-history read access false. A synthetic request successfully reserved a slot in the real database; its repeat used the in-process cache. No real notice data was transferred. Five focused offline tests also passed.
+
+**Decision:** use a separate least-privilege role, row-level security policy for that role and Supabase's published certificate. No API or database passwords are committed.
+
+**Limitation:** the public deployment and actual provider calls still need verification. The public and local collectors have separate counters and share the PRIM account. The arrivals catalogue contains conflicting licence labels; the publisher's broader [licensing guidance](https://prim.iledefrance-mobilites.fr/fr/licences) and [open-data FAQ](https://data.iledefrance-mobilites.fr/pages/contact/) identify Licence Mobilité for API data. The source-specific discrepancy remains documented.
+
+**Next:** configure hosting secrets, deploy and verify the public site with bounded on-demand requests. Implementation and tests are AI-assisted.
