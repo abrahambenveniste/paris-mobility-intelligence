@@ -281,3 +281,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** privileged database owners can still access the table. No uploader, narrowly scoped database role, public read API, shared API quota or hosted website exists yet; role checks are not a complete security audit. The app still runs locally.
 
 **Next:** implement and verify authenticated atomic synchronization, then a controlled read path and hosted application, subject to applicable source terms. See [public release preparation](public-release.md). Implementation and validation are AI-assisted.
+
+## 2026-11-09 — Private synchronization sender
+
+**Purpose:** prepare secure, retry-safe local-to-cloud uploads while collection stays on the owner's computer.
+
+**Evidence:** 46 offline tests pass. Synthetic fake-connection tests verified batch rollback, matching retries, conflict rejection, verified TLS options and secret-free output. A separate rolled-back SQL experiment in the owner's Supabase project returned true for retry deduplication and identical-content comparison, and false for changed-content comparison. No real notice data was uploaded.
+
+**Decision:** implement a manual sender with transactional batches, a stable archive/check key, full-content conflict checks and verified TLS. Keep the PostgreSQL driver optional and separately pinned. Default to replaying the local archive rather than persisting an unverified checkpoint.
+
+**Limitation:** no writer credential or trusted CA has been provisioned; Python-to-Supabase transfer has not been tested end to end. There is no automatic synchronization, public read API, hosted server or public website. Source terms still need review.
+
+**Next:** provision a narrowly scoped writer connection and verify a bounded synthetic end-to-end upload before real synchronization; then develop the hosted read path and public deployment. See [public-release preparation](public-release.md). Implementation and checks are AI-assisted.

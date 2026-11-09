@@ -59,9 +59,30 @@ PRIMARY KEY (archive_id, check_id)
 
 **Empirically tested in the owner's Supabase project:** a rolled-back transaction created the schema and accepted one synthetic empty check; `anon` and `authenticated` lacked schema access and row-level security was enabled. A separate intentionally inconsistent synthetic check was rejected by a check constraint. After creating the empty structure, a read-only query confirmed: anonymous read/write `false`; authenticated read/write `false`; RLS `true`; stored checks `0`. No real notice records were uploaded. These role checks do not constitute a full penetration test or a hosted-app test.
 
-**Limit:** there is no uploader, backend read role, cloud API, public site, or durable shared API quota yet. Do not place an administrator connection string in browser code. The private schema and table are not a public application. Review the data terms before publishing notice content. A receiving writer must verify retries, reject conflicting identities and commit each batch atomically before advancing its cursor.
+**Limit at this stage:** there was no uploader, backend read role, cloud API, public site, or durable shared API quota. Do not place an administrator connection string in browser code. The private schema and table are not a public application. Review the data terms before publishing notice content.
 
 **Next:** implement and test authenticated synchronization and a separately controlled read path. Then adapt and deploy the web server, verify dataset terms, and test a real public URL. No background cloud collection is authorized.
+
+## Private synchronization sender — 9 November 2026
+
+**Purpose:** prepare a deliberate, local-to-cloud transfer that can be retried safely while the owner's computer is on. `sync_sender.py` reads the existing validated local batches. It is a manual one-off command: it is not scheduled or started by the platform launcher.
+
+Actual code:
+
+```python
+with connection.transaction():
+    # Insert checks; reject any conflicting previously saved identity.
+```
+
+Each batch commits as a unit. A matching `(archive_id, check_id)` is counted as a retry only after its stored content matches; different content raises an error and rolls back the batch. The cursor advances in memory after the transaction succeeds. By default, a later run replays from the beginning and checks existing records; an explicit `--after` can resume from a known committed check. It does not yet store a persistent checkpoint, so replay gets slower as the archive grows. The supplied archive UUID must remain stable and must be backed up with the local archive; restoring an older archive under a different UUID can create duplicate observations.
+
+**Synthetic input:** upload checks 1 and 2; upload the identical batch again. **Test output:** first upload `inserted: 2`, second upload `repeated: 2`. If an existing check ID has changed content, the fake-connection test confirms the entire batch is rolled back. Tests use only synthetic content.
+
+**Security design:** configuration is read only from `PMI_DATABASE_URL`, `PMI_DATABASE_CA` and `PMI_ARCHIVE_ID` environment variables, never command-line arguments. Connections require PostgreSQL `sslmode=verify-full` and a supplied CA certificate. Error output includes only the exception class, not connection strings or notice content. Supabase explains [certificate verification](https://supabase.com/docs/guides/database/connecting-to-postgres); the optional Psycopg dependency is pinned separately in `requirements-sync.txt`. The dependency has not been installed or used against the real project yet.
+
+**Evidence:** 40 Python and six JavaScript tests pass. A fake database connection tested transaction rollback, idempotent retry, TLS configuration and avoiding secret output. Separately, a rolled-back synthetic SQL transaction in the actual Supabase database returned `retry_deduplicated=true`, `identical_matches=true`, and `changed_matches=false`. These checks did not execute the Python sender end-to-end against Supabase. No real notice data was uploaded.
+
+**Remaining:** create a narrowly scoped writer credential without using an administrator credential in the application, provision a stable archive UUID and trusted CA, then run a bounded end-to-end integration test. The sender has no public read API, hosted server, automatic upload loop or shared cross-client PRIM budget. Public release and source-terms review remain unfinished.
 
 ## Proposed deployment design — not yet implemented
 
