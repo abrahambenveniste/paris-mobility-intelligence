@@ -383,3 +383,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** a single successful request does not prove full network coverage or future availability. Local and hosted clients have separate budgets while sharing the PRIM account. Free Render sleeps after inactivity; the user's computer controls local historical collection. The PRIM unit-arrival catalogue's conflicting licence labels are documented in [public release](public-release.md).
 
 **Next:** monitor provider quotas and source terms; improve historical research features separately. Implementation and verification are AI-assisted.
+
+## 2026-11-09 — Show destinations instead of internal point IDs
+
+**Purpose:** make the public station view understandable to passengers without claiming unverified platform names.
+
+**Evidence:** our earlier line-4 Châtelet inspection returned different reported destinations for the two source points. The current reference snapshot has at most three points per station/line group. An ID identifies a source record, not necessarily a named platform or a permanent direction.
+
+**Decision:** one click queries the station/line source points sequentially, then groups estimates by the destinations actually reported in each response. A short delay respects the public service's request throttle. IDs and per-point timestamps remain under source details. Failed points remain visible, and estimates are not deduplicated into trains.
+
+**Limitation:** one click uses up to one API request per source point; cached responses may use fewer. Empty or partial responses do not prove a direction has no service. Destination labels are not verified physical platform names and may change.
+
+**Next:** verify the public Châtelet view and monitor quota use. Implementation and checks are AI-assisted.

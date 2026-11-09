@@ -19,26 +19,44 @@ function selectStation(group){
 function selectLine(group,r){
   const panel=$('station-info').querySelector('.public-live');panel.replaceChildren(el('h3',`Métro ${r.name} · on-demand information`));
   if(!liveEnabled){panel.append(el('p','Live information is not enabled on this preview yet.','small muted'));return;}
-  const stops=group.stops.filter(s=>s.line_id===r.id), select=el('select');select.setAttribute('aria-label','Choose boarding point');
-  for(const stop of stops){const option=el('option',`Boarding point ${stop.id.replace('IDFM:','')}`);option.value=stop.id;select.append(option);}
+  const stops=group.stops.filter(s=>s.line_id===r.id);
   const departures=el('button','Get arrival estimates','filter'),traffic=el('button','Get line notices','filter');
   const arrivalOut=el('div',undefined,'point-estimates'),trafficOut=el('div',undefined,'point-estimates');
-  panel.append(el('p','Select one boarding point to request estimates. Coverage may vary.','small muted'),select,departures,traffic,arrivalOut,trafficOut);
+  panel.append(el('p',`Request estimates for ${group.name}, grouped by the destinations reported by the provider. Coverage may vary.`,'small muted'),departures,traffic,arrivalOut,trafficOut);
   async function request(kind){
     const out=kind==='departures'?arrivalOut:trafficOut;
     departures.disabled=traffic.disabled=true;out.replaceChildren(el('p','Requesting information…'));
     try{
-      const params=new URLSearchParams({line:r.id});if(kind==='departures')params.set('stop','STIF:StopPoint:Q:'+select.value.replace('IDFM:','')+':');
+      if(kind==='departures'){
+        const results=[],details=el('details'),messages=[];
+        details.append(el('summary','Source details'));
+        for(let i=0;i<stops.length;i++){
+          if(i)await new Promise(resolve=>setTimeout(resolve,1200));
+          const stop=stops[i],params=new URLSearchParams({line:r.id,stop:'STIF:StopPoint:Q:'+stop.id.replace('IDFM:','')+':'});
+          try{
+            const response=await fetch('/api/departures?'+params),data=await response.json();if(!response.ok)throw Error(data.error||'Information unavailable.');
+            results.push(...data.departures);details.append(el('p',`${stop.id} · ${data.cached?'cached':'fetched'} ${new Date(data.fetched_at).toLocaleString('en-GB',{timeZone:'Europe/Paris'})} Paris time · ${data.departures.length} estimate(s)`));
+          }catch(error){messages.push(`One source point could not be loaded: ${error.message}`);details.append(el('p',`${stop.id} · unavailable`));}
+        }
+        out.replaceChildren();
+        const grouped=new Map();for(const item of results){if(!grouped.has(item.destination))grouped.set(item.destination,[]);grouped.get(item.destination).push(item);}
+        for(const [destination,items] of grouped){
+          out.append(el('h3',`Towards ${destination}`));
+          items.sort((a,b)=>(a.expected_at||'9999').localeCompare(b.expected_at||'9999'));
+          for(const item of items){const time=item.expected_at?new Date(item.expected_at).toLocaleTimeString('en-GB',{timeZone:'Europe/Paris',hour:'2-digit',minute:'2-digit'}):'Time unavailable';out.append(el('p',item.cancelled?'Reported cancelled':`${time} · estimated ${item.kind}`));}
+        }
+        if(!results.length)out.append(el('p','No usable estimates returned. This does not establish that service has stopped.'));
+        for(const message of messages)out.append(el('p',message,'notice'));
+        out.append(el('p',`Checked ${stops.length} source point(s). Times are predictions, not confirmed arrivals; repeated records may refer to the same train.`, 'small muted'),details);
+        return;
+      }
+      const params=new URLSearchParams({line:r.id});
       const response=await fetch('/api/'+kind+'?'+params),data=await response.json();if(!response.ok)throw Error(data.error||'Information unavailable.');
       out.replaceChildren(el('p',`${data.cached?'Cached':'Fetched'} ${new Date(data.fetched_at).toLocaleString('en-GB',{timeZone:'Europe/Paris'})} Paris time.`,'small muted'));
       if(kind==='traffic'){
         if(!data.reports.length)out.append(el('p','No directly linked notices returned. This does not confirm normal service.'));
         for(const item of data.reports)out.append(el('p',item.text));
         out.append(el('p','Notices refer to the line, not necessarily this station.','small muted'));
-      }else{
-        if(!data.departures.length)out.append(el('p','No usable estimates returned for this point. This does not establish that service has stopped.'));
-        for(const item of data.departures){const time=item.expected_at?new Date(item.expected_at).toLocaleTimeString('en-GB',{timeZone:'Europe/Paris',hour:'2-digit',minute:'2-digit'}):'Time unavailable';out.append(el('p',`${item.destination} · ${item.cancelled?'reported cancelled':time+' estimated '+item.kind}`));}
-        out.append(el('p','Times are predictions, not confirmed arrivals.','small muted'));
       }
     }catch(error){out.replaceChildren(el('p',error.message,'notice'));}finally{departures.disabled=traffic.disabled=false;}
   }
