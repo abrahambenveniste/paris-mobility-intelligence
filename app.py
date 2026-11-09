@@ -3,6 +3,7 @@ import argparse
 from datetime import datetime, timezone
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
+import os
 from pathlib import Path
 import threading
 import time
@@ -23,6 +24,10 @@ def read_keys(path=ROOT / '.env'):
             if '=' in line and not line.lstrip().startswith('#'):
                 key, value = line.split('=', 1)
                 values[key.strip()] = value.strip().strip('"').strip("'")
+    # Hosting services supply secrets as environment variables, not a .env file.
+    for name in ('PRIM_API_KEY', 'PRIM_STATIC_TOKEN'):
+        if os.environ.get(name):
+            values[name] = os.environ[name]
     return values
 
 

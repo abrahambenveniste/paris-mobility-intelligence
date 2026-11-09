@@ -245,3 +245,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** a managed deployment, sync, complete source terms register, shared quota controls and cost verification are not yet implemented. No public application URL exists. Public GitHub visibility is not a software licence.
 
 **Next:** complete [public-release preparation](public-release.md) and test the working deployment before publishing. This record does not add source data or credentials to Git.
+
+## 2026-11-09 — Hosting secrets preparation
+
+**Purpose:** begin preparing the app for a free public Render deployment, after the owner reported creating their account.
+
+**Evidence:** 34 Python and six JavaScript tests pass. Synthetic tests confirm that named hosted environment secrets override local `.env` values and unrelated environment variables are not imported. No real credentials were displayed or committed.
+
+**Decision:** retain `.env` for local use; accept `PRIM_API_KEY` and `PRIM_STATIC_TOKEN` from the hosting environment. No hosting account configuration or deployment was performed.
+
+**Limitation:** the existing server is local-only; shared quota enforcement, cloud persistence, authenticated synchronization, public-server controls and source terms remain unfinished.
+
+**Next:** prepare and validate those remaining pieces before connecting the repository to Render. See [public-release preparation](public-release.md). Implementation and checks are AI-assisted.

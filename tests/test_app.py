@@ -8,12 +8,28 @@ import threading
 import unittest
 from unittest.mock import patch
 from http.server import ThreadingHTTPServer
-from app import RequestCache, handler_class, normalize_departures, timestamp
+from app import RequestCache, handler_class, normalize_departures, timestamp, read_keys
 from prepare_data import build_network, metro_codes, line_query
 
 LINE = 'STIF:Line::C01374:'
 STOP = 'STIF:StopPoint:Q:1:'
 NOW = datetime(2026, 11, 5, 12, tzinfo=timezone.utc)
+
+
+class SecretConfigurationTests(unittest.TestCase):
+    def test_host_environment_overrides_local_file_without_exposing_other_variables(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / '.env'
+            path.write_text('PRIM_API_KEY=local\nPRIM_STATIC_TOKEN=local-static\n', encoding='utf-8')
+            with patch.dict('os.environ', {'PRIM_API_KEY':'hosted', 'UNRELATED_SECRET':'private'}, clear=True):
+                keys = read_keys(path)
+            self.assertEqual(keys['PRIM_API_KEY'],'hosted')
+            self.assertEqual(keys['PRIM_STATIC_TOKEN'],'local-static')
+            self.assertNotIn('UNRELATED_SECRET',keys)
+
+    def test_missing_file_uses_environment(self):
+        with tempfile.TemporaryDirectory() as directory, patch.dict('os.environ', {'PRIM_STATIC_TOKEN':'hosted-static'}, clear=True):
+            self.assertEqual(read_keys(Path(directory)/'missing'), {'PRIM_STATIC_TOKEN':'hosted-static'})
 
 
 def visit(line=LINE, expected='2026-11-05T12:05:00Z', **call_fields):
