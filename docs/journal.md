@@ -233,3 +233,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** tests include synthetic line separation/migration and launcher process ownership; the Windows double-click action was not separately exercised. Only one live all-line observation window exists. Source terms, access credentials, shared quotas, storage and hosting design remain to be resolved before publishing live data.
 
 **Next:** inspect real notice version changes and source-data anomalies; prepare a public hosting feasibility decision. See [methodology](disruption-history.md). Implementation and validation are AI-assisted.
+
+## 2026-11-09 — Public release preparation
+
+**Purpose:** respond to the owner's request to make the tool accessible to everyone.
+
+**Evidence:** GitHub source is already public; the existing app serves only localhost and stores history in local SQLite. PRIM documents Licence Mobilité for its Navitia traffic feed and displays conflicting licence references for the unit arrival API.
+
+**Decision:** the owner selected public website access, with disruption collection only while their computer is on. Prepare a compatible hosted backend and authenticated sync; do not implement scheduled cloud collection by default.
+
+**Limitation:** a managed deployment, sync, complete source terms register, shared quota controls and cost verification are not yet implemented. No public application URL exists. Public GitHub visibility is not a software licence.
+
+**Next:** complete [public-release preparation](public-release.md) and test the working deployment before publishing. This record does not add source data or credentials to Git.

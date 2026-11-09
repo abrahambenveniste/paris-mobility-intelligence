@@ -54,6 +54,10 @@ Notices from all 16 métro lines can be archived locally with changed versions p
 
 **Audience:** researchers and data scientists. **Delivery goal:** local installation and a hosted website. The four modules will be developed sequentially on shared data infrastructure.
 
+## Public website
+
+The owner has selected a public audience; the application is **not yet hosted**. Disruption collection will remain user-operated on the owner’s computer. [Deployment preparation and source-term findings](docs/public-release.md).
+
 ## Read the project
 
 - [Project brief and shared-map concept](docs/project-brief.md)

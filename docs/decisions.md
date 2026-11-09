@@ -34,6 +34,7 @@ Updated: 2026-11-09. Status distinguishes user decisions from proposals.
 | D026 | Add a read-only website view of line-4 notice history | Implementation under the owner’s instruction to continue. Search local versions and display collection quality without PRIM requests or inferred incident boundaries |
 | D027 | Expand local disruption history to all published métro lines and integrate map navigation | Owner explicitly requested all lines and a combined tool. Use a 30-minute per-line interval, preserve line-4 history and show collection quality; local-only collection remains user-operated |
 | D028 | Public audience for a future hosted version | Owner explicitly selected public access. Hosted infrastructure, data terms, secrets and operating costs must be addressed before a functional release |
+| D029 | Public website, but disruption collection runs only while the owner’s computer is on | Explicit owner answer. A future hosted interface may show the most recently synchronized history and its gaps; no cloud-side scheduled collector |
 
 ## Proposed
 
