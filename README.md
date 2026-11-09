@@ -20,7 +20,7 @@ The **Reference coverage** panel follows your line filter and lets you inspect u
 
 ## Run locally
 
-**Configured Windows computer:** double-click `Start Explorer.cmd`. [Quick usage guide and local v0.1 scope](docs/local-release.md). Keep its terminal open while using the tool.
+**Configured Windows computer:** double-click `Start Platform.cmd` for the explorer and local collectors, or `Start Explorer.cmd` for the explorer alone. [Quick usage guide and local v0.1 scope](docs/local-release.md). Keep its terminal open while using the tool.
 
 Requires Python 3.10+ and internet access; no Python packages or database needed. Copy `.env.example` to `.env` and enter your own PRIM credentials. Keep this file private.
 
@@ -39,7 +39,7 @@ A local collector now saves prediction snapshots for two Châtelet / métro-4 po
 
 ## Disruption Intelligence: notice history
 
-Line-4 notices can now be archived locally with changed versions preserved. Start the explorer, then `Start Notice History.cmd`; open [saved notice history](http://127.0.0.1:8765/history) to search saved versions, or use `python disruption_history.py --history`. [Instructions, examples and limits](docs/disruption-history.md). Disappearance from the feed is not treated as incident resolution.
+Notices from all 16 métro lines can be archived locally with changed versions preserved. Double-click `Start Platform.cmd` to start the map and both approved local collectors; open [saved notice history](http://127.0.0.1:8765/history) to search saved versions, or use `python disruption_history.py --history`. [Instructions, examples and limits](docs/disruption-history.md). Disappearance from the feed is not treated as incident resolution.
 
 ## Four projects, one map
 

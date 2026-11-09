@@ -13,6 +13,30 @@ def payload(text='Synthetic planned works', reports=True):
 
 
 class NoticeHistoryTests(unittest.TestCase):
+    def test_lines_have_independent_sampling_and_history(self):
+        other='STIF:Line::C01371:'
+        with tempfile.TemporaryDirectory() as folder, closing(connect(Path(folder)/'db')) as db:
+            collect_check(db,payload,now=1000,line=LINE,interval=1800)
+            second=payload(); second['line_id']=other
+            self.assertTrue(collect_check(db,lambda:second,now=1000,line=other,interval=1800))
+            self.assertFalse(collect_check(db,payload,now=1300,line=LINE,interval=1800))
+            self.assertEqual(len(history(db)),2)
+            self.assertEqual(history(db,line=other)[0]['line_id'],other)
+            self.assertEqual(summary(db,other)['checks_by_status'],{'ok':1})
+            self.assertEqual(summary(db,'uncollected')['checks_by_status'],{})
+
+    def test_old_line4_checks_migrate_without_loss(self):
+        import sqlite3
+        with tempfile.TemporaryDirectory() as folder:
+            path=Path(folder)/'db'
+            with closing(sqlite3.connect(path)) as old:
+                old.execute('CREATE TABLE checks(id INTEGER PRIMARY KEY, started_at REAL, observed_at TEXT, gap_seconds REAL, status TEXT, response_json TEXT,error_kind TEXT)')
+                old.execute("INSERT INTO checks VALUES(1,1000,'test',0,'empty',NULL,NULL)")
+                old.commit()
+            with closing(connect(path)) as db:
+                self.assertEqual(db.execute('SELECT line_id,status FROM checks').fetchone(),(LINE,'empty'))
+            self.assertTrue(path.with_suffix('.before-all-metro.sqlite').exists())
+
     def test_web_history_is_read_only_and_filters_versions(self):
         with tempfile.TemporaryDirectory() as folder:
             path=Path(folder)/'db'

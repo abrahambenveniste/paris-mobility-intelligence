@@ -148,10 +148,13 @@ def handler_class(network, key, cache, traffic_cache=None):
             if url.path == '/api/notice-history':
                 from disruption_history import saved_history
                 search = parse_qs(url.query).get('search', [''])[0]
+                line = parse_qs(url.query).get('line', [''])[0]
+                if line and line not in allowed_lines:
+                    return self.send(400, {'error':'Select a published metro line.'})
                 if len(search) > 200:
                     return self.send(400, {'error': 'Search is limited to 200 characters.'})
                 try:
-                    return self.send(200, saved_history(search=search))
+                    return self.send(200, saved_history(search=search,line=line))
                 except Exception:
                     return self.send(503, {'error':'Saved history is unavailable. Try again after the current collection check.'})
             if url.path == '/api/traffic':

@@ -1,4 +1,6 @@
-# Disruption Intelligence: line-4 publication history
+# Disruption Intelligence: métro publication history
+
+**Current scope:** all published métro lines, checked locally every 30 minutes. Earlier sections below describe the original line-4 pilot; the current instructions are in the latest section.
 
 ## Purpose and owner decisions
 
@@ -60,3 +62,21 @@ Purpose: inspect saved publications without command-line work. The `/api/notice-
 Observed input: the existing archive contains one empty successful check. Output: zero notice IDs/versions, one empty check, and an explicit warning against assuming normal service. Browser search and refresh preserved this state without upstream requests. All 29 Python and six JavaScript tests pass; a new test confirms missing-file handling, filtered populated versions and byte-for-byte database preservation after reading. Populated cards were not verified against a live notice in this increment.
 
 Implementation is AI-assisted. Next: gather real notices and review their version history; physical incident boundaries remain unverified.
+
+## All-métro integrated explorer — 9 November 2026
+
+**Purpose:** the owner expanded the local disruption history to all métro lines and requested one integrated tool. The map, line departures and saved notice history now link to each other; history cards link to the corresponding filtered map line. Historical status is explicitly labelled at collection, not current status.
+
+**Run:** double-click `Start Platform.cmd`. It starts or reuses the local explorer, starts the all-métro notice collector and starts the existing two-point line-4 prediction collector. Keep the terminal open; Ctrl+C stops processes started by this launcher, not a pre-existing explorer. Alternatively `python run_platform.py` starts only notice collection; pass `--with-predictions` for both. Do not run duplicate explorer processes sharing the same budget file. The collector is not installed as a background service.
+
+**Sampling:** the 16 published lines are discovered from the local reference snapshot. Each line is checked sequentially every 30 minutes while running: at most 16 × 48 = 768 upstream traffic requests per 24 hours before caching, below the explorer's shared rolling limit of 900. This assumes one collector and a stable 16-line network; on-demand requests share that budget, and other PRIM clients are outside it. The interval grows with route count. A check skipped because it was recent is not duplicated. Previous line-4 checks are migrated and a local pre-migration SQLite backup is made. Per-line timestamps and gaps remain separate.
+
+**Code:** `SELECT MAX(started_at) FROM checks WHERE line_id=?` finds the previous check for the same line, so a recent check of one line cannot suppress another.
+
+**Observed input:** one bounded collection cycle using the current reference: 15 new line checks and the recent line-4 check retained. **Output:** 16 lines with saved checks; 4 checks returned 13 distinct notice IDs, 12 were empty, none failed. This is one observation window, not a measure of incidents or current service. The browser showed populated line-6 notices; its map link selected métro 6 and displayed 56 mapped line-point records. Notice content is kept local and not reproduced here.
+
+**Validation:** 32 Python and six JavaScript tests passed. New tests cover independent line histories, restart throttling, old line-4 migration with backup, and platform launcher process ownership. Browser checks covered populated history, line filtering and map navigation. The Windows launcher was not separately double-click tested.
+
+**Data quality:** the first sample includes multiple similar notices under separate IDs and some reported application periods of about one second. We do not merge these records or interpret reported periods as measured durations. We must inspect these anomalies, station-only notice coverage and changes across real repeated observations before estimating recurrence or severity. Current history cards are content versions, not a full event timeline or a validated incident count.
+
+**Next:** use the launcher to collect while the computer is on; examine real changes and gaps. Cloud hosting and publication of data need a separate deployment design and source-terms review. Code and checks are AI-assisted.

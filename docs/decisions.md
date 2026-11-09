@@ -32,6 +32,8 @@ Updated: 2026-11-09. Status distinguishes user decisions from proposals.
 | D024 | Begin project 1 on line 4, collecting only while the owner runs it locally | Explicit owner approval. Initial implementation samples two already-inspected Châtelet points every five minutes; this is not whole-line coverage. Save collection failures and gaps separately; scoring awaits suitable evidence |
 | D025 | Begin Disruption Intelligence with local line-4 notice history | Owner chose history, line 4 and user-operated collection. Preserve versions and collection checks; no inferred incident boundaries or predictive claims |
 | D026 | Add a read-only website view of line-4 notice history | Implementation under the owner’s instruction to continue. Search local versions and display collection quality without PRIM requests or inferred incident boundaries |
+| D027 | Expand local disruption history to all published métro lines and integrate map navigation | Owner explicitly requested all lines and a combined tool. Use a 30-minute per-line interval, preserve line-4 history and show collection quality; local-only collection remains user-operated |
+| D028 | Public audience for a future hosted version | Owner explicitly selected public access. Hosted infrastructure, data terms, secrets and operating costs must be addressed before a functional release |
 
 ## Proposed
 

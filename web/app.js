@@ -68,6 +68,7 @@ function selectStationLine(group,line) {
   $('selected-name').textContent=group.name;$('selected-line').textContent=`Métro ${r.name} · REPORTED DESTINATIONS`;
   $('selected-platform').textContent=`${selectedPoints.length} boarding-point records · ${group.commune}. Estimates are grouped by reported destination, with their source points preserved.`;
   $('traffic-line').value=line;
+  $('station-history').href='/history?'+new URLSearchParams({line});
   if(map)for(const [id,marker] of markers)marker.setStyle({radius:selectedPoints.some(s=>key(s)===id)?8:4.5,weight:2,fillColor:selectedPoints.some(s=>key(s)===id)?r.color:'#fff'});
   loadDepartures();
 }
@@ -174,6 +175,8 @@ async function init() {
       for(const r of network.routes) {const layer=L.geoJSON(r.geometry,{style:{color:r.color,weight:3,opacity:.7},interactive:false});layer.routeId=r.id;routeLayers.push(layer);}
       for(const stop of network.stops) { const r=route(stop.line_id), marker=L.circleMarker([stop.lat,stop.lon],{radius:4.5,color:r.color,fillColor:'#fff',fillOpacity:1,weight:2});const label=el('span',`${r.mode} ${r.name} · ${stop.name} · ${stop.id}`);marker.bindTooltip(label);marker.on('click',()=>selectStation(groups.find(g=>g.stops.includes(stop))));markers.set(key(stop),marker); }
     } else { $('map').textContent='Map library unavailable. You can still use the boarding-point list and estimates.'; }
+    const requested=new URLSearchParams(location.search).get('line');
+    if(network.routes.some(r=>r.id===requested)){activeLine=requested;$('traffic-line').value=requested;updateFilters();}
     renderList();fit();
   } catch(error) { $('app-error').hidden=false;$('app-error').textContent=error.message;$('result-count').textContent='Network unavailable'; }
 }

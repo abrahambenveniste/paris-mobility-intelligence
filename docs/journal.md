@@ -221,3 +221,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitation:** no live populated notices are available yet; populated data/search are tested synthetically. Version sightings are not incident counts, durations or a full chronological event sequence.
 
 **Next:** run the local collector and review actual publication changes. See [history documentation](disruption-history.md). Implementation and validation are AI-assisted.
+
+## 2026-11-09 — All-métro history and integrated launcher
+
+**Purpose:** fulfil the owner's request for disruption history across all lines integrated with the existing map and prediction pilot.
+
+**Evidence:** a bounded run covered 16 lines: 4 checks returned 13 distinct notice IDs, 12 checks were empty, 0 failed; the previous line-4 check was retained. Browser checks verified populated line-6 history, line filter and navigation to the line-6 map (56 mapped records). All 38 tests pass (32 Python, six JavaScript). Some similar notices have separate IDs and some source application periods are about one second; neither is treated as an established incident count or duration.
+
+**Decision:** collect every 30 minutes per line, track each line independently, migrate the old local archive with backup, expose per-line status and link map/history. `Start Platform.cmd` launches the explorer plus both authorised local collectors; it reuses an existing server and stops only children it owns. The owner selected a public audience for a future hosted version.
+
+**Limitation:** tests include synthetic line separation/migration and launcher process ownership; the Windows double-click action was not separately exercised. Only one live all-line observation window exists. Source terms, access credentials, shared quotas, storage and hosting design remain to be resolved before publishing live data.
+
+**Next:** inspect real notice version changes and source-data anomalies; prepare a public hosting feasibility decision. See [methodology](disruption-history.md). Implementation and validation are AI-assisted.
