@@ -6,6 +6,21 @@ from urllib.request import Request, urlopen
 from traffic import line_uri
 
 
+def safe_geometry(value):
+    """Keep only bounded publisher-supplied line coordinates; never invent a path."""
+    if not isinstance(value, dict) or value.get('type') != 'LineString':
+        return None
+    points = value.get('coordinates')
+    if not isinstance(points, list) or not 2 <= len(points) <= 10000:
+        return None
+    for point in points:
+        if (not isinstance(point, list) or len(point) < 2 or
+                any(isinstance(x, bool) or not isinstance(x, (int, float)) for x in point[:2]) or
+                not (1.5 <= point[0] <= 3.5 and 48 <= point[1] <= 49.5)):
+            return None
+    return {'type': 'LineString', 'coordinates': [point[:2] for point in points]}
+
+
 def normalize_journeys(payload, avoided):
     if 'error' in payload:
         return {'journeys': [], 'message': 'The provider could not find a journey for this request.',
@@ -29,7 +44,7 @@ def normalize_journeys(payload, avoided):
             sections.append({'kind': kind, 'from': section.get('from', {}).get('name'),
                              'to': section.get('to', {}).get('name'), 'duration': section.get('duration'),
                              'line': info.get('code'), 'line_id': line_ids[0] if kind == 'public_transport' else None, 'direction': info.get('direction'),
-                             'freshness': section.get('data_freshness')})
+                             'freshness': section.get('data_freshness'), 'geometry': safe_geometry(section.get('geojson'))})
         journeys.append({'duration': journey['duration'], 'departure': journey.get('departure_date_time'),
                          'arrival': journey.get('arrival_date_time'), 'sections': sections})
     return {'journeys': journeys, 'provider_time_local': payload.get('context', {}).get('current_datetime'),

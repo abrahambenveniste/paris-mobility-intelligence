@@ -473,3 +473,17 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Public verification:** Cambronne → Nation returned a scheduled métro 6 route and a walking option. The métro leg showed two provider notices labelled upcoming, with the one-second source period flagged. The notices were identified as line-level, not verified effects on that journey.
 
 **Next:** monitor quota usage and improve journey-specific disruption matching where source evidence permits. Implementation and testing are AI-assisted.
+
+## 2026-11-10 — Map the suggested journey
+
+**Purpose:** show where the selected itinerary goes, on the existing network map.
+
+**Evidence:** a bounded PRIM response for Châtelet → Bastille contained a `LineString` for the métro leg and both walking legs. A local browser test displayed the first option and switched to the second, walking-only option. Four focused journey tests, five public-server tests and JavaScript syntax passed.
+
+**Code:** `safe_geometry(section.get('geojson'))` keeps publisher-supplied line coordinates only when the type, size and geographic bounds pass validation. Missing or invalid geometry is omitted; no connecting path is guessed.
+
+**Decision:** draw the first option automatically, use a dashed stroke for walking, and let the visitor select another option. On narrow screens, the selection button brings the map into view. Disruption notices and the existing map remain available.
+
+**Limitations:** the provider's route geometry is a suggested path, not evidence of a vehicle's position or actual service. Some sections may lack usable geometry; those options are labelled incomplete. A route's selected coordinates are not verified station entrances.
+
+**Next:** deploy and verify the public version. Implementation and validation are AI-assisted.

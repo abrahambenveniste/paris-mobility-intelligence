@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from journey import normalize_journeys
+from journey import normalize_journeys, safe_geometry
 from public_live import PublicLive
 
 
@@ -16,6 +16,12 @@ class Budget:
 
 
 class JourneyTests(unittest.TestCase):
+    def test_publisher_geometry_is_bounded_and_optional(self):
+        line = {'type': 'LineString', 'coordinates': [[2.3, 48.8], [2.4, 48.9]]}
+        self.assertEqual(safe_geometry(line), line)
+        self.assertIsNone(safe_geometry({'type': 'LineString', 'coordinates': [[2.3, 48.8], [50, 50]]}))
+        self.assertIsNone(safe_geometry({'type': 'Point', 'coordinates': [2.3, 48.8]}))
+        self.assertIsNone(safe_geometry(None))
     def test_preserves_legs_and_freshness(self):
         payload = {'journeys': [{'duration': 600, 'sections': [section()]}]}
         result = normalize_journeys(payload, 'line:IDFM:C1')

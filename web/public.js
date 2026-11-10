@@ -2,10 +2,30 @@
 const $=id=>document.getElementById(id);
 const el=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefined)n.textContent=text;if(cls)n.className=cls;return n;};
 const clean=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
-let network,groups,map,revision=0;
+let network,groups,map,revision=0,journeyLayer=null;
 const parisTime=value=>new Date(value).toLocaleString('en-GB',{timeZone:'Europe/Paris',dateStyle:'medium',timeStyle:'short'});
 const minutes=value=>Math.ceil((value||0)/60);
 function stationKey(g){const p=g.stops[0];return p.id+'|'+p.line_id;}
+function clearJourney(){if(journeyLayer){journeyLayer.remove();journeyLayer=null;}$('map-selection').textContent='Reference routes, not live train positions';}
+function drawJourney(journey,index){
+  clearJourney();
+  for(const button of document.querySelectorAll('.show-on-map'))button.setAttribute('aria-pressed',String(button.dataset.index===String(index)));
+  if(!map||!window.L)return;
+  journeyLayer=L.layerGroup().addTo(map);const bounds=L.latLngBounds([]);let drawn=0,missing=0;
+  for(const section of journey.sections){
+    const geometry=section.geometry;
+    if(!geometry){if(['public_transport','street_network','crow_fly'].includes(section.kind))missing++;continue;}
+    const points=geometry.coordinates.map(([lon,lat])=>[lat,lon]);
+    if(points.length<2)continue;
+    const route=network.routes.find(r=>section.line_id==='line:IDFM:'+r.id.split('::')[1].replace(':',''));
+    const colour=section.kind==='public_transport'?(route?.color||'#17584c'):'#455a54';
+    L.polyline(points,{color:'#fff',weight:10,opacity:.95,interactive:false}).addTo(journeyLayer);
+    L.polyline(points,{color:colour,weight:6,opacity:1,dashArray:section.kind==='public_transport'?null:'6 7',interactive:false}).addTo(journeyLayer);
+    for(const point of points)bounds.extend(point);drawn++;
+  }
+  if(drawn){map.fitBounds(bounds,{padding:[35,35],maxZoom:15});$('map-selection').textContent=`Option ${index+1} · ${missing?'some path data unavailable':'publisher-supplied route'}`;}
+  else $('map-selection').textContent=`Option ${index+1} · path data unavailable`;
+}
 
 function fillNotice(panel,data){
   panel.replaceChildren();
@@ -49,6 +69,8 @@ function showRoutes(data,out,current){
   for(const [index,j] of data.journeys.entries()){
     const card=el('article',undefined,'route-card');
     const top=el('div',undefined,'route-card-top');top.append(el('span',`OPTION ${index+1}`,'route-kicker'),el('strong',`${minutes(j.duration)} min`,'route-duration'));card.append(top);
+    const show=el('button','Show on map','show-on-map');show.type='button';show.dataset.index=String(index);show.setAttribute('aria-pressed','false');show.addEventListener('click',()=>{drawJourney(j,index);if(window.matchMedia('(max-width: 850px)').matches)$('map').scrollIntoView({block:'center'});});card.append(show);
+    if(j.sections.some(s=>['public_transport','street_network','crow_fly'].includes(s.kind)&&!s.geometry))card.append(el('p','Some path details are unavailable, so the map may be incomplete.','notice-unavailable'));
     const strip=el('div',undefined,'route-strip');
     for(const s of j.sections){
       if(s.kind==='public_transport'){
@@ -74,13 +96,14 @@ function showRoutes(data,out,current){
     }
     card.append(steps);out.append(card);
   }
+  if(data.journeys.length)drawJourney(data.journeys[0],0);
   loadNotices(linePanels,current);
 }
 
 function setupJourneys(){
   const labels=new Map(),names=new Map();
   for(const g of groups){const key=stationKey(g),label=`${g.name} · ${g.commune}`;labels.set(clean(label),key);const name=clean(g.name);names.set(name,names.has(name)?null:key);const option=el('option');option.value=label;$('journey-stations').append(option);}
-  function changed(){revision++;$('journey-results').replaceChildren();}
+  function changed(){revision++;$('journey-results').replaceChildren();clearJourney();}
   for(const id of ['journey-from','journey-to'])$(id).addEventListener('input',changed);
   $('journey-swap').addEventListener('click',()=>{const from=$('journey-from'),to=$('journey-to');[from.value,to.value]=[to.value,from.value];changed();});
   $('journey-form').addEventListener('submit',async event=>{
@@ -89,7 +112,7 @@ function setupJourneys(){
     const from=labels.get(start)||names.get(start),to=labels.get(end)||names.get(end),current=++revision;
     if(!from||!to){out.replaceChildren(el('p','Choose a station from the suggestions for both fields.','notice'));return;}
     if(from===to){out.replaceChildren(el('p','Choose two different stations.','notice'));return;}
-    button.disabled=true;out.replaceChildren(el('p','Finding routes…','result-loading'));
+    button.disabled=true;clearJourney();out.replaceChildren(el('p','Finding routes…','result-loading'));
     try{
       const response=await fetch('/api/journeys?'+new URLSearchParams({from,to})),data=await response.json();
       if(current!==revision)return;if(!response.ok)throw Error(data.error||'Routes are unavailable.');showRoutes(data,out,current);

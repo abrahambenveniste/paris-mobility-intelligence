@@ -43,6 +43,7 @@ Updated: 2026-11-09. Status distinguishes user decisions from proposals.
 | D035 | Place journey planning alongside the map | Owner requested a simpler interface. Allow station name search, swapping endpoints and selecting the current map station, without changing routing assumptions |
 | D036 | Link reported line notices to the route planner | On owner approval, let a visitor explicitly select a whole line to avoid from its notices. Preserve existing journey fields and require a separate route request |
 | D037 | Simplify the public website to a station-to-station planner and map | Owner requested removing the line-to-avoid selector and station action buttons, and displaying reported disruption notices within journey options. Do not infer a specific route is disrupted from a line-level notice |
+| D038 | Draw journey options on the existing map | Owner requested showing at least the first route. Draw only the geometry supplied by PRIM; allow selecting another option and clearly flag missing path sections |
 
 ## Proposed
 
