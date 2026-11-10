@@ -129,7 +129,10 @@ function setupMobility(){
     for(const key of ['A','B']){
       const place=places[key];if(!place)continue;
       const result=place.result,card=el('section',undefined,'location-card');
-      card.append(el('h3',`Location ${key}`),el('strong',`${result.score} / 100 · métro proximity`,'point-score'));
+      card.append(el('h3',`Location ${key}`));
+      const score=el('div',undefined,'score-highlight'),scoreText=el('div');
+      scoreText.append(el('span','Mobility Proximity Score','score-title'),el('span','Métro access within 500 m','score-subtitle'));
+      const scoreValue=el('div',undefined,'score-value');scoreValue.append(el('strong',String(result.score)),el('span','/ 100'));score.append(scoreText,scoreValue);card.append(score);
       card.append(el('p',`${result.nearest===null?'No mapped station within 500 m':`Nearest mapped point: ${Math.round(result.nearest)} m`} · ${result.lines.size} distinct métro lines`));
       if(result.stations.length){const list=el('ul',undefined,'nearby-list');for(const station of result.stations){const names=[...station.lines].map(id=>network.routes.find(r=>r.id===id)?.name||id);const item=el('li');item.append(el('strong',station.name),el('span',`${Math.round(station.distance)} m · line${names.length===1?'':'s'} ${names.join(', ')}`));list.append(item);}card.append(list);}
       out.append(card);

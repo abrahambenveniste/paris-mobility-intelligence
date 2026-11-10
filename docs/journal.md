@@ -523,3 +523,7 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Code and evidence:** the browser stores two coordinates, calls the existing `nearbyMobility` calculation separately and displays both result cards and radius circles. The same reference snapshot and score limitations apply. No additional live API calls are required.
 
 **Limitations and next action:** the two scores remain illustrative straight-line métro proximity measures, not walking access or a validated accessibility index. Gather feedback and improve the method only with suitable supporting data. Implementation and validation are AI-assisted.
+
+## 2026-11-10 — Clarify the score and project credit
+
+**Purpose and decision:** at the owner's request, credit Abraham Benveniste in the website's data section and visually highlight each location's “Mobility Proximity Score.” The underlying calculation and its limitations remain unchanged. Implementation is AI-assisted.
