@@ -24,16 +24,14 @@ Explore métro reliability, the transport network, disruptions and neighbourhood
 
 ## Run the local explorer
 
-You’ll need Python 3.10+, an internet connection and your own PRIM credentials. Copy `.env.example` to `.env`, add your keys there and keep that file private.
+Requires Python 3.10+ and PRIM credentials in a private `.env` file. See the [setup guide](docs/local-release.md).
 
 ```powershell
 python src/prepare_data.py
 python src/app.py
 ```
 
-Then visit [localhost:8765](http://127.0.0.1:8765). On the configured Windows computer, you can also open the `launchers` folder and double-click `Start Explorer.cmd` or `Start Platform.cmd` (the latter also starts the local collectors). See the [local setup guide](docs/local-release.md) and [network explorer guide](docs/network-explorer.md) for details. Run the offline checks with `python -m unittest discover -s tests -v`.
-
-The public site and local explorer aren’t identical: historical collectors and their saved data stay on the owner’s computer. The hosted app doesn’t continuously collect history.
+Open [localhost:8765](http://127.0.0.1:8765). Historical collection runs locally while your computer is on.
 
 ## Under the hood
 
