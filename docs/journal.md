@@ -438,4 +438,6 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 
 **Limitations:** station suggestions depend on the current browser's native datalist support. Results remain PRIM suggestions and may use scheduled data; the map does not yet draw the route. No automatic incident avoidance or new historical collection was added.
 
-**Next:** deploy and verify the public layout. Implementation and checks are AI-assisted.
+**Public verification:** the deployed planner accepted `Chatelet` → `Bastille` with métro 1 excluded and returned métro and walking options. The compact layout, station selection, swap and identical-station message were checked locally. A separate wide-screen browser check was unavailable.
+
+**Next:** monitor usability and verify a wide-screen view. Implementation and checks are AI-assisted.
