@@ -455,3 +455,19 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Public check:** métro 6 returned two upcoming notices and the route button. One source period was only one second despite a notice describing an interruption on a date; periods below one minute now show a caution to check the notice text and official updates instead of implying that duration. This rule is a data-quality flag, not a corrected incident time.
 
 **Next:** monitor notice-quality patterns and further validate public use. Implementation and validation are AI-assisted.
+
+## 2026-11-10 — Journey-centred public interface
+
+**Purpose:** make the website a simple station-to-station planner with a map and useful disruption context beside each métro leg.
+
+**Decision:** remove public line avoidance and station action controls as requested. Reuse PRIM's journey endpoint and existing on-demand line reports; after the visitor searches, check each distinct métro line sequentially through the existing shared quota guard. Reuse a response across matching legs. Display a line-level notice with status and retrieval time, without implying it affects the exact journey. A failed or empty notice check is explicitly labelled. No background collection is added.
+
+**Code:** `linePanels.get(lineId).push(notice)` associates each returned métro leg with a panel; one line-level response can then populate every panel for that line. Source line IDs, not line names, are used for the match.
+
+**Synthetic input/output:** a route containing métro 1 and an active test notice showed the notice beneath that leg, labelled “line-level reports” and “may not affect this particular journey.” The sample is simulated, not a historical event.
+
+**Evidence:** a local browser check verified station entry, route cards and a synthetic notice. Desktop and compact layouts were visually checked. Focused Python tests and JavaScript syntax are run before deployment. One bounded real PRIM inspection returned scheduled legs and no journey-linked disruptions; this does not prove the absence of incidents.
+
+**Limitations:** notices can be incomplete, upcoming or relevant only to another portion of the line. A route request may generate one additional notice request per distinct line; requests are rate-limited and cached, and failures remain visible. The planner requests real-time routes but some legs are scheduled. Route geometry is not drawn on the map, and the app does not establish that routes are unaffected by disruption.
+
+**Next:** deploy, verify a real public route and its notice status, and monitor quota usage. Implementation and testing are AI-assisted.

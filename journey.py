@@ -28,7 +28,7 @@ def normalize_journeys(payload, avoided):
                 raise ValueError('Unexpected street mode')
             sections.append({'kind': kind, 'from': section.get('from', {}).get('name'),
                              'to': section.get('to', {}).get('name'), 'duration': section.get('duration'),
-                             'line': info.get('code'), 'direction': info.get('direction'),
+                             'line': info.get('code'), 'line_id': line_ids[0] if kind == 'public_transport' else None, 'direction': info.get('direction'),
                              'freshness': section.get('data_freshness')})
         journeys.append({'duration': journey['duration'], 'departure': journey.get('departure_date_time'),
                          'arrival': journey.get('arrival_date_time'), 'sections': sections})

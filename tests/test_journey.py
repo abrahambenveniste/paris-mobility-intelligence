@@ -21,6 +21,7 @@ class JourneyTests(unittest.TestCase):
         result = normalize_journeys(payload, 'line:IDFM:C1')
         self.assertEqual(result['journeys'][0]['sections'][0]['freshness'], 'base_schedule')
         self.assertEqual(result['journeys'][0]['sections'][0]['line'], '2')
+        self.assertEqual(result['journeys'][0]['sections'][0]['line_id'], 'line:IDFM:C2')
 
     def test_rejects_avoided_line_and_other_modes(self):
         for leg in (section('line:IDFM:C1'), section(mode='Bus')):
