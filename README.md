@@ -4,7 +4,7 @@ A research platform for understanding transport reliability, network connectivit
 
 This is also a documented learning project: follow how public transport data becomes a usable map, why each tool was chosen, and what the results cannot tell us. Technical claims should be understandable and reproducible by someone new to programming.
 
-The [public website](https://paris-mobility-intelligence.onrender.com/) combines a journey planner and a Paris arrondissement comparison on one map. The comparison counts mapped métro station-name groups and lines with boarding points inside each boundary; it is not a walking-distance or accessibility score. [Method and limitations](docs/public-release.md#paris-arrondissement-comparison).
+The [public website](https://paris-mobility-intelligence.onrender.com/) combines a journey planner and a comparison of two chosen locations on one map. [Method and limitations](docs/public-release.md#point-based-métro-proximity).
 
 The map also explores métro proximity within 500 metres of a chosen point. Its illustrative score combines straight-line distance and line count; it does not measure walking access or step-free accessibility. [Calculation and limitations](docs/public-release.md#point-based-métro-proximity).
 

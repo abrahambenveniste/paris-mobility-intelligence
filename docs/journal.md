@@ -515,3 +515,11 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitations:** straight-line distance is not walking distance; reference points are not confirmed entrances. The score omits frequency, service conditions, other modes, population and step-free accessibility. Grouping and dataset coverage can affect results.
 
 **Next:** gather feedback on the score's assumptions and consider validated walking-network and accessibility data before making broader claims. Implementation and testing are AI-assisted.
+
+## 2026-11-10 — Compare two locations
+
+**Purpose and decision:** following the owner's request, replace the arrondissement view with two independently selectable points on the existing map. Keep the 500 m proximity calculation for each; A and B can be changed independently. Public builds no longer fetch arrondissement boundaries.
+
+**Code and evidence:** the browser stores two coordinates, calls the existing `nearbyMobility` calculation separately and displays both result cards and radius circles. The same reference snapshot and score limitations apply. No additional live API calls are required.
+
+**Limitations and next action:** the two scores remain illustrative straight-line métro proximity measures, not walking access or a validated accessibility index. Gather feedback and improve the method only with suitable supporting data. Implementation and validation are AI-assisted.

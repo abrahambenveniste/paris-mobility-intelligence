@@ -46,6 +46,7 @@ Updated: 2026-11-09. Status distinguishes user decisions from proposals.
 | D038 | Draw journey options on the existing map | Owner requested showing at least the first route. Draw only the geometry supplied by PRIM; allow selecting another option and clearly flag missing path sections |
 | D039 | Compare the 20 Paris arrondissements on the existing map | Owner chose Paris and arrondissements. Count mapped métro station-name groups and distinct lines with points inside each boundary; publish separate indicators, not a composite accessibility score |
 | D040 | Explore métro proximity from a chosen map point | Owner chose a 500-metre straight-line radius. Use an explicitly illustrative 50/50 score for nearest reference-point distance and distinct lines, capped at four; this is not a validated accessibility measure |
+| D041 | Replace arrondissement comparisons with two chosen locations | Owner requested independent A/B map points, using the same 500-metre proximity method and shared map. The arrondissement layer and its data download are no longer part of the public interface. |
 
 ## Proposed
 

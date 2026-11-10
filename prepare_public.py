@@ -51,10 +51,6 @@ def main():
             stop.pop('live_supported', None)
             stop.pop('monitoring_ref', None)
         network.pop('unmapped', None)
-        network['arrondissements'] = fetch_areas()
-        network['area_source'] = {'name': 'Ville de Paris — Arrondissements',
-                                  'url': 'https://opendata.paris.fr/explore/dataset/arrondissements/',
-                                  'licence': 'ODbL', 'retrieved_at': datetime.now(timezone.utc).isoformat()}
         network['scope'] = 'public_map_preview'
         PUBLIC_NETWORK.parent.mkdir(parents=True, exist_ok=True)
         temporary = PUBLIC_NETWORK.with_suffix('.tmp')

@@ -8,15 +8,15 @@ The owner wants a website accessible to everyone. Disruption collection should c
 
 The GitHub repository is public. A [métro map preview](https://paris-mobility-intelligence.onrender.com) is deployed on Render's free tier with on-demand arrival estimates and line notices. The SQLite archive and collectors remain local; `127.0.0.1` is accessible only on the owner's computer. No public synchronization service exists yet.
 
-## Paris arrondissement comparison
+## Paris arrondissement comparison (retired)
 
-The map offers a second view for comparing the 20 arrondissements. `prepare_public.py` retrieves and validates the [City of Paris boundaries](https://opendata.paris.fr/explore/dataset/arrondissements/) (ODbL), alongside the existing IDFM métro stop/line reference snapshot. Both snapshots are refreshed at build time, not in real time. `web/mobility.js` checks whether each reference point lies inside a polygon and counts unique station-name and commune pairs, plus unique métro line identifiers. The visitor can select two areas, and the colours show the first count.
+The previous version compared the 20 arrondissements using [City of Paris boundaries](https://opendata.paris.fr/explore/dataset/arrondissements/) (ODbL). The owner replaced that interface with a comparison of two chosen map points. Public builds no longer download the boundaries.
 
 For example, one inspected snapshot produced 10 station-name groups and 5 lines for the 1st arrondissement and 23 groups and 6 lines for the 11th. Groups with boarding points on both sides can appear in more than one area; different stations sharing the same name and commune may be combined. Counts are absolute, not adjusted for population or area. They do not establish walking distance, actual service frequency, travel time, accessibility or overall mobility. The boundary source and the IDFM reference datasets are independently licensed; consult their publisher terms before redistribution.
 
 ### Point-based métro proximity
 
-Choose a map point to list groups with an IDFM boarding-point reference within 500 metres. Distance uses the haversine great-circle formula; station groups use exact name and commune. Lines count only if a mapped point for that line lies within the radius. The experimental score is `round(50 × (1 − nearest distance / 500) + 50 × min(distinct lines / 4, 1))`, or zero if no point falls within the radius. The 50/50 weighting and four-line cap are design choices, not empirically validated thresholds. No API request is made when selecting a point.
+Choose one or two map points to compare groups with an IDFM boarding-point reference within 500 metres of each. Distance uses the haversine great-circle formula; station groups use exact name and commune. Lines count only if a mapped point for that line lies within the radius. The experimental score is `round(50 × (1 − nearest distance / 500) + 50 × min(distinct lines / 4, 1))`, or zero if no point falls within the radius. The 50/50 weighting and four-line cap are design choices, not empirically validated thresholds. No API request is made when selecting a point.
 
 These are straight-line distances to mapped reference points, not station entrances or accessible pedestrian routes. Grouping can merge similarly named stations, the data snapshot can be incomplete or stale, and a zero means no mapped point in the radius—not proof of no access. Service frequency, disruptions, other modes and step-free access are excluded. Outside the mapped métro network, results are especially incomplete.
 
