@@ -503,3 +503,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Limitations:** names are an approximation of stations, and groups with points across a boundary can appear in multiple areas. Counts are not normalised by area or population and do not measure frequency, walking access, jobs, journey time or accessibility. Boundary and stop snapshots can change.
 
 **Next:** assess visitor feedback and, before expanding the indicators, select and validate suitable population, destination or travel-time sources. Implementation and testing are AI-assisted.
+
+## 2026-11-10 — Explore a point's métro proximity
+
+**Purpose and decision:** the owner chose a 500 m radius for comparing métro proximity at a clicked location. Reuse the existing IDFM reference points on the shared map; calculate in the browser without API requests. The provisional index gives up to 50 points for nearest-point proximity and 50 for up to four lines. These weights are explanatory choices, not research-validated values.
+
+**Code:** `distanceMetres(...)` applies the haversine formula; `nearbyMobility(...)` groups nearby records by exact name and commune and counts distinct line identifiers. The map displays a radius, point markers, station names and estimated distances.
+
+**Input/output evidence:** a local browser click near Châtelet produced five nearby station-name groups, five distinct lines, a nearest mapped point 109 m away and an illustrative score of 89/100. This is a single reference-data example, not a field measurement. Synthetic tests check grouping, distance and the no-station case.
+
+**Limitations:** straight-line distance is not walking distance; reference points are not confirmed entrances. The score omits frequency, service conditions, other modes, population and step-free accessibility. Grouping and dataset coverage can affect results.
+
+**Next:** gather feedback on the score's assumptions and consider validated walking-network and accessibility data before making broader claims. Implementation and testing are AI-assisted.

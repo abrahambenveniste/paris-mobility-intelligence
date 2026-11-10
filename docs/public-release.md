@@ -14,6 +14,12 @@ The map offers a second view for comparing the 20 arrondissements. `prepare_publ
 
 For example, one inspected snapshot produced 10 station-name groups and 5 lines for the 1st arrondissement and 23 groups and 6 lines for the 11th. Groups with boarding points on both sides can appear in more than one area; different stations sharing the same name and commune may be combined. Counts are absolute, not adjusted for population or area. They do not establish walking distance, actual service frequency, travel time, accessibility or overall mobility. The boundary source and the IDFM reference datasets are independently licensed; consult their publisher terms before redistribution.
 
+### Point-based métro proximity
+
+Choose a map point to list groups with an IDFM boarding-point reference within 500 metres. Distance uses the haversine great-circle formula; station groups use exact name and commune. Lines count only if a mapped point for that line lies within the radius. The experimental score is `round(50 × (1 − nearest distance / 500) + 50 × min(distinct lines / 4, 1))`, or zero if no point falls within the radius. The 50/50 weighting and four-line cap are design choices, not empirically validated thresholds. No API request is made when selecting a point.
+
+These are straight-line distances to mapped reference points, not station entrances or accessible pedestrian routes. Grouping can merge similarly named stations, the data snapshot can be incomplete or stale, and a zero means no mapped point in the radius—not proof of no access. Service frequency, disruptions, other modes and step-free access are excluded. Outside the mapped métro network, results are especially incomplete.
+
 ## Public map preview — deployed 9 November 2026
 
 The owner approved publishing a clearly labelled map-only preview first, while the full live application is completed separately. The preview uses the public [métro route shapes](https://data.iledefrance-mobilites.fr/explore/dataset/traces-des-lignes-de-transport-en-commun-idfm/) and [stop/line associations](https://data.iledefrance-mobilites.fr/explore/dataset/arrets-lignes/); the publisher's catalog metadata identifies both as ODbL. It does not require API credentials, transmit the private archive, or expose arrival/traffic endpoints. The restricted real-time coverage dataset is not used: its absence is not shown as zero coverage.

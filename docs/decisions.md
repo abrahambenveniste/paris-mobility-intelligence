@@ -45,6 +45,7 @@ Updated: 2026-11-09. Status distinguishes user decisions from proposals.
 | D037 | Simplify the public website to a station-to-station planner and map | Owner requested removing the line-to-avoid selector and station action buttons, and displaying reported disruption notices within journey options. Do not infer a specific route is disrupted from a line-level notice |
 | D038 | Draw journey options on the existing map | Owner requested showing at least the first route. Draw only the geometry supplied by PRIM; allow selecting another option and clearly flag missing path sections |
 | D039 | Compare the 20 Paris arrondissements on the existing map | Owner chose Paris and arrondissements. Count mapped métro station-name groups and distinct lines with points inside each boundary; publish separate indicators, not a composite accessibility score |
+| D040 | Explore métro proximity from a chosen map point | Owner chose a 500-metre straight-line radius. Use an explicitly illustrative 50/50 score for nearest reference-point distance and distinct lines, capped at four; this is not a validated accessibility measure |
 
 ## Proposed
 

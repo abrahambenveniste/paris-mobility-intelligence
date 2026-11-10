@@ -124,6 +124,7 @@ function setupMobility(){
   const areas=network.arrondissements;
   if(!Array.isArray(areas)||areas.length!==20){$('view-mobility').disabled=true;$('view-mobility').title='Area data unavailable';return;}
   const metrics=new Map(areas.map(a=>[String(a.number),areaIndicators(a,network.stops)]));
+  let picking=false,pointLayer=null;
   const colour=n=>n<10?'#e3f0e5':n<15?'#add6bd':n<20?'#5da782':'#226c55';
   for(const area of areas){for(const id of ['area-a','area-b']){const option=el('option',`${area.number}${area.number===1?'st':'th'} arrondissement · ${area.name}`);option.value=String(area.number);$(id).append(option);}}
   // Correct the familiar English ordinal endings in the selection labels.
@@ -140,9 +141,22 @@ function setupMobility(){
     const geo={type:'FeatureCollection',features:areas.map(a=>({type:'Feature',properties:{number:a.number,name:a.name},geometry:a.geometry}))};
     mobilityLayer=L.geoJSON(geo,{style:feature=>({color:'#fff',weight:1,fillColor:colour(metrics.get(String(feature.properties.number)).stations),fillOpacity:.72}),onEachFeature:(feature,layer)=>{
       const n=String(feature.properties.number);layer.bindTooltip(`${label(n)} · ${metrics.get(n).stations} station-name groups`);
-      layer.on('click',()=>{if(!$('area-a').value||$('area-b').value){$('area-a').value=n;$('area-b').value='';}else if($('area-a').value!==n)$('area-b').value=n;render();});
+      layer.on('click',e=>{if(picking){pickPoint(e.latlng);return;}if(!$('area-a').value||$('area-b').value){$('area-a').value=n;$('area-b').value='';}else if($('area-a').value!==n)$('area-b').value=n;render();});
     }});
   }
+  function pickPoint(latlng){
+    const result=nearbyMobility(latlng.lat,latlng.lng,network.stops),out=$('point-results');out.replaceChildren();
+    if(pointLayer)pointLayer.remove();pointLayer=L.layerGroup().addTo(map);
+    L.circle(latlng,{radius:500,color:'#24584c',weight:2,fillOpacity:.07,interactive:false}).addTo(pointLayer);
+    L.circleMarker(latlng,{radius:7,color:'#173d33',fillColor:'#fff',fillOpacity:1,weight:3,interactive:false}).addTo(pointLayer);
+    const heading=el('strong',`${result.score} / 100 · métro proximity`,'point-score');out.append(heading);
+    const nearest=result.nearest===null?'No mapped station within 500 m':`Nearest mapped point: ${Math.round(result.nearest)} m`;
+    out.append(el('p',`${nearest} · ${result.lines.size} distinct métro lines`));
+    if(result.stations.length){const list=el('ul',undefined,'nearby-list');for(const s of result.stations){const names=[...s.lines].map(id=>network.routes.find(r=>r.id===id)?.name||id);const item=el('li');item.append(el('strong',s.name),el('span',`${Math.round(s.distance)} m · line${names.length===1?'':'s'} ${names.join(', ')}`));list.append(item);L.circleMarker([s.lat,s.lon],{radius:5,color:'#24584c',fillColor:'#72ad88',fillOpacity:1,interactive:false}).addTo(pointLayer);}out.append(list);}
+    out.append(el('p','Illustrative score: 50 points for closeness to the nearest mapped point, plus up to 50 for four distinct lines. Straight-line distances to reference points, not entrances or walking routes. Names are grouped; frequency, service and step-free accessibility are not measured.','point-explain'));
+  }
+  $('pick-location').addEventListener('click',()=>{picking=!picking;$('pick-location').setAttribute('aria-pressed',String(picking));$('pick-location').textContent=picking?'Click anywhere on the map':'Choose a point on the map';});
+  if(map)map.on('click',e=>{if(activeView==='mobility'&&picking)pickPoint(e.latlng);});
   function view(mode){
     if(mode===activeView)return;
     activeView=mode;const isMobility=mode==='mobility';
@@ -151,8 +165,8 @@ function setupMobility(){
     $('map-legend').textContent=isMobility?'Paris arrondissements · mapped station-name groups':'Métro network · dashed = walking';
     $('map-selection').textContent=isMobility?'Counts of mapped points inside boundaries':'Reference routes, not live train positions';
     if(!map)return;
-    if(isMobility){journeyView={center:map.getCenter(),zoom:map.getZoom()};if(baseLayer)baseLayer.remove();if(journeyLayer)journeyLayer.remove();if(mobilityLayer){mobilityLayer.addTo(map);map.fitBounds(mobilityLayer.getBounds(),{padding:[25,25]});}}
-    else{if(mobilityLayer)mobilityLayer.remove();if(baseLayer)baseLayer.addTo(map);if(journeyLayer)journeyLayer.addTo(map);if(journeyView)map.setView(journeyView.center,journeyView.zoom);}
+    if(isMobility){journeyView={center:map.getCenter(),zoom:map.getZoom()};if(baseLayer)baseLayer.remove();if(journeyLayer)journeyLayer.remove();if(pointLayer)pointLayer.addTo(map);if(mobilityLayer){mobilityLayer.addTo(map);map.fitBounds(mobilityLayer.getBounds(),{padding:[25,25]});}}
+    else{if(mobilityLayer)mobilityLayer.remove();if(pointLayer)pointLayer.remove();if(baseLayer)baseLayer.addTo(map);if(journeyLayer)journeyLayer.addTo(map);if(journeyView)map.setView(journeyView.center,journeyView.zoom);}
   }
   $('view-journey').addEventListener('click',()=>view('journey'));$('view-mobility').addEventListener('click',()=>view('mobility'));
   $('fit-map').addEventListener('click',()=>{if(activeView==='mobility'&&mobilityLayer)map.fitBounds(mobilityLayer.getBounds(),{padding:[25,25]});});

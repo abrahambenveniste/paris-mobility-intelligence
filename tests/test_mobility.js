@@ -1,10 +1,14 @@
 'use strict';
 const assert=require('node:assert/strict');
-const {pointInPolygon,areaIndicators}=require('../web/mobility.js');
+const {pointInPolygon,areaIndicators,distanceMetres,nearbyMobility}=require('../web/mobility.js');
 const area={geometry:{type:'Polygon',coordinates:[[[0,0],[4,0],[4,4],[0,4],[0,0]],[[1,1],[2,1],[2,2],[1,2],[1,1]]]}};
 assert.equal(pointInPolygon([3,3],area.geometry),true);
 assert.equal(pointInPolygon([1.5,1.5],area.geometry),false);
 assert.equal(pointInPolygon([5,5],area.geometry),false);
 const stops=[{name:'A',commune:'Paris',line_id:'1',lon:3,lat:3},{name:'A',commune:'Paris',line_id:'2',lon:3.1,lat:3},{name:'B',commune:'Paris',line_id:'1',lon:1.5,lat:1.5}];
 assert.deepEqual(areaIndicators(area,stops),{stations:1,lines:2,points:2});
+assert.equal(distanceMetres(48,2,48,2),0);
+const nearby=nearbyMobility(48,2,[{name:'A',commune:'Paris',line_id:'1',lat:48,lon:2},{name:'A',commune:'Paris',line_id:'2',lat:48,lon:2},{name:'B',commune:'Paris',line_id:'3',lat:49,lon:2}]);
+assert.equal(nearby.stations.length,1);assert.equal(nearby.lines.size,2);assert.equal(nearby.score,75);
+assert.equal(nearbyMobility(48,2,[]).score,0);
 console.log('Mobility polygon and grouping checks passed.');
