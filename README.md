@@ -2,7 +2,11 @@
 
 A little experiment with Paris métro data: can we turn public transport APIs into a map that’s fun to explore and useful enough to answer a few everyday questions?
 
-**[Try the live map](https://paris-mobility-intelligence.onrender.com/)** · [How it works](docs/learning-walkthrough.md) · [The project journal](docs/journal.md)
+## 🗺️ [Open the live Paris métro map →](https://paris-mobility-intelligence.onrender.com/)
+
+Explore journeys and compare locations in your browser. No installation needed.
+
+[How it works](docs/learning-walkthrough.md)
 
 ## What can you do with it?
 
@@ -34,7 +38,7 @@ python prepare_data.py
 python app.py
 ```
 
-Then visit [localhost:8765](http://127.0.0.1:8765). On the configured Windows computer, you can also double-click `Start Explorer.cmd` or `Start Platform.cmd` (the latter also starts the local collectors). See the [local setup guide](docs/local-release.md) and [network explorer guide](docs/network-explorer.md) for details. Run the offline checks with `python -m unittest discover -s tests -v`.
+Then visit [localhost:8765](http://127.0.0.1:8765). On the configured Windows computer, you can also open the `launchers` folder and double-click `Start Explorer.cmd` or `Start Platform.cmd` (the latter also starts the local collectors). See the [local setup guide](docs/local-release.md) and [network explorer guide](docs/network-explorer.md) for details. Run the offline checks with `python -m unittest discover -s tests -v`.
 
 The public site and local explorer aren’t identical: historical collectors and their saved data stay on the owner’s computer. The hosted app doesn’t continuously collect history.
 
@@ -47,7 +51,7 @@ This is a learning project created by Abraham Benveniste with Codex assistance. 
 - [Beginner walkthrough: data → Python → map](docs/learning-walkthrough.md)
 - [Data sources and open questions](docs/data-sources.md)
 - [Reliability collection pilot](docs/reliability-pilot.md) · [Disruption history](docs/disruption-history.md)
-- [Decisions](docs/decisions.md) · [Journal](docs/journal.md) · [Contributing](CONTRIBUTING.md)
+- [Decisions](docs/decisions.md) · [Contributing](CONTRIBUTING.md)
 
 ## A couple of ground rules
 

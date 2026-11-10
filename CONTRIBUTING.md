@@ -6,7 +6,7 @@ Thanks for taking a look! This is a small learning project, so thoughtful questi
 
 Tell us what you’d like to improve, why it would be useful, and how we can check it works. Keep changes focused and link to the relevant source when a claim depends on transport data. If something’s an assumption, say so.
 
-Please update the relevant docs and add a short journal entry when a feature, data source or method changes. We like plain language: someone new to the project should be able to follow along.
+Please update the relevant docs when a feature, data source or method changes. We like plain language: someone new to the project should be able to follow along.
 
 ## A few things we take seriously
 

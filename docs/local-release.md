@@ -6,7 +6,7 @@ A local first version of project 2: explore all 16 published metro lines, search
 
 ## Start and use it
 
-On the owner's configured computer, double-click **Start Explorer.cmd** in the project folder. It starts Python and opens the default browser. Keep the terminal open; Ctrl+C stops the server. Alternatively, run `python app.py --open` from the repository.
+On the owner's configured computer, double-click **Start Explorer.cmd** in the project’s `launchers` folder. It starts Python and opens the default browser. Keep the terminal open; Ctrl+C stops the server. Alternatively, run `python app.py --open` from the repository.
 
 For a fresh installation: install Python 3.10+, copy `.env.example` to `.env`, fill in your own credentials, run `python prepare_data.py` once, then start the app. No Python packages, database or JavaScript build step is required. Internet access supplies live data, the map library and street tiles. Refresh reference data deliberately by rerunning preparation, then restart.
 

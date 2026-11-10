@@ -42,6 +42,6 @@ After collection is approved, archive arrival and disruption streams during M1 s
 
 Current readiness: the local project-2 explorer is implemented and tested. Full reliability calculations remain conditional on usable event evidence. Actual arrivals, cancellation completeness, historical availability, fine job locations, and accessibility coverage remain unresolved. Scheduled collection and hosting are not yet approved.
 
-Record purpose → evidence → decision → limitation → next action. Keep a short journal entry with links to the relevant change. Use commit history for exact edits and decision records for why choices were made.
+Record purpose → evidence → decision → limitation → next action. Use commit history for exact edits and decision records for why choices were made.
 
 Avoid speculative completion dates. Engineering progress and the time required to accumulate representative observations are different constraints.

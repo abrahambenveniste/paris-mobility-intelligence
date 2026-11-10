@@ -35,7 +35,7 @@ A reusable request:
 | Explain the unmatched point | Say why we omit its location instead of guessing |
 | Demonstrate the app | Explain snapshot age, source-record age and cached response age |
 
-Record completed work in the journal only after it happens, with the owner's explanation or observed result. No new feature is required to demonstrate these skills.
+Record completed work only after it happens, with the owner's explanation or observed result. No new feature is required to demonstrate these skills.
 
 ## Presenting the project
 

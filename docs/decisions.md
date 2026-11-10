@@ -48,6 +48,8 @@ Updated: 2026-11-09. Status distinguishes user decisions from proposals.
 | D040 | Explore métro proximity from a chosen map point | Owner chose a 500-metre straight-line radius. Use an explicitly illustrative 50/50 score for nearest reference-point distance and distinct lines, capped at four; this is not a validated accessibility measure |
 | D041 | Replace arrondissement comparisons with two chosen locations | Owner requested independent A/B map points, using the same 500-metre proximity method and shared map. The arrondissement layer and its data download are no longer part of the public interface. |
 
+| D042 | Simplify the repository layout | Owner requested removing the project journal, grouping Windows launchers in `launchers/`, and highlighting the public map. Keep decisions and relevant methodology in their existing docs. |
+
 ## Proposed
 
 | ID | Proposal | Decision needed |

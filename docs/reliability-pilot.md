@@ -6,8 +6,8 @@ The owner approved starting project 1 on line 4, collecting only while their com
 
 ## Run
 
-1. Start the explorer with **Start Explorer.cmd**.
-2. Open **Start Collector.cmd**. Keep both windows open.
+1. Start the explorer with **launchers/Start Explorer.cmd**.
+2. Open **launchers/Start Collector.cmd**. Keep both windows open.
 3. Stop the collector with Ctrl+C. Completed cycles remain saved.
 
 Equivalent commands: `python app.py` and, in another terminal, `python collect.py`. Use `python collect.py --once` for one bounded cycle or `python collect.py --report` for a saved-data summary without network requests. If the explorer uses a different port, pass it to the collector with `--port`.
