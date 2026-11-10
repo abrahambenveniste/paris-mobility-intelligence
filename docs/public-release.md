@@ -20,6 +20,8 @@ Choose one or two map points to compare groups with an IDFM boarding-point refer
 
 These are straight-line distances to mapped reference points, not station entrances or accessible pedestrian routes. Grouping can merge similarly named stations, the data snapshot can be incomplete or stale, and a zero means no mapped point in the radius—not proof of no access. Service frequency, disruptions, other modes and step-free access are excluded. Outside the mapped métro network, results are especially incomplete.
 
+When a point is selected, the browser sends its coordinates to the French public [Géoplateforme geocoding service](https://adresse.data.gouv.fr/outils/api-doc/adresse) to find a nearby address. A result is shown only if the provider reports it within 100 m, and is labelled “near”; otherwise the address is unavailable. The score and station dots still work if the service fails. A dot represents the nearest mapped boarding-point reference for each displayed name group, not a verified entrance.
+
 ## Public map preview — deployed 9 November 2026
 
 The owner approved publishing a clearly labelled map-only preview first, while the full live application is completed separately. The preview uses the public [métro route shapes](https://data.iledefrance-mobilites.fr/explore/dataset/traces-des-lignes-de-transport-en-commun-idfm/) and [stop/line associations](https://data.iledefrance-mobilites.fr/explore/dataset/arrets-lignes/); the publisher's catalog metadata identifies both as ODbL. It does not require API credentials, transmit the private archive, or expose arrival/traffic endpoints. The restricted real-time coverage dataset is not used: its absence is not shown as zero coverage.

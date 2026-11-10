@@ -125,23 +125,26 @@ function setupMobility(){
   const colours={A:'#24584c',B:'#bb683e'};
   function render(){
     const out=$('point-results');out.replaceChildren();
-    if(pointLayer)pointLayer.remove();if(map)pointLayer=L.layerGroup().addTo(map);
+    if(pointLayer)pointLayer.remove();if(map){pointLayer=L.layerGroup();if(activeView==='mobility')pointLayer.addTo(map);}
     for(const key of ['A','B']){
       const place=places[key];if(!place)continue;
       const result=place.result,card=el('section',undefined,'location-card');
-      card.append(el('h3',`Location ${key}`));
+      const title=el('h3',`Location ${key}`);title.append(el('span',` (${place.address||'finding nearby address…'})`,'location-address'));card.append(title);
       const score=el('div',undefined,'score-highlight'),scoreText=el('div');
       scoreText.append(el('span','Mobility Proximity Score','score-title'),el('span','Métro access within 500 m','score-subtitle'));
       const scoreValue=el('div',undefined,'score-value');scoreValue.append(el('strong',String(result.score)),el('span','/ 100'));score.append(scoreText,scoreValue);card.append(score);
       card.append(el('p',`${result.nearest===null?'No mapped station within 500 m':`Nearest mapped point: ${Math.round(result.nearest)} m`} · ${result.lines.size} distinct métro lines`));
       if(result.stations.length){const list=el('ul',undefined,'nearby-list');for(const station of result.stations){const names=[...station.lines].map(id=>network.routes.find(r=>r.id===id)?.name||id);const item=el('li');item.append(el('strong',station.name),el('span',`${Math.round(station.distance)} m · line${names.length===1?'':'s'} ${names.join(', ')}`));list.append(item);}card.append(list);}
       out.append(card);
-      if(pointLayer){L.circle(place.latlng,{radius:500,color:colours[key],weight:2,fillOpacity:.07,interactive:false}).addTo(pointLayer);L.marker(place.latlng,{interactive:false,icon:L.divIcon({className:`location-marker location-${key.toLowerCase()}`,html:key,iconSize:[30,30]})}).addTo(pointLayer);}
+      if(pointLayer){L.circle(place.latlng,{radius:500,color:colours[key],weight:2,fillOpacity:.07,interactive:false}).addTo(pointLayer);for(const station of result.stations)L.circleMarker([station.lat,station.lon],{radius:6,color:colours[key],weight:2,fillColor:'#fff',fillOpacity:1}).bindTooltip(el('span',`${station.name} · ${Math.round(station.distance)} m`)).addTo(pointLayer);L.marker(place.latlng,{interactive:false,icon:L.divIcon({className:`location-marker location-${key.toLowerCase()}`,html:key,iconSize:[30,30]})}).addTo(pointLayer);}
     }
   }
   function choose(key){choosing=key;for(const k of ['A','B'])$(`pick-${k.toLowerCase()}`).setAttribute('aria-pressed',String(k===key));$('pick-instruction').textContent=`Click the map to set location ${key}.`;if(window.innerWidth<=850)$('map').scrollIntoView({behavior:'smooth',block:'center'});}
   $('pick-a').addEventListener('click',()=>choose('A'));$('pick-b').addEventListener('click',()=>choose('B'));
-  if(map)map.on('click',e=>{if(activeView!=='mobility'||!choosing)return;const key=choosing;places[key]={latlng:e.latlng,result:nearbyMobility(e.latlng.lat,e.latlng.lng,network.stops)};choosing=null;for(const k of ['A','B'])$(`pick-${k.toLowerCase()}`).setAttribute('aria-pressed','false');$('pick-instruction').textContent=`Location ${key} selected. Choose a location to change or compare.`;render();});
+  async function lookupAddress(key,place){
+    try{const params=new URLSearchParams({lat:place.latlng.lat.toFixed(6),lon:place.latlng.lng.toFixed(6),index:'address',limit:'1'});const response=await fetch(`https://data.geopf.fr/geocodage/reverse?${params}`);if(!response.ok)throw Error('Address unavailable');const data=await response.json(),p=data.features?.[0]?.properties;place.address=p&&Number.isFinite(p.distance)&&p.distance<=100&&typeof p.label==='string'?`near ${p.label}`:'address unavailable';}catch(_){place.address='address unavailable';}if(places[key]===place)render();
+  }
+  if(map)map.on('click',e=>{if(activeView!=='mobility'||!choosing)return;const key=choosing,place={latlng:e.latlng,result:nearbyMobility(e.latlng.lat,e.latlng.lng,network.stops)};places[key]=place;choosing=null;for(const k of ['A','B'])$(`pick-${k.toLowerCase()}`).setAttribute('aria-pressed','false');$('pick-instruction').textContent=`Location ${key} selected. Choose a location to change or compare.`;render();lookupAddress(key,place);});
   function view(mode){
     if(mode===activeView)return;activeView=mode;const isMobility=mode==='mobility';$('journey-panel').hidden=isMobility;$('mobility-panel').hidden=!isMobility;
     $('view-journey').setAttribute('aria-pressed',String(!isMobility));$('view-mobility').setAttribute('aria-pressed',String(isMobility));

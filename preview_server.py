@@ -56,7 +56,7 @@ def preview_handler(network, live=None):
             self.send_header('Content-Length',str(len(raw)))
             self.send_header('X-Content-Type-Options','nosniff')
             self.send_header('Cache-Control','no-store')
-            self.send_header('Content-Security-Policy',"default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https://tile.openstreetmap.org; connect-src 'self'; frame-ancestors 'none'")
+            self.send_header('Content-Security-Policy',"default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; img-src 'self' data: https://tile.openstreetmap.org; connect-src 'self' https://data.geopf.fr; frame-ancestors 'none'")
             self.end_headers()
             try:
                 self.wfile.write(raw)

@@ -527,3 +527,11 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 ## 2026-11-10 — Clarify the score and project credit
 
 **Purpose and decision:** at the owner's request, credit Abraham Benveniste in the website's data section and visually highlight each location's “Mobility Proximity Score.” The underlying calculation and its limitations remain unchanged. Implementation is AI-assisted.
+
+## 2026-11-10 — Nearby addresses and station dots
+
+**Purpose and decision:** identify selected map points with a nearby address and show station groups as dots within each 500 m circle. The browser requests one reverse-geocoding result per selected point from the French public Géoplateforme; source coordinates are sent to that service. Labels say “near” and require a provider distance of at most 100 m. A missing address does not prevent the proximity calculation.
+
+**Evidence:** a bounded provider test at 48.858, 2.347 returned an address 13 m away and allowed browser cross-origin requests. Address results and mapped boarding points are estimates, not verified entrances or evidence of an exact selected address. Overlapping areas may show the same station in both sets.
+
+**Next:** check browser behaviour and public deployment. Implementation is AI-assisted.
