@@ -6,7 +6,7 @@ On 6 November 2026 the owner requested métro-only scope and all métro lines. K
 
 ## Select by mode, then join by identifiers
 
-Actual code in [prepare_data.py](../prepare_data.py):
+Actual code in [prepare_data.py](../src/prepare_data.py):
 
 ```python
 rows[SHAPES], source = records(SHAPES, 'route_type="Subway"', key)
@@ -49,7 +49,7 @@ The three unmatched coverage records refer to Bagneux–Lucie Aubrac (4), Carref
 
 Preparation took 19 bounded catalogue requests: one geometry page, nine stop-association pages, nine coverage pages. Three preliminary source-inspection requests preceded the preparation. Pagination allows up to 3,000 records per dataset, checks stable totals and rejects unexpectedly empty pages. Counts and hashes are saved locally. Separate source pages are still not an atomic snapshot.
 
-The existing file `data/pilot-network.json` is retained to avoid unnecessary migration. Its new `scope=metro` field prevents accidentally running an old bus-containing snapshot. Run `python prepare_data.py`, then `python app.py`.
+The existing file `data/pilot-network.json` is retained to avoid unnecessary migration. Its new `scope=metro` field prevents accidentally running an old bus-containing snapshot. Run `python src/prepare_data.py`, then `python src/app.py`.
 
 Filters wrap across rows. A traffic dropdown lists the same routes as the map. The server allows traffic requests only for routes present in the métro snapshot; an arbitrary bus ID is rejected. Selecting a filter does not trigger a network request. Departure and traffic caches and request budgets are unchanged. No database or new package was needed.
 

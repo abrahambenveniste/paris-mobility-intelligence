@@ -11,10 +11,10 @@ The owner chose incident history, métro line 4 initially, and collection only w
 Start **launchers/Start Explorer.cmd**, then **launchers/Start Notice History.cmd**. Keep both windows open. The notice collector checks every five minutes; Ctrl+C stops it. There is no scheduled task or automatic restart. The prediction collector is separate and optional.
 
 ```powershell
-python disruption_history.py --once
-python disruption_history.py --report
-python disruption_history.py --history
-python disruption_history.py --search "travaux"
+python src/disruption_history.py --once
+python src/disruption_history.py --report
+python src/disruption_history.py --history
+python src/disruption_history.py --search "travaux"
 ```
 
 `--once` makes at most one check. Report/history/search read the saved database without contacting PRIM. Search matches message text or notice ID, case-insensitively. The website history view is available at http://127.0.0.1:8765/history while the explorer runs. It shows saved versions, search and collection-quality counts; the command-line JSON remains available. Use `--port` if the explorer runs on a different port.
@@ -67,7 +67,7 @@ Implementation is AI-assisted. Next: gather real notices and review their versio
 
 **Purpose:** the owner expanded the local disruption history to all métro lines and requested one integrated tool. The map, line departures and saved notice history now link to each other; history cards link to the corresponding filtered map line. Historical status is explicitly labelled at collection, not current status.
 
-**Run:** double-click `launchers/Start Platform.cmd`. It starts or reuses the local explorer, starts the all-métro notice collector and starts the existing two-point line-4 prediction collector. Keep the terminal open; Ctrl+C stops processes started by this launcher, not a pre-existing explorer. Alternatively `python run_platform.py` starts only notice collection; pass `--with-predictions` for both. Do not run duplicate explorer processes sharing the same budget file. The collector is not installed as a background service.
+**Run:** double-click `launchers/Start Platform.cmd`. It starts or reuses the local explorer, starts the all-métro notice collector and starts the existing two-point line-4 prediction collector. Keep the terminal open; Ctrl+C stops processes started by this launcher, not a pre-existing explorer. Alternatively `python src/run_platform.py` starts only notice collection; pass `--with-predictions` for both. Do not run duplicate explorer processes sharing the same budget file. The collector is not installed as a background service.
 
 **Sampling:** the 16 published lines are discovered from the local reference snapshot. Each line is checked sequentially every 30 minutes while running: at most 16 × 48 = 768 upstream traffic requests per 24 hours before caching, below the explorer's shared rolling limit of 900. This assumes one collector and a stable 16-line network; on-demand requests share that budget, and other PRIM clients are outside it. The interval grows with route count. A check skipped because it was recent is not duplicated. Previous line-4 checks are migrated and a local pre-migration SQLite backup is made. Per-line timestamps and gaps remain separate.
 

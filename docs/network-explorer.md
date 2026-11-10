@@ -30,8 +30,8 @@ Show record age separately from request time. The two-minute “older record” 
 
 1. Install Python 3.10+; no additional Python dependencies.
 2. Copy `.env.example` to `.env`; enter `PRIM_API_KEY` and `PRIM_STATIC_TOKEN` locally.
-3. Run `python prepare_data.py` (five bounded catalogue requests for the inspected snapshot).
-4. Run `python app.py` and open http://127.0.0.1:8765. An alternative port can be supplied with `--port`.
+3. Run `python src/prepare_data.py` (five bounded catalogue requests for the inspected snapshot).
+4. Run `python src/app.py` and open http://127.0.0.1:8765. An alternative port can be supplied with `--port`.
 5. Select a boarding point or use Refresh. Stop with Ctrl+C.
 
 The server binds only to loopback and serves an explicit file allowlist. Credentials stay server-side. No scheduled polling, database, account system, or live-data archive is implemented. Run one server instance: the persistent rolling budget is not designed for concurrent processes.

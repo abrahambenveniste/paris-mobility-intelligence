@@ -70,10 +70,10 @@ def main():
     parser.add_argument('--public',action='store_true',help='Bind to the hosting service network')
     args=parser.parse_args()
     if not PUBLIC_NETWORK.exists():
-        raise SystemExit('Run python prepare_public.py before starting the preview.')
+        raise SystemExit('Run python src/prepare_public.py before starting the preview.')
     network=json.loads(PUBLIC_NETWORK.read_text(encoding='utf-8'))
     if network.get('scope') != 'public_map_preview' or not network.get('routes') or not network.get('stops'):
-        raise SystemExit('Invalid public reference snapshot; run python prepare_public.py again.')
+        raise SystemExit('Invalid public reference snapshot; run python src/prepare_public.py again.')
     port=int(os.environ.get('PORT','8766'))
     live = None
     if os.environ.get('PMI_PUBLIC_LIVE') == '1':

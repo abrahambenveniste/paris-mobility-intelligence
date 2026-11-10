@@ -21,7 +21,7 @@ The app explicitly maps `STIF:Line::C01083:` to `line:IDFM:C01083` (bus 38), and
 
 ## Actual code and explanation
 
-In [traffic.py](../traffic.py):
+In [traffic.py](../src/traffic.py):
 
 ```python
 if identity not in linked and not direct:

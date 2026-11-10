@@ -50,6 +50,8 @@ Updated: 2026-11-09. Status distinguishes user decisions from proposals.
 
 | D042 | Simplify the repository layout | Owner requested removing the project journal, grouping Windows launchers in `launchers/`, and highlighting the public map. Keep decisions and relevant methodology in their existing docs. |
 
+| D043 | Group Python source files | Move application scripts into `src/` and update launchers, tests and hosting commands; keep credentials and root project configuration in place. |
+
 ## Proposed
 
 | ID | Proposal | Decision needed |

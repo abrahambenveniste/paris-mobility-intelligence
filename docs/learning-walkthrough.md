@@ -36,7 +36,7 @@ Python is a practical choice here, not a proven winner over every language. Java
 
 ## 4. Download a bounded subset
 
-In [prepare_data.py](../prepare_data.py), this actual query selects the two line IDs:
+In [prepare_data.py](../src/prepare_data.py), this actual query selects the two line IDs:
 
 ```python
 'arrets-lignes': 'id in ("IDFM:C01374","IDFM:C01083")',
@@ -47,7 +47,7 @@ The script requests pages of at most 100 records, checks response size, and refu
 Run once from the repository folder:
 
 ```powershell
-python prepare_data.py
+python src/prepare_data.py
 ```
 
 Observed output for our snapshot:
@@ -112,7 +112,7 @@ HTML creates the search box and detail panel; CSS arranges them; JavaScript filt
 
 ## 7. Turn a live response into readable estimates
 
-Selecting a point calls the local `/api/departures` route. Python requests PRIM, checks its delivery status, and filters the response to the selected line. The actual filter in [app.py](../app.py) is:
+Selecting a point calls the local `/api/departures` route. Python requests PRIM, checks its delivery status, and filters the response to the selected line. The actual filter in [app.py](../src/app.py) is:
 
 ```python
 if journey.get('LineRef', {}).get('value') != line:
@@ -150,7 +150,7 @@ The app caches results for two minutes. A **cache** reuses a recent result to sa
 ## 8. Run, inspect and explain
 
 ```powershell
-python app.py
+python src/app.py
 ```
 
 Open http://127.0.0.1:8765. Search Cité, select a boarding point, read its identifier and estimate labels, then refresh. Close the server with Ctrl+C. A successful response today does not guarantee that the source is always available.

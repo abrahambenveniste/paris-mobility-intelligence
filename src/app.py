@@ -12,7 +12,7 @@ from urllib.parse import parse_qs, urlencode, urlsplit
 from urllib.request import Request, urlopen
 from traffic import fetch_reports
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parent.parent
 WEB = ROOT / 'web'
 NETWORK = ROOT / 'data' / 'pilot-network.json'
 
@@ -207,10 +207,10 @@ def main():
     parser.add_argument('--open', action='store_true', help='Open the local explorer in your default browser')
     args = parser.parse_args()
     if not NETWORK.exists():
-        raise SystemExit('First-time setup: run python prepare_data.py to download the metro reference network, then start again.')
+        raise SystemExit('First-time setup: run python src/prepare_data.py to download the metro reference network, then start again.')
     network = json.loads(NETWORK.read_text(encoding='utf-8'))
     if network.get('scope') != 'metro':
-        raise SystemExit('Run python prepare_data.py to replace the old two-line snapshot with the metro network.')
+        raise SystemExit('Run python src/prepare_data.py to replace the old two-line snapshot with the metro network.')
     cache = RequestCache(ROOT / 'artifacts' / 'app-request-budget.json')
     traffic_cache = RequestCache(ROOT / 'artifacts' / 'traffic-request-budget.json', ttl=300)
     key = read_keys().get('PRIM_API_KEY', '')
@@ -219,7 +219,7 @@ def main():
     try:
         server = ThreadingHTTPServer(('127.0.0.1', args.port), handler_class(network, key, cache, traffic_cache))
     except OSError:
-        raise SystemExit(f'Cannot open local port {args.port}. Close another running copy or use python app.py --port 8766.')
+        raise SystemExit(f'Cannot open local port {args.port}. Close another running copy or use python src/app.py --port 8766.')
     address = f'http://127.0.0.1:{server.server_port}'
     print(f'Paris Mobility Intelligence: {address}\nKeep this terminal open. Press Ctrl+C to stop.', flush=True)
     if args.open:

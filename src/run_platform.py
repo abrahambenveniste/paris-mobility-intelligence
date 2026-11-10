@@ -28,7 +28,7 @@ def main():
     children=[]
     try:
         if not ready():
-            server=subprocess.Popen([sys.executable,str(ROOT/'app.py')],cwd=ROOT)
+            server=subprocess.Popen([sys.executable,str(ROOT/'src'/'app.py')],cwd=ROOT)
             children.append(server)
             for _ in range(20):
                 if ready():
@@ -38,9 +38,9 @@ def main():
                 time.sleep(1)
             else:
                 raise RuntimeError('Explorer did not become available.')
-        children.append(subprocess.Popen([sys.executable,str(ROOT/'disruption_history.py')],cwd=ROOT))
+        children.append(subprocess.Popen([sys.executable,str(ROOT/'src'/'disruption_history.py')],cwd=ROOT))
         if args.with_predictions:
-            children.append(subprocess.Popen([sys.executable,str(ROOT/'collect.py')],cwd=ROOT))
+            children.append(subprocess.Popen([sys.executable,str(ROOT/'src'/'collect.py')],cwd=ROOT))
         webbrowser.open('http://127.0.0.1:8765/history')
         print('Platform running. Ctrl+C stops collectors started here. Existing explorer windows remain yours.',flush=True)
         while True:
