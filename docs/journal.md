@@ -470,4 +470,6 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 
 **Limitations:** notices can be incomplete, upcoming or relevant only to another portion of the line. A route request may generate one additional notice request per distinct line; requests are rate-limited and cached, and failures remain visible. The planner requests real-time routes but some legs are scheduled. Route geometry is not drawn on the map, and the app does not establish that routes are unaffected by disruption.
 
-**Next:** deploy, verify a real public route and its notice status, and monitor quota usage. Implementation and testing are AI-assisted.
+**Public verification:** Cambronne → Nation returned a scheduled métro 6 route and a walking option. The métro leg showed two provider notices labelled upcoming, with the one-second source period flagged. The notices were identified as line-level, not verified effects on that journey.
+
+**Next:** monitor quota usage and improve journey-specific disruption matching where source evidence permits. Implementation and testing are AI-assisted.
