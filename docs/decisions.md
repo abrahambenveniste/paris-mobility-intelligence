@@ -41,6 +41,7 @@ Updated: 2026-11-09. Status distinguishes user decisions from proposals.
 | D033 | Test on-demand alternatives for a reported métro disruption | Owner approved a bounded routing feasibility pilot. Inspect provider responses before deciding on a public interface; distinguish a manually avoided line from an automatically detected closed segment |
 | D034 | Add a public métro-and-walking journey interface | Owner approved an origin, destination and optional line-to-avoid interface. Use PRIM's planner; do not claim automatic incident avoidance or guaranteed service |
 | D035 | Place journey planning alongside the map | Owner requested a simpler interface. Allow station name search, swapping endpoints and selecting the current map station, without changing routing assumptions |
+| D036 | Link reported line notices to the route planner | On owner approval, let a visitor explicitly select a whole line to avoid from its notices. Preserve existing journey fields and require a separate route request |
 
 ## Proposed
 

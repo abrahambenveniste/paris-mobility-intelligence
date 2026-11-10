@@ -441,3 +441,15 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Public verification:** the deployed planner accepted `Chatelet` → `Bastille` with métro 1 excluded and returned métro and walking options. The compact layout, station selection, swap and identical-station message were checked locally. A separate wide-screen browser check was unavailable.
 
 **Next:** monitor usability and verify a wide-screen view. Implementation and checks are AI-assisted.
+
+## 2026-11-10 — Connect notices to alternative routes
+
+**Purpose:** help a visitor move from a reported line notice to an alternative route without manually reselecting the line.
+
+**Code:** `line.value = r.id` selects the noticed line in the planner when the visitor clicks the new button; it does not request a route automatically. If the start is empty, the selected station is filled in. Existing station inputs are retained.
+
+**Evidence:** a local browser test used a synthetic upcoming notice with a reported time period. Its button selected métro 4, preserved existing Bastille and Nation inputs, and filled Châtelet as the start when both fields were empty. JavaScript syntax and five focused public-server tests passed. No real notice was needed for this test.
+
+**Limitation:** a notice can be upcoming, active or have an unknown status; its presence does not prove the whole line is closed. The button excludes the entire line only if the visitor chooses it. The selected station may not be affected. Periods are source-reported, not independently verified incident start or end times.
+
+**Next:** deploy and check the public workflow. Implementation and validation are AI-assisted.

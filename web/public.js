@@ -91,8 +91,24 @@ function selectLine(group,r){
       out.replaceChildren(el('p',`${data.cached?'Cached':'Fetched'} ${new Date(data.fetched_at).toLocaleString('en-GB',{timeZone:'Europe/Paris'})} Paris time.`,'small muted'));
       if(kind==='traffic'){
         if(!data.reports.length)out.append(el('p','No directly linked notices returned. This does not confirm normal service.'));
-        for(const item of data.reports)out.append(el('p',item.text));
+        for(const item of data.reports){
+          const card=el('article',undefined,'traffic-card');
+          const status=item.status==='active'?'Reported active':item.status==='future'?'Reported upcoming':`Status: ${item.status||'not supplied'}`;
+          card.append(el('strong',status),el('p',item.text));
+          for(const period of item.periods_local||[]){if(period.begin||period.end)card.append(el('p',`Reported period: ${(period.begin||'not supplied').replace('T',' ')} – ${(period.end||'not supplied').replace('T',' ')} (Paris time)`,'small muted'));}
+          out.append(card);
+        }
         out.append(el('p','Notices refer to the line, not necessarily this station.','small muted'));
+        if(data.reports.length){
+          const avoid=el('button',`Find a route avoiding métro ${r.name}`,'filter avoid-notice');
+          avoid.addEventListener('click',()=>{
+            const line=$('journey-avoid');line.value=r.id;line.dispatchEvent(new Event('input',{bubbles:true}));
+            const start=$('journey-from'),destination=$('journey-to');
+            if(!start.value.trim()){start.value=`${group.name} · ${group.commune}`;start.dispatchEvent(new Event('input',{bubbles:true}));}
+            const target=destination.value.trim()?$('journey-submit'):destination;target.focus();
+          });
+          out.append(avoid,el('p',`This excludes the whole métro ${r.name} line. Review your stations and press Find routes.`, 'small muted'));
+        }
       }
     }catch(error){out.replaceChildren(el('p',error.message,'notice'));}finally{departures.disabled=traffic.disabled=false;}
   }
