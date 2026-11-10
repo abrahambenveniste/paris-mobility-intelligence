@@ -16,18 +16,11 @@ Explore journeys and compare locations in your browser. No installation needed.
 
 The score is an experiment, not an official accessibility rating. It combines straight-line distance to the nearest mapped point and the number of métro lines within 500 metres. It doesn’t measure walking routes, service frequency or step-free access. [Here’s the formula and what it leaves out.](docs/public-release.md#point-based-métro-proximity)
 
-The map uses reference data from Île-de-France Mobilités. Journeys and line notices are requested on demand from PRIM; a line notice may not affect your specific trip. The browser also sends a selected location to the French public Géoplateforme to find a nearby address. [More about the sources, deployment and limits.](docs/public-release.md)
+The map and proximity scores use a saved reference-data snapshot. Live journey and line-notice queries run only when someone requests them; caching and a conservative request budget help respect PRIM API limits. A line notice may not affect your specific trip. Address lookup sends the selected coordinates to the French public Géoplateforme. Historical collectors run locally, only while the owner’s computer is on. [More about the sources, deployment and limits.](docs/public-release.md)
 
 ## What’s the bigger idea?
 
-This project started with four ideas. Some are already on the map; others are still on the wish list:
-
-| Idea | Where we are |
-| --- | --- |
-| **Reliability** | A local collector saves line 4 prediction snapshots. There’s no reliability ranking yet, and predictions aren’t confirmed arrivals. |
-| **Network explorer** | A métro map and journey planner are live. It isn’t a full digital twin or closure simulator. |
-| **Disruptions** | The planner shows line notices; a separate local collector can save notice history while the computer is on. There’s no early-warning model yet. |
-| **Neighbourhood mobility** | Compare two locations using the experimental métro proximity score. Jobs, services and journey-time access aren’t included. |
+Explore métro reliability, the transport network, disruptions and neighbourhood mobility together—starting small and building as the data allows.
 
 ## Run the local explorer
 
