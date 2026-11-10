@@ -452,4 +452,6 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 
 **Limitation:** a notice can be upcoming, active or have an unknown status; its presence does not prove the whole line is closed. The button excludes the entire line only if the visitor chooses it. The selected station may not be affected. Periods are source-reported, not independently verified incident start or end times.
 
-**Next:** deploy and check the public workflow. Implementation and validation are AI-assisted.
+**Public check:** métro 6 returned two upcoming notices and the route button. One source period was only one second despite a notice describing an interruption on a date; periods below one minute now show a caution to check the notice text and official updates instead of implying that duration. This rule is a data-quality flag, not a corrected incident time.
+
+**Next:** monitor notice-quality patterns and further validate public use. Implementation and validation are AI-assisted.

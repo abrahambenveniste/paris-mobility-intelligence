@@ -95,7 +95,12 @@ function selectLine(group,r){
           const card=el('article',undefined,'traffic-card');
           const status=item.status==='active'?'Reported active':item.status==='future'?'Reported upcoming':`Status: ${item.status||'not supplied'}`;
           card.append(el('strong',status),el('p',item.text));
-          for(const period of item.periods_local||[]){if(period.begin||period.end)card.append(el('p',`Reported period: ${(period.begin||'not supplied').replace('T',' ')} – ${(period.end||'not supplied').replace('T',' ')} (Paris time)`,'small muted'));}
+          for(const period of item.periods_local||[]){
+            if(!period.begin&&!period.end)continue;
+            const duration=Date.parse(period.end)-Date.parse(period.begin);
+            if(Number.isFinite(duration)&&duration>=0&&duration<60000)card.append(el('p','The source supplied an unusually short time period; check the notice text and official updates for timing.','small muted'));
+            else card.append(el('p',`Reported period: ${(period.begin||'not supplied').replace('T',' ')} – ${(period.end||'not supplied').replace('T',' ')} (Paris time)`,'small muted'));
+          }
           out.append(card);
         }
         out.append(el('p','Notices refer to the line, not necessarily this station.','small muted'));
