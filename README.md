@@ -4,6 +4,8 @@ A research platform for understanding transport reliability, network connectivit
 
 This is also a documented learning project: follow how public transport data becomes a usable map, why each tool was chosen, and what the results cannot tell us. Technical claims should be understandable and reproducible by someone new to programming.
 
+The [public website](https://paris-mobility-intelligence.onrender.com/) combines a journey planner and a Paris arrondissement comparison on one map. The comparison counts mapped métro station-name groups and lines with boarding points inside each boundary; it is not a walking-distance or accessibility score. [Method and limitations](docs/public-release.md#paris-arrondissement-comparison).
+
 **Start here:** [beginner walkthrough: data → Python → map](docs/learning-walkthrough.md). For working with an AI assistant, see [questions, prompts, and learning checkpoints](docs/working-and-learning.md).
 
 Development is AI-assisted. The owner defines goals and approves scope; implementation and documentation have been produced with Codex assistance. The walkthrough includes exercises to establish personal understanding; these are not claimed as completed until the owner has done them.

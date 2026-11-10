@@ -8,6 +8,12 @@ The owner wants a website accessible to everyone. Disruption collection should c
 
 The GitHub repository is public. A [métro map preview](https://paris-mobility-intelligence.onrender.com) is deployed on Render's free tier with on-demand arrival estimates and line notices. The SQLite archive and collectors remain local; `127.0.0.1` is accessible only on the owner's computer. No public synchronization service exists yet.
 
+## Paris arrondissement comparison
+
+The map offers a second view for comparing the 20 arrondissements. `prepare_public.py` retrieves and validates the [City of Paris boundaries](https://opendata.paris.fr/explore/dataset/arrondissements/) (ODbL), alongside the existing IDFM métro stop/line reference snapshot. Both snapshots are refreshed at build time, not in real time. `web/mobility.js` checks whether each reference point lies inside a polygon and counts unique station-name and commune pairs, plus unique métro line identifiers. The visitor can select two areas, and the colours show the first count.
+
+For example, one inspected snapshot produced 10 station-name groups and 5 lines for the 1st arrondissement and 23 groups and 6 lines for the 11th. Groups with boarding points on both sides can appear in more than one area; different stations sharing the same name and commune may be combined. Counts are absolute, not adjusted for population or area. They do not establish walking distance, actual service frequency, travel time, accessibility or overall mobility. The boundary source and the IDFM reference datasets are independently licensed; consult their publisher terms before redistribution.
+
 ## Public map preview — deployed 9 November 2026
 
 The owner approved publishing a clearly labelled map-only preview first, while the full live application is completed separately. The preview uses the public [métro route shapes](https://data.iledefrance-mobilites.fr/explore/dataset/traces-des-lignes-de-transport-en-commun-idfm/) and [stop/line associations](https://data.iledefrance-mobilites.fr/explore/dataset/arrets-lignes/); the publisher's catalog metadata identifies both as ODbL. It does not require API credentials, transmit the private archive, or expose arrival/traffic endpoints. The restricted real-time coverage dataset is not used: its absence is not shown as zero coverage.

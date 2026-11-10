@@ -489,3 +489,17 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Public validation:** Châtelet → Bastille displayed option 1 on the map, then “Show on map” switched to option 2. The sampled options used publisher-provided path geometry; the métro leg was marked scheduled.
 
 **Next:** monitor missing geometry and collect user feedback. Implementation and validation are AI-assisted.
+
+## 2026-11-10 — Compare Paris arrondissements
+
+**Purpose:** give visitors a simple geographic comparison beside the existing journey planner, on the same map.
+
+**Evidence:** the City of Paris boundary feed returned 20 polygons; the existing IDFM snapshot contained 803 métro boarding-point records. In this snapshot, the 1st arrondissement has 10 station-name groups and 5 lines with mapped points inside it; the 11th has 23 groups and 6 lines. These are calculated reference-data counts, not field observations.
+
+**Decision and code:** Python downloads and checks the boundaries during preparation; JavaScript checks each boarding-point coordinate against the polygons, then uses sets to count distinct `[name, commune]` groups and line identifiers. The interface switches between the existing planner and a coloured comparison map, with two optional selections. This keeps the published data preparation reproducible and the calculation visible in `web/mobility.js`.
+
+**Validation:** checked the 20 unique boundaries, point-in-polygon logic including a hole, duplicate station-name grouping, a local browser comparison, JavaScript syntax and focused public-server tests.
+
+**Limitations:** names are an approximation of stations, and groups with points across a boundary can appear in multiple areas. Counts are not normalised by area or population and do not measure frequency, walking access, jobs, journey time or accessibility. Boundary and stop snapshots can change.
+
+**Next:** assess visitor feedback and, before expanding the indicators, select and validate suitable population, destination or travel-time sources. Implementation and testing are AI-assisted.

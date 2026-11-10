@@ -12,6 +12,7 @@ from public_live import PublicLive
 def preview_handler(network, live=None):
     assets = {'/': ('public.html','text/html; charset=utf-8'),
               '/public.js': ('public.js','text/javascript; charset=utf-8'),
+              '/mobility.js': ('mobility.js','text/javascript; charset=utf-8'),
               '/stations.js': ('stations.js','text/javascript; charset=utf-8'),
               '/style.css': ('style.css','text/css; charset=utf-8')}
     class Handler(BaseHTTPRequestHandler):
