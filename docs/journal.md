@@ -486,4 +486,6 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 
 **Limitations:** the provider's route geometry is a suggested path, not evidence of a vehicle's position or actual service. Some sections may lack usable geometry; those options are labelled incomplete. A route's selected coordinates are not verified station entrances.
 
-**Next:** deploy and verify the public version. Implementation and validation are AI-assisted.
+**Public validation:** Châtelet → Bastille displayed option 1 on the map, then “Show on map” switched to option 2. The sampled options used publisher-provided path geometry; the métro leg was marked scheduled.
+
+**Next:** monitor missing geometry and collect user feedback. Implementation and validation are AI-assisted.
