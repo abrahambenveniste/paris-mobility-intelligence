@@ -3,7 +3,7 @@
 > Scope update, 6 November 2026: the app now covers all 16 published métro lines and excludes buses. See [current selection, coverage and tests](metro-expansion.md). The two-line counts and examples below document the earlier implementation; they are historical, not current coverage. Traffic uses a line selector; the original two-line query has been replaced by mode-based discovery.
 
 
-Read this alongside the source code. No previous experience with transport APIs is assumed. This explains the implementation already built; it is not evidence that the owner has yet completed the exercises.
+New to transport APIs? You’re in the right place. Follow along with the source code as we turn a small data sample into a map. Some examples describe our earlier pilot; the scope note above points to the current version. Development is AI-assisted, and the exercises are here to try at your own pace.
 
 ## 1. Begin with a useful question
 

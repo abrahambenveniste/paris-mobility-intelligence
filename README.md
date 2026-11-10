@@ -1,82 +1,54 @@
-# Paris Mobility Intelligence
+# Paris Mobility Intelligence 🚇
 
-A research platform for understanding transport reliability, network connectivity, disruptions, and neighbourhood access in Paris.
+A little experiment with Paris métro data: can we turn public transport APIs into a map that’s fun to explore and useful enough to answer a few everyday questions?
 
-This is also a documented learning project: follow how public transport data becomes a usable map, why each tool was chosen, and what the results cannot tell us. Technical claims should be understandable and reproducible by someone new to programming.
+**[Try the live map](https://paris-mobility-intelligence.onrender.com/)** · [How it works](docs/learning-walkthrough.md) · [The project journal](docs/journal.md)
 
-The [public website](https://paris-mobility-intelligence.onrender.com/) combines a journey planner and a comparison of two chosen locations on one map. [Method and limitations](docs/public-release.md#point-based-métro-proximity).
+## What can you do with it?
 
-The map also explores métro proximity within 500 metres of a chosen point. Its illustrative score combines straight-line distance and line count; it does not measure walking access or step-free accessibility. [Calculation and limitations](docs/public-release.md#point-based-métro-proximity).
+- **Plan a journey:** pick two stations to see suggested routes, map paths and reported line disruptions.
+- **Compare two places:** click the map to see nearby métro stations and compare their Mobility Proximity Scores.
+- **Explore the network:** see route shapes and boarding points for the 16 published métro lines.
 
-**Start here:** [beginner walkthrough: data → Python → map](docs/learning-walkthrough.md). For working with an AI assistant, see [questions, prompts, and learning checkpoints](docs/working-and-learning.md).
+The score is an experiment, not an official accessibility rating. It combines straight-line distance to the nearest mapped point and the number of métro lines within 500 metres. It doesn’t measure walking routes, service frequency or step-free access. [Here’s the formula and what it leaves out.](docs/public-release.md#point-based-métro-proximity)
 
-Development is AI-assisted. The owner defines goals and approves scope; implementation and documentation have been produced with Codex assistance. The walkthrough includes exercises to establish personal understanding; these are not claimed as completed until the owner has done them.
+The map uses reference data from Île-de-France Mobilités. Journeys and line notices are requested on demand from PRIM; a line notice may not affect your specific trip. The browser also sends a selected location to the French public Géoplateforme to find a nearby address. [More about the sources, deployment and limits.](docs/public-release.md)
 
-**Status: local explorer for all 16 published Paris métro lines (1–14, 3bis and 7bis).** Search 803 boarding-point records, inspect official route shapes, request departure estimates, and check directly linked traffic notices. Bus 38 has been removed from the active scope. Closure simulation, historical analytics, and hosting are future work.
+## What’s the bigger idea?
 
-**Station-first navigation:** search a station name, select it, then choose a métro line. Estimates are grouped by reported destination and ordered by estimated time, with source points and record freshness visible. Châtelet and Les Halles remain separate. [Grouping rules, examples and validation](docs/station-first.md).
+This project started with four ideas. Some are already on the map; others are still on the wish list:
 
-[Metro expansion: selection logic, coverage and validation](docs/metro-expansion.md). The inspected snapshot has 801 mapped points listed for real-time coverage, two without a coverage match, and three additional coverage points left unmapped. These are boarding-point records, not unique stations.
+| Idea | Where we are |
+| --- | --- |
+| **Reliability** | A local collector saves line 4 prediction snapshots. There’s no reliability ranking yet, and predictions aren’t confirmed arrivals. |
+| **Network explorer** | A métro map and journey planner are live. It isn’t a full digital twin or closure simulator. |
+| **Disruptions** | The planner shows line notices; a separate local collector can save notice history while the computer is on. There’s no early-warning model yet. |
+| **Neighbourhood mobility** | Compare two locations using the experimental métro proximity score. Jobs, services and journey-time access aren’t included. |
 
-For traffic notices, click “Check notices for this line” beside the selected station’s departures. A separate line-level lookup remains below the map. Notices concern the line, not necessarily the selected station. Reports are cached for five minutes. A dashed route indicates a linked active notice, not a full-line closure. [How notices are filtered](docs/traffic-notices.md).
+## Run the local explorer
 
-The **Reference coverage** panel follows your line filter and lets you inspect unmatched records. It uses the saved snapshot without additional PRIM calls. [Code, examples and validation](docs/coverage-view.md).
-
-## Run locally
-
-**Configured Windows computer:** double-click `Start Platform.cmd` for the explorer and local collectors, or `Start Explorer.cmd` for the explorer alone. [Quick usage guide and local v0.1 scope](docs/local-release.md). Keep its terminal open while using the tool.
-
-Requires Python 3.10+ and internet access; no Python packages or database needed. Copy `.env.example` to `.env` and enter your own PRIM credentials. Keep this file private.
+You’ll need Python 3.10+, an internet connection and your own PRIM credentials. Copy `.env.example` to `.env`, add your keys there and keep that file private.
 
 ```powershell
 python prepare_data.py
 python app.py
 ```
 
-Open http://127.0.0.1:8765. Preparation discovers published métro lines and downloads their reference subsets; rerun it when you want updated reference data, then restart the server. Stop the server with Ctrl+C. Selecting a station's line requests its covered boarding points; refreshing reuses a two-minute cache where available. Searching alone makes no live request.
+Then visit [localhost:8765](http://127.0.0.1:8765). On the configured Windows computer, you can also double-click `Start Explorer.cmd` or `Start Platform.cmd` (the latter also starts the local collectors). See the [local setup guide](docs/local-release.md) and [network explorer guide](docs/network-explorer.md) for details. Run the offline checks with `python -m unittest discover -s tests -v`.
 
-[Setup, methodology, sources, and limits](docs/network-explorer.md). Run the lightweight offline tests with `python -m unittest discover -s tests -v`.
+The public site and local explorer aren’t identical: historical collectors and their saved data stay on the owner’s computer. The hosted app doesn’t continuously collect history.
 
-## Project 1: collection pilot
+## Under the hood
 
-A local collector now saves prediction snapshots for two Châtelet / métro-4 points every five minutes while running. Start the explorer, then `Start Collector.cmd`. [Setup, data-quality evidence and scientific limits](docs/reliability-pilot.md). This is not yet a reliability index.
+Python fetches and prepares the reference data; JavaScript, HTML, CSS and Leaflet turn it into the interactive map. SQLite stores local history, GitHub tracks the code, and Render hosts the public preview. The app also uses Île-de-France Mobilités APIs and the Géoplateforme address service.
 
-## Disruption Intelligence: notice history
+This is a learning project created by Abraham Benveniste with Codex assistance. The goal is to understand each choice, share the code and keep the limitations visible. Curious about the details?
 
-Notices from all 16 métro lines can be archived locally with changed versions preserved. Double-click `Start Platform.cmd` to start the map and both approved local collectors; open [saved notice history](http://127.0.0.1:8765/history) to search saved versions, or use `python disruption_history.py --history`. [Instructions, examples and limits](docs/disruption-history.md). Disappearance from the feed is not treated as incident resolution.
+- [Beginner walkthrough: data → Python → map](docs/learning-walkthrough.md)
+- [Data sources and open questions](docs/data-sources.md)
+- [Reliability collection pilot](docs/reliability-pilot.md) · [Disruption history](docs/disruption-history.md)
+- [Decisions](docs/decisions.md) · [Journal](docs/journal.md) · [Contributing](CONTRIBUTING.md)
 
-## Four projects, one map
+## A couple of ground rules
 
-| Project | Intended outcome | Evidence requirement |
-| --- | --- | --- |
-| 1. Transport Reliability Index | Explainable line, route, and stop comparisons over time | Separate predictions from confirmed service; publish coverage and uncertainty |
-| 2. Public Transport Digital Twin | A network map with current information and closure scenarios | Distinguish reported conditions from modeled effects |
-| 8. Disruption Early-Warning System | Incident monitoring, recurrence analysis, and eventually validated warnings | Predictive claims require signals preceding events and chronological evaluation |
-| 10. Neighbourhood Mobility Score | Compare access to transport, services, and jobs where defensible | Match geographic vintages; disclose routing assumptions and job-location limits |
-
-**Current scope:** all métro routes published in the source, including termini outside Paris. The owner expanded the original métro-4/bus-38 pilot on 6 November 2026. Buses, RER and trams are excluded. Reference coverage does not guarantee continuous real-time availability.
-
-**Audience:** researchers and data scientists. **Delivery goal:** local installation and a hosted website. The four modules will be developed sequentially on shared data infrastructure.
-
-## Public website
-
-The [public métro map preview](https://paris-mobility-intelligence.onrender.com) lets anyone request suggested journeys between métro stations, see reported line notices alongside each métro leg, and draw available journey paths on the map. Requests are on demand; line notices may not affect the particular journey, and route availability is not guaranteed. The local historical archive remains private, and disruption collection remains user-operated on the owner's computer. [Deployment details, quotas and source terms](docs/public-release.md).
-
-## Read the project
-
-- [Project brief and shared-map concept](docs/project-brief.md)
-- [Data sources, access, and remaining gaps](docs/data-sources.md)
-- [First bounded data-quality audit and test results](docs/audits/2026-11-05-smoke-audit.md)
-- [Research standards](docs/research-standards.md)
-- [Roadmap and M0 completion criteria](docs/roadmap.md)
-- [Decisions and open questions](docs/decisions.md)
-- [Project journal](docs/journal.md)
-- [Contributing](CONTRIBUTING.md)
-
-## Reproducibility and licensing
-
-Every published indicator should be traceable to a source version, transformation, method, and observation window. Missing observations must remain visible.
-
-The project is intended to become open source. A repository licence has not yet been selected. Public visibility alone does not grant an open-source licence. External datasets retain their own terms; their redistribution requires a separate review.
-
-Do not commit credentials, raw data, or account screenshots.
+Keep credentials, raw data, exports and account screenshots out of Git. Check the publisher’s terms before sharing source data. The repository is public, but it doesn’t yet have a software licence: public visibility alone doesn’t grant reuse rights.

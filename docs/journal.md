@@ -535,3 +535,7 @@ Use one dated entry per meaningful step. Link evidence and decisions; keep conve
 **Evidence:** a bounded provider test at 48.858, 2.347 returned an address 13 m away and allowed browser cross-origin requests. Address results and mapped boarding points are estimates, not verified entrances or evidence of an exact selected address. Overlapping areas may show the same station in both sets.
 
 **Next:** check browser behaviour and public deployment. Implementation is AI-assisted.
+
+## 2026-11-10 — A friendlier welcome
+
+**Why:** the owner wanted the repository to feel like a fun experiment. We refreshed the README, contribution guide and walkthrough introduction in a more relaxed voice, while keeping the source, AI assistance and data limitations clear. **Next:** keep new documentation easy to read and accurate.

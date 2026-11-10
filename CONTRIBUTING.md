@@ -1,19 +1,16 @@
 # Contributing
 
-The project is in specification and feasibility review. Application development awaits the project owner's explicit approval.
+Thanks for taking a look! This is a small learning project, so thoughtful questions and simple ideas are welcome.
 
-## Propose a change
+## Got an idea?
 
-Describe the problem, supporting evidence, proposed change, and how to assess it. Cite primary sources for factual dataset claims. Mark hypotheses and unknowns explicitly.
+Tell us what you’d like to improve, why it would be useful, and how we can check it works. Keep changes focused and link to the relevant source when a claim depends on transport data. If something’s an assumption, say so.
 
-Keep changes focused. Update the relevant documentation and add a short journal entry when a decision, method, source, or supported claim changes.
+Please update the relevant docs and add a short journal entry when a feature, data source or method changes. We like plain language: someone new to the project should be able to follow along.
 
-## Write for a researcher
+## A few things we take seriously
 
-Lead with what changed and why. Use plain language, compact tables where useful, exact definitions, and links to evidence. Avoid marketing claims, invented measurements, unsupported rankings, and copied chat transcripts.
-
-For research results, provide source versions, parameters, methods, uncertainty, and reproduction instructions.
-
-## Protect the repository
-
-Never commit API tokens, passwords, account screenshots, raw responses, or data exports. Review dataset terms before proposing data publication. The repository licence is still to be selected; public visibility does not resolve reuse rights.
+- Keep API keys, passwords, account screenshots, raw responses and exports out of Git.
+- Don’t turn predictions into confirmed arrivals or missing records into cancellations.
+- Explain formulas, source dates and limitations so results can be checked.
+- Check dataset terms before sharing data. The repository doesn’t yet have a software licence, so public visibility alone doesn’t grant reuse rights.
