@@ -39,13 +39,9 @@ The public site and local explorer aren’t identical: historical collectors and
 
 Python fetches and prepares the reference data; JavaScript, HTML, CSS and Leaflet turn it into the interactive map. SQLite stores local history, GitHub tracks the code, and Render hosts the public preview. The app also uses Île-de-France Mobilités APIs and the Géoplateforme address service.
 
-This is a learning project created by Abraham Benveniste with Codex assistance. The goal is to understand each choice, share the code and keep the limitations visible. Curious about the details?
+Curious about the details?
 
 - [Beginner walkthrough: data → Python → map](docs/learning-walkthrough.md)
 - [Data sources and open questions](docs/data-sources.md)
 - [Reliability collection pilot](docs/reliability-pilot.md) · [Disruption history](docs/disruption-history.md)
 - [Decisions](docs/decisions.md) · [Contributing](CONTRIBUTING.md)
-
-## A couple of ground rules
-
-Keep credentials, raw data, exports and account screenshots out of Git. Check the publisher’s terms before sharing source data. The repository is public, but it doesn’t yet have a software licence: public visibility alone doesn’t grant reuse rights.
